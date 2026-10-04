@@ -411,7 +411,13 @@ function App() {
           )}
 
           {currentView === 'teachers' && (
-            <TeacherList teachers={teachers} onToggleExclude={handleToggleExclude} />
+            <TeacherList 
+              teachers={teachers} 
+              schedule={currentSchedule} 
+              slots={appSlots} 
+              zones={appZones} 
+              onToggleExclude={handleToggleExclude} 
+            />
           )}
 
           {currentView === 'reports' && (
