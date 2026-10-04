@@ -1,0 +1,6895 @@
+export const bilsaData = 
+{
+  "teachers": [
+    {
+      "id": "T_0_ÖMERHAŞİMOĞLU",
+      "name": "ÖMER HAŞİMOĞLU",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_1_AYSELYAVUZ",
+      "name": "AYSEL YAVUZ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_2_AHMETAKÇAKÖSE",
+      "name": "AHMET AKÇAKÖSE",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_3_ALİHALİDAKDAĞ",
+      "name": "ALİ HALİD AKDAĞ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_4_ASLIBAKAR",
+      "name": "ASLI BAKAR",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_5_AYGÜLKOÇ",
+      "name": "AYGÜL KOÇ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_6_BİLALGÜLER",
+      "name": "BİLAL GÜLER",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_7_BÜŞRAVAROL",
+      "name": "BÜŞRA VAROL",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_8_DİLEKKILIÇ",
+      "name": "DİLEK KILIÇ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_9_ECEMÇOMAK",
+      "name": "ECEM ÇOMAK",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_10_ELEMTALAYMANOĞLU",
+      "name": "ELEM TALAYMANOĞLU",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_11_EMRAHKESKİNSOY",
+      "name": "EMRAH KESKİNSOY",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_12_FARUKCENGİZ",
+      "name": "FARUK CENGİZ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_13_GAMZEOVA",
+      "name": "GAMZE OVA",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_14_GÜLYAKA",
+      "name": "GÜL YAKA",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_15_GÜLERSUCİN",
+      "name": "GÜLER SUCİN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_16_GÜLİZARTURAN",
+      "name": "GÜLİZAR TURAN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_17_HARUNÖZKAN",
+      "name": "HARUN ÖZKAN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_18_NURANCİNGÖZ",
+      "name": "NURAN CİNGÖZ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_19_RAHMANÇOMAK",
+      "name": "RAHMAN ÇOMAK",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_20_ŞULEKAYMAK",
+      "name": "ŞULE KAYMAK",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_21_TÜLAYSARIDEMİR",
+      "name": "TÜLAY SARIDEMİR",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_22_ÖZLEMYEŞİLKÖK",
+      "name": "ÖZLEM YEŞİLKÖK",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_23_ÜNALÜREN",
+      "name": "ÜNAL ÜREN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_24_ZÜLALKALDIRIM",
+      "name": "ZÜLAL KALDIRIM",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_25_ZUHALKESKİN",
+      "name": "ZUHAL KESKİN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_26_DERYAÖNAY",
+      "name": "DERYA ÖNAY",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_27_JihanSAMRA",
+      "name": "Jihan SAMRA",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_28_ZEYNEPDEMİRCİ",
+      "name": "ZEYNEP DEMİRCİ",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_29_SENAALEMDARALTUN",
+      "name": "SENA ALEMDAR ALTUN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_30_YAĞMURGÜN",
+      "name": "YAĞMUR GÜN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_31_EBRUGÖK",
+      "name": "EBRU GÖK",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_32_DİLEKYURTSEVEN",
+      "name": "DİLEK YURTSEVEN",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_33_EZGİÇEKER",
+      "name": "EZGİ ÇEKER",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    },
+    {
+      "id": "T_34_BİYOLJİÜCRT",
+      "name": "BİYOLJİ ÜCRT",
+      "branch": "Bilinmiyor",
+      "isExcluded": false,
+      "historyStats": {
+        "totalScore": 0,
+        "zoneCounts": {}
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_1_13",
+      "day": 1,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "10A AL",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "10A AL",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9 ELK",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9 ELK",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "10B BL",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "10B BL",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "11C MH",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "11C MH",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "11A BL 1",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_0_ÖMERHAŞİMOĞLU_5_13",
+      "day": 5,
+      "period": 13,
+      "className": "11A BL 1",
+      "teacherId": "T_0_ÖMERHAŞİMOĞLU"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9C BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9C BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "12A BL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "12A BL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9C MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9B MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9B MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9A BL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9A BL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9D MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "10C MH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "10C MH",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "12A AL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "12A AL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9E BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9E BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9A MH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9A MH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "10B BL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "10B BL",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9E MUH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9E MUH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9B BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9B BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9D BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9D BİL 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_1_AYSELYAVUZ_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_1_AYSELYAVUZ"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9 ELK",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9 ELK",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "9 ELK",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "9 ELK",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_2_AHMETAKÇAKÖSE_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_2_AHMETAKÇAKÖSE"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9E BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9E BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9C BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9C BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "11A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "11A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "10A BL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9B BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9B BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9B MUH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9B MUH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "12A BL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "12A BL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9 ELK",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9 ELK",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "10A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "10A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "11C MH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "11C MH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "12A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "12A AL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "10B BL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "10B BL",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "10C MH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_3_ALİHALİDAKDAĞ_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "10C MH",
+      "teacherId": "T_3_ALİHALİDAKDAĞ"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9D MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9D MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9A MH 1",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9A MH 1",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "10C MH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "10C MH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9B MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_4_ASLIBAKAR_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_4_ASLIBAKAR"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "12A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "12A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9B BİL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "11A BL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "11C MH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_1_13",
+      "day": 1,
+      "period": 13,
+      "className": "11C MH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "12A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "12A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9 ELK",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "9 ELK",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "11C MH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_3_13",
+      "day": 3,
+      "period": 13,
+      "className": "11C MH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "12A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9B BİL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "11A BL 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "11A AL",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9B MUH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_5_AYGÜLKOÇ_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9B MUH",
+      "teacherId": "T_5_AYGÜLKOÇ"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9D MUH",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9D MUH",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9D MUH",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9D MUH",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9D MUH",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9E MUH 1",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9E MUH 1",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9E MUH 1",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9E MUH 1",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9E MUH 1",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "10A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_6_BİLALGÜLER_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "11A AL",
+      "teacherId": "T_6_BİLALGÜLER"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "12A BL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "12A BL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "12A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "12A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "11A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "11A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "11A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "11A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "12A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "12A AL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "12A BL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "12A BL",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "11A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_2_13",
+      "day": 2,
+      "period": 13,
+      "className": "11A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9D BİL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9D BİL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9B MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9B MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9C MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9D BİL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9D BİL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9A BL 1",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9B MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9B MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_7_BÜŞRAVAROL_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_7_BÜŞRAVAROL"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9A BL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9A BL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9D BİL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9D BİL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9D MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9D BİL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9D BİL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9A BL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9A BL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9A BL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_8_DİLEKKILIÇ_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9D BİL 1",
+      "teacherId": "T_8_DİLEKKILIÇ"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "12A BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "12A BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "10A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "10A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "10C MH",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_1_13",
+      "day": 1,
+      "period": 13,
+      "className": "10C MH",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "12A BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "12A BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "10B BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "10B BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "10C MH",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_2_13",
+      "day": 2,
+      "period": 13,
+      "className": "10C MH",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "10A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "10A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "10A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "12A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "12A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "12A AL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "10B BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "10B BL",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_9_ECEMÇOMAK_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_9_ECEMÇOMAK"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "11C MH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_2_13",
+      "day": 2,
+      "period": 13,
+      "className": "11C MH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9F MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9F MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "10C MH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_3_13",
+      "day": 3,
+      "period": 13,
+      "className": "10C MH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9E MUH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_10_ELEMTALAYMANOĞLU_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_10_ELEMTALAYMANOĞLU"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "10C MH",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "10C MH",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9D BİL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9D BİL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9A BL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9A BL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "10B BL",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "10B BL",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "10A BL 1",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "10A AL",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_11_EMRAHKESKİNSOY_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "10A AL",
+      "teacherId": "T_11_EMRAHKESKİNSOY"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9F MUH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9F MUH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "11C MH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "11C MH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "11C MH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "11A BL 1",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_1_13",
+      "day": 1,
+      "period": 13,
+      "className": "11A BL 1",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "10B BL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "10B BL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "10C MH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "10C MH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9B MUH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "10A AL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "10A AL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9F MUH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9F MUH",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "10A AL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "10A AL",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_12_FARUKCENGİZ_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_12_FARUKCENGİZ"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "10B BL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "10B BL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "10A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "10A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9D BİL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9D BİL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "11C MH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "11C MH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "10C MH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "10C MH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_2_13",
+      "day": 2,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "11A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "11A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "12A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "12A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "11A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "11A AL",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "11A BL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_3_13",
+      "day": 3,
+      "period": 13,
+      "className": "11A BL 1",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_13_GAMZEOVA_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_13_GAMZEOVA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9E BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9E BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9A MH 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9A MH 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9E BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9E BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9E BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9F MUH",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9F MUH",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_14_GÜLYAKA_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9B BİL 1",
+      "teacherId": "T_14_GÜLYAKA"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "11A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "11A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "10A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "10A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9C BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9C BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "10C MH",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "12A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "10B BL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "10B BL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9D BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9D BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "11A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "11A AL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "10C MH",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9B BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9B BİL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "10C MH",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "10C MH",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "10B BL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "10B BL",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_15_GÜLERSUCİN_5_13",
+      "day": 5,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_15_GÜLERSUCİN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "12A BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "12A BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_2_13",
+      "day": 2,
+      "period": 13,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "10B BL",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_16_GÜLİZARTURAN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_16_GÜLİZARTURAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "10C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "10C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "11C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "11C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9B BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9B BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9B BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9 ELK",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9 ELK",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9A MH 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9A MH 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9A MH 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9F MUH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9F MUH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9B BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9B BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9C BİL 1",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "10C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "10C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_17_HARUNÖZKAN_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "10C MH",
+      "teacherId": "T_17_HARUNÖZKAN"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9E MUH 1",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9E MUH 1",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9E MUH 1",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9E MUH 1",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9D MUH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_18_NURANCİNGÖZ_5_13",
+      "day": 5,
+      "period": 13,
+      "className": "10C MH",
+      "teacherId": "T_18_NURANCİNGÖZ"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "10A AL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "10A AL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "12A BL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "12A BL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9B MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9B MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "10C MH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "10C MH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9A MH 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9A MH 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "10A AL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "10A AL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9D MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9D MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9E MUH 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9E MUH 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9F MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9F MUH",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "10B BL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "10B BL",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9E BİL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_19_RAHMANÇOMAK_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9E BİL 1",
+      "teacherId": "T_19_RAHMANÇOMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9E MUH 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9E MUH 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9D MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9D MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9C BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9C BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9E BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9E BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_2_12",
+      "day": 2,
+      "period": 12,
+      "className": "11A AL",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9D BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9A BL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9A BL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9B MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9B MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "10A AL",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "10A AL",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "10C MH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "10C MH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "10B BL",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "10B BL",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9A MH 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9A MH 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9F MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9F MUH",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9B BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_20_ŞULEKAYMAK_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9B BİL 1",
+      "teacherId": "T_20_ŞULEKAYMAK"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "10C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "10C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_21_TÜLAYSARIDEMİR_5_13",
+      "day": 5,
+      "period": 13,
+      "className": "11C MH",
+      "teacherId": "T_21_TÜLAYSARIDEMİR"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9D BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9D BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9D BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9D BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9D BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9C BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9B MUH",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9B MUH",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9B MUH",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9E BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "12A AL",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_22_ÖZLEMYEŞİLKÖK_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9C BİL 1",
+      "teacherId": "T_22_ÖZLEMYEŞİLKÖK"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "12A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "12A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9D MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9D MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9E MUH 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9E MUH 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9E BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9E BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9A BL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9A BL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "11A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "11A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9C BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9C BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9B BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9B BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9D BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9D BİL 1",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "11A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "11A AL",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9F MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "10C MH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "10C MH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9C MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_23_ÜNALÜREN_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9C MUH",
+      "teacherId": "T_23_ÜNALÜREN"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "10A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9D MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "10A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_3_13",
+      "day": 3,
+      "period": 13,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9C MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "11A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "11A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9C MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9C MUH",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9A BL 1",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_12",
+      "day": 5,
+      "period": 12,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_24_ZÜLALKALDIRIM_5_13",
+      "day": 5,
+      "period": 13,
+      "className": "10B BL",
+      "teacherId": "T_24_ZÜLALKALDIRIM"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "11C MH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "11C MH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "11C MH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "11C MH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_10",
+      "day": 3,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "11A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "12A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "12A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "12A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9F MUH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9F MUH",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "12A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "12A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "10A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_25_ZUHALKESKİN_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "11A AL",
+      "teacherId": "T_25_ZUHALKESKİN"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9E MUH 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9E MUH 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9B BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9B BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9C MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9C MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9C BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9C BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9F MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9F MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9A MH 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9A MH 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9E BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9E BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "10B BL",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9B MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9B MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9A BL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9A BL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9D BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9D BİL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "10C MH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "10C MH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9D MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9D MUH",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "10B BL",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "10A AL",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "10A AL",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_26_DERYAÖNAY_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "10A BL 1",
+      "teacherId": "T_26_DERYAÖNAY"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9A BL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9A BL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "12A BL",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "12A BL",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9A MH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9A MH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9D MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9D MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9A MH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9A MH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9E MUH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "9E MUH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9E MUH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9E MUH 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9B BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9B BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9B MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9B MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9E BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9E BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9D MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9D MUH",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9A BL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9A BL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9C BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_27_JihanSAMRA_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9C BİL 1",
+      "teacherId": "T_27_JihanSAMRA"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "12A BL",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_10",
+      "day": 1,
+      "period": 10,
+      "className": "12A BL",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "12A BL",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9B BİL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9B BİL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_2_11",
+      "day": 2,
+      "period": 11,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9E BİL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9E BİL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_10",
+      "day": 5,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_28_ZEYNEPDEMİRCİ_5_11",
+      "day": 5,
+      "period": 11,
+      "className": "11A BL 1",
+      "teacherId": "T_28_ZEYNEPDEMİRCİ"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_3",
+      "day": 2,
+      "period": 3,
+      "className": "9C BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_4",
+      "day": 2,
+      "period": 4,
+      "className": "9C BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_7",
+      "day": 2,
+      "period": 7,
+      "className": "11C MH",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_2_10",
+      "day": 2,
+      "period": 10,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9B BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9B BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9E BİL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_29_SENAALEMDARALTUN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "11A BL 1",
+      "teacherId": "T_29_SENAALEMDARALTUN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_11",
+      "day": 1,
+      "period": 11,
+      "className": "10B BL",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_12",
+      "day": 1,
+      "period": 12,
+      "className": "10B BL",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_1_13",
+      "day": 1,
+      "period": 13,
+      "className": "10B BL",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9E BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9E BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_11",
+      "day": 3,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_12",
+      "day": 3,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_3_13",
+      "day": 3,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_10",
+      "day": 4,
+      "period": 10,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_11",
+      "day": 4,
+      "period": 11,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_12",
+      "day": 4,
+      "period": 12,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_4_13",
+      "day": 4,
+      "period": 13,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9D BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9D BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9C BİL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_30_YAĞMURGÜN_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "10A BL 1",
+      "teacherId": "T_30_YAĞMURGÜN"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9C BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9C BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_5",
+      "day": 2,
+      "period": 5,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_6",
+      "day": 2,
+      "period": 6,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_8",
+      "day": 2,
+      "period": 8,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_2_9",
+      "day": 2,
+      "period": 9,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9C BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9C BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9B BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9A BL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_31_EBRUGÖK_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9D BİL 1",
+      "teacherId": "T_31_EBRUGÖK"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9A MH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9A MH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9E MUH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9E MUH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9E BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9E BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9A BL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "12A AL",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "12A AL",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9C BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9C BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9A BL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9E BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9E BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9B BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9B BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9A BL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9A BL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9D MUH",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9D MUH",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9E MUH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_6",
+      "day": 4,
+      "period": 6,
+      "className": "9E MUH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9B BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9B BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_1",
+      "day": 5,
+      "period": 1,
+      "className": "9C BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_2",
+      "day": 5,
+      "period": 2,
+      "className": "9C BİL 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9D MUH",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9D MUH",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9A MH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_32_DİLEKYURTSEVEN_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9A MH 1",
+      "teacherId": "T_32_DİLEKYURTSEVEN"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_1_7",
+      "day": 1,
+      "period": 7,
+      "className": "9C BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_3",
+      "day": 3,
+      "period": 3,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_4",
+      "day": 3,
+      "period": 4,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_5",
+      "day": 3,
+      "period": 5,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_6",
+      "day": 3,
+      "period": 6,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_7",
+      "day": 3,
+      "period": 7,
+      "className": "9B MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_8",
+      "day": 3,
+      "period": 8,
+      "className": "9C BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_3_9",
+      "day": 3,
+      "period": 9,
+      "className": "9C BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9C BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9C BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_5",
+      "day": 4,
+      "period": 5,
+      "className": "9E BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_7",
+      "day": 4,
+      "period": 7,
+      "className": "9D MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_8",
+      "day": 4,
+      "period": 8,
+      "className": "9B MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_4_9",
+      "day": 4,
+      "period": 9,
+      "className": "9B MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_3",
+      "day": 5,
+      "period": 3,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_4",
+      "day": 5,
+      "period": 4,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_5",
+      "day": 5,
+      "period": 5,
+      "className": "9E BİL 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_6",
+      "day": 5,
+      "period": 6,
+      "className": "9B MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9B MUH",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_33_EZGİÇEKER_5_9",
+      "day": 5,
+      "period": 9,
+      "className": "9E MUH 1",
+      "teacherId": "T_33_EZGİÇEKER"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_1",
+      "day": 1,
+      "period": 1,
+      "className": "9B BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_2",
+      "day": 1,
+      "period": 2,
+      "className": "9B BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_3",
+      "day": 1,
+      "period": 3,
+      "className": "9C MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_4",
+      "day": 1,
+      "period": 4,
+      "className": "9C MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_5",
+      "day": 1,
+      "period": 5,
+      "className": "9D MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_6",
+      "day": 1,
+      "period": 6,
+      "className": "9D MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_8",
+      "day": 1,
+      "period": 8,
+      "className": "9B MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_1_9",
+      "day": 1,
+      "period": 9,
+      "className": "9B MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_2_1",
+      "day": 2,
+      "period": 1,
+      "className": "9E BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_2_2",
+      "day": 2,
+      "period": 2,
+      "className": "9E BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_3_1",
+      "day": 3,
+      "period": 1,
+      "className": "9E MUH 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_3_2",
+      "day": 3,
+      "period": 2,
+      "className": "9E MUH 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_4_1",
+      "day": 4,
+      "period": 1,
+      "className": "9A MH 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_4_2",
+      "day": 4,
+      "period": 2,
+      "className": "9A MH 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_4_3",
+      "day": 4,
+      "period": 3,
+      "className": "9F MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_4_4",
+      "day": 4,
+      "period": 4,
+      "className": "9F MUH",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_5_7",
+      "day": 5,
+      "period": 7,
+      "className": "9C BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    },
+    {
+      "id": "L_T_34_BİYOLJİÜCRT_5_8",
+      "day": 5,
+      "period": 8,
+      "className": "9C BİL 1",
+      "teacherId": "T_34_BİYOLJİÜCRT"
+    }
+  ]
+};
