@@ -1,4 +1,4 @@
-import React from 'react';
+
 import type { Teacher, Assignment, Zone, Slot } from '../types';
 import { BarChart3 } from 'lucide-react';
 

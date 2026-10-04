@@ -1,4 +1,4 @@
-import type { Teacher, Lesson, Slot, Zone, Assignment, Availability } from '../types';
+import type { Teacher, Lesson, Slot, Zone, Assignment } from '../types';
 import { calculateAvailability } from './availability';
 
 export interface ScheduleResult {

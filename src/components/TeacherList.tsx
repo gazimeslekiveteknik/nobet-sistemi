@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, UserX, UserCheck } from 'lucide-react';
 import type { Teacher } from '../types';
 

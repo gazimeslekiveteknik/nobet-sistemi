@@ -1,6 +1,6 @@
-import { collection, doc, setDoc, getDocs, getDoc, query, orderBy } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from './config';
-import { Teacher, Lesson, DutyPlan } from '../types';
+import type { Teacher, Lesson, DutyPlan } from '../types';
 
 export const FirebaseService = {
   // Save the entire state (Teachers + Lessons + Schedule) for a specific week

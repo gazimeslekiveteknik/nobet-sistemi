@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, FileSpreadsheet, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { FileSpreadsheet, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import type { Teacher, Lesson } from '../types';
 import { parseBilsaExcel } from '../algorithm/bilsaParser';
@@ -11,7 +11,7 @@ interface ExcelImportProps {
 
 export function ExcelImport({ onDataImported }: ExcelImportProps) {
   const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [_file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<{ teachers: number; lessons: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
