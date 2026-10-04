@@ -64,7 +64,8 @@ export function generateSchedule(
       
       let assignedCount = assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id).length;
       
-      while (assignedCount < zone.idealStaff) {
+      const targetStaff = (slot.type === 'OPENING' || slot.type === 'CLOSING') ? 1 : zone.idealStaff;
+      while (assignedCount < targetStaff) {
         // Find best candidate
         let bestCandidate: Teacher | null = null;
         let bestScore = Infinity;
