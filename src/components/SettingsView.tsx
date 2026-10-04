@@ -16,6 +16,73 @@ export function SettingsView() {
   ]);
 
   const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+  const [lessonDuration, setLessonDuration] = useState(40);
+  const [breakDuration, setBreakDuration] = useState(15);
+  const [timetable, setTimetable] = useState<Record<string, {start: string, end: string}>>({});
+
+  const handleTimeChange = (lessonId: number, day: string, field: 'start' | 'end', val: string) => {
+    setTimetable(prev => ({
+      ...prev,
+      [`${lessonId}_${day}`]: {
+        ...(prev[`${lessonId}_${day}`] || { start: '', end: '' }),
+        [field]: val
+      }
+    }));
+  };
+
+  const parseTime = (timeStr: string) => {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  const formatTime = (totalMins: number) => {
+    const h = Math.floor(totalMins / 60).toString().padStart(2, '0');
+    const m = (totalMins % 60).toString().padStart(2, '0');
+    return `${h}:${m}`;
+  };
+
+  const handleAutoFill = () => {
+    const firstStart = timetable['1_Pazartesi']?.start;
+    if (!firstStart) {
+      alert('Lütfen Pazartesi 1. Dersin başlangıç saatini girin! (Örn: 09:00)');
+      return;
+    }
+
+    const newTimetable = { ...timetable };
+    const startMins = parseTime(firstStart);
+
+    days.forEach(day => {
+      let currentMins = startMins;
+      
+      lessons.forEach(lesson => {
+        const endMins = currentMins + lessonDuration;
+        
+        newTimetable[`${lesson.id}_${day}`] = {
+          start: formatTime(currentMins),
+          end: formatTime(endMins)
+        };
+        
+        currentMins = endMins + breakDuration;
+      });
+    });
+
+    setTimetable(newTimetable);
+  };
+
+  const copyToAllDays = (lessonId: number) => {
+     const pztStart = timetable[`${lessonId}_Pazartesi`]?.start || '';
+     const pztEnd = timetable[`${lessonId}_Pazartesi`]?.end || '';
+     
+     if (!pztStart && !pztEnd) return;
+     
+     const newTimetable = { ...timetable };
+     days.forEach(day => {
+        if (day !== 'Pazartesi') {
+           newTimetable[`${lessonId}_${day}`] = { start: pztStart, end: pztEnd };
+        }
+     });
+     setTimetable(newTimetable);
+  };
 
   const addZone = () => {
     setZones([...zones, { 
@@ -79,7 +146,7 @@ export function SettingsView() {
           <div className="mb-4 p-4 bg-blue-50 border border-blue-100 rounded-lg flex items-end gap-4">
             <div>
                <label className="block text-xs font-medium text-blue-800 mb-1">Ders Süresi</label>
-               <select className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
+               <select value={lessonDuration} onChange={e => setLessonDuration(Number(e.target.value))} className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
                  <option value="30">30 Dakika</option>
                  <option value="40">40 Dakika</option>
                  <option value="45">45 Dakika</option>
@@ -88,14 +155,14 @@ export function SettingsView() {
             </div>
             <div>
                <label className="block text-xs font-medium text-blue-800 mb-1">Teneffüs Süresi</label>
-               <select className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
+               <select value={breakDuration} onChange={e => setBreakDuration(Number(e.target.value))} className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
                  <option value="5">5 Dakika</option>
                  <option value="10">10 Dakika</option>
                  <option value="15">15 Dakika</option>
                </select>
             </div>
             <button 
-               onClick={() => alert('İlk dersin başlama saatinden itibaren tüm tablo (ders ve teneffüs süreleri kullanılarak) otomatik dolduruldu! (Veritabanı bağlantısı sonrasında aktif)')}
+               onClick={handleAutoFill}
                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <Wand2 className="w-4 h-4" />
@@ -128,12 +195,13 @@ export function SettingsView() {
                     {days.map((day, dIdx) => (
                       <td key={day} className="p-2 min-w-[130px] border-r border-gray-100 relative group">
                         <div className="flex items-center gap-1">
-                          <input type="time" className="w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 bg-white" title="Başlangıç Saati" />
+                          <input type="time" value={timetable[`${lesson.id}_${day}`]?.start || ''} onChange={e => handleTimeChange(lesson.id, day, 'start', e.target.value)} className="w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 bg-white" title="Başlangıç Saati" />
                           <span className="text-gray-400">-</span>
-                          <input type="time" className="w-full px-1 py-1 text-xs border rounded bg-white outline-none focus:ring-1 focus:ring-indigo-500" title="Bitiş Saati" />
+                          <input type="time" value={timetable[`${lesson.id}_${day}`]?.end || ''} onChange={e => handleTimeChange(lesson.id, day, 'end', e.target.value)} className="w-full px-1 py-1 text-xs border rounded bg-white outline-none focus:ring-1 focus:ring-indigo-500" title="Bitiş Saati" />
                         </div>
                         {dIdx === 0 && (
                           <button 
+                            onClick={() => copyToAllDays(lesson.id)}
                             className="absolute right-1 top-[-10px] bg-indigo-50 text-indigo-600 p-1 rounded border border-indigo-100 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-indigo-100 flex items-center gap-1 text-[10px] font-medium"
                             title="Pazartesi saatlerini kopyala"
                           >
