@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { generateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek } from './types';
-import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3 } from 'lucide-react';
+import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ExcelImport } from './components/ExcelImport';
 import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
@@ -43,11 +43,22 @@ function App() {
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
   const [schedule, setSchedule] = useState(() => generateSchedule(bilsaData.teachers as Teacher[], bilsaData.lessons as Lesson[], mockSlots, mockZones));
   const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [weekOffset, setWeekOffset] = useState<number>(0);
+  const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
+
+  const currentSchedule = weekSchedules[weekOffset] || schedule;
+  const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
+    const resolved = typeof newSched === 'function' ? newSched(currentSchedule) : newSched;
+    setWeekSchedules(prev => ({ ...prev, [weekOffset]: resolved }));
+    setSchedule(resolved);
+  };
+
   const [isLocked, setIsLocked] = useState<boolean>(false);
 
   
-  const getWeekString = () => {
+  const getWeekString = (offset = 0) => {
     const curr = new Date();
+    curr.setDate(curr.getDate() + (offset * 7));
     const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
     const last = first + 4; // Friday
     
@@ -74,7 +85,7 @@ function App() {
   const handleDataImported = (importedTeachers: Teacher[], importedLessons: Lesson[]) => {
     setTeachers(importedTeachers);
     setLessons(importedLessons);
-    setSchedule(generateSchedule(importedTeachers, importedLessons, mockSlots, mockZones));
+    updateCurrentSchedule(generateSchedule(importedTeachers, importedLessons, mockSlots, mockZones));
     setTimeout(() => setCurrentView('plan'), 1500); // Switch to plan view after showing success
   };
 
@@ -82,7 +93,7 @@ function App() {
     setTeachers(prev => {
       const updated = prev.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
       // Auto-regenerate schedule with updated teachers, keeping manual assignments
-      setSchedule(generateSchedule(updated, lessons, mockSlots, mockZones, schedule.assignments));
+      updateCurrentSchedule(generateSchedule(updated, lessons, mockSlots, mockZones, currentSchedule.assignments));
       return updated;
     });
   };
@@ -98,7 +109,7 @@ function App() {
 
     if (!confirmed) return;
 
-    setSchedule(prev => {
+    updateCurrentSchedule(prev => {
       let newAssignments = [...prev.assignments];
       const availability = calculateAvailability(teachers, lessons, mockSlots);
       
@@ -183,7 +194,7 @@ function App() {
     const assignmentId = e.dataTransfer.getData('assignmentId');
     if (!assignmentId) return;
 
-    const assignment = schedule.assignments.find(a => a.id === assignmentId);
+    const assignment = currentSchedule.assignments.find(a => a.id === assignmentId);
     if (!assignment) return;
 
     // Check if moving to the same place
@@ -199,7 +210,7 @@ function App() {
     }
 
     // Update assignment
-    setSchedule(prev => {
+    updateCurrentSchedule(prev => {
        const newAssignments = prev.assignments.map(a => 
           a.id === assignmentId 
              ? { ...a, slotId: targetSlotId, zoneId: targetZoneId, isManual: true }
@@ -272,7 +283,7 @@ function App() {
           )}
 
           {currentView === 'reports' && (
-            <Analytics teachers={teachers} assignments={schedule.assignments} zones={mockZones} slots={mockSlots} />
+            <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={mockZones} slots={mockSlots} />
           )}
 
           {currentView === 'settings' && (
@@ -286,7 +297,14 @@ function App() {
             <>
               <header className="flex justify-between items-center mb-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-800">Nöbet Planı <span className="text-lg font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full ml-3 align-middle">{getWeekString()}</span></h2>
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-3xl font-bold text-gray-800">Nöbet Planı</h2>
+                    <div className="flex items-center bg-indigo-50 rounded-full p-1 border border-indigo-100 shadow-sm">
+                      <button onClick={() => setWeekOffset(o => o - 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Önceki Hafta"><ChevronLeft className="w-5 h-5" /></button>
+                      <span className="text-sm font-medium text-indigo-700 px-4 min-w-[140px] text-center">{getWeekString(weekOffset)}</span>
+                      <button onClick={() => setWeekOffset(o => o + 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Sonraki Hafta"><ChevronRight className="w-5 h-5" /></button>
+                    </div>
+                  </div>
                   <p className="text-gray-500 mt-2">Sistemdeki Aktif Öğretmen: {teachers.length}</p>
                 </div>
                 <div className="flex gap-3">
@@ -297,7 +315,7 @@ function App() {
                         id: 'week_1',
                         weekStartDate: new Date().toISOString(),
                         status: 'PUBLISHED' as const,
-                        assignments: schedule.assignments
+                        assignments: currentSchedule.assignments
                       };
                       try {
                         await FirebaseService.saveWeeklyPlan('week_1', teachers, lessons, planToSave);
@@ -328,7 +346,7 @@ function App() {
                           alert('Bu plan kilitlenmiş! Yanlışlıkla bozulmaması için yeniden optimize etme işlemi engellendi. İşlem yapmak için kilidi açın.');
                           return;
                        }
-                       setSchedule(generateSchedule(teachers, lessons, mockSlots, mockZones, schedule.assignments));
+                       updateCurrentSchedule(generateSchedule(teachers, lessons, mockSlots, mockZones, currentSchedule.assignments));
                     }}
                     className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
                       isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
@@ -398,7 +416,7 @@ function App() {
                       </span>
                     </td>
                     {mockZones.map(zone => {
-                      const assigned = schedule.assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id);
+                      const assigned = currentSchedule.assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id);
                       return (
                         <td 
                           key={zone.id} 

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+const fs = require('fs');
+
+const code = `import { useState } from 'react';
 import { Save, Plus, Trash2, Clock, MapPin, Copy, Wand2 } from 'lucide-react';
 
 export function SettingsView() {
@@ -19,7 +21,7 @@ export function SettingsView() {
 
   const addZone = () => {
     setZones([...zones, { 
-      id: `z${Date.now()}`, 
+      id: \`z\${Date.now()}\`, 
       name: 'Yeni Bölge', 
       idealStaff: 2, 
       priority: zones.length + 1,
@@ -33,7 +35,7 @@ export function SettingsView() {
   };
 
   const addLesson = () => {
-    setLessons([...lessons, { id: lessons.length + 1, name: `${lessons.length + 1}. Ders` }]);
+    setLessons([...lessons, { id: lessons.length + 1, name: \`\${lessons.length + 1}. Ders\` }]);
   };
 
   const removeLesson = (id: number) => {
@@ -114,7 +116,7 @@ export function SettingsView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {lessons.map((lesson) => (
+                {lessons.map((lesson, idx) => (
                   <tr key={lesson.id} className="hover:bg-gray-50/50">
                     <td className="py-3 px-4 font-medium text-gray-900 border-r bg-gray-50">
                       <input 
@@ -220,3 +222,5 @@ export function SettingsView() {
     </div>
   );
 }
+`
+fs.writeFileSync('src/components/SettingsView.tsx', code);
