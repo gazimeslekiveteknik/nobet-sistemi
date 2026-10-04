@@ -62,7 +62,20 @@ function App() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+    
+    // Timeout to prevent hanging if Firebase is blocked or offline
+    const fallbackTimeout = setTimeout(() => {
+       if (isMounted) {
+          console.warn("Firebase timeout: Loading default settings.");
+          setIsInitializing(false);
+       }
+    }, 4000);
+
     FirebaseService.loadSettings().then(settings => {
+      if (!isMounted) return;
+      clearTimeout(fallbackTimeout);
+      
       if (settings) {
         if (settings.appZones) setAppZones(settings.appZones);
         if (settings.appPeriods) setAppPeriods(settings.appPeriods);
@@ -70,7 +83,14 @@ function App() {
         if (settings.appSlots) setAppSlots(settings.appSlots);
       }
       setIsInitializing(false);
+    }).catch(err => {
+      if (!isMounted) return;
+      clearTimeout(fallbackTimeout);
+      console.error(err);
+      setIsInitializing(false);
     });
+    
+    return () => { isMounted = false; };
   }, []);
   const handleSaveSettings = async () => {
     const newSlots: Slot[] = [];
