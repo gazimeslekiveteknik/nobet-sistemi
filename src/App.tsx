@@ -3,10 +3,11 @@ import { FirebaseService } from './firebase/service';
 import { generateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek } from './types';
-import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
 import { ExcelImport } from './components/ExcelImport';
 import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
+import { PrintableView } from './components/PrintableView';
 import { SettingsView } from './components/SettingsView';
 
 import { bilsaData } from './data/bilsaData';
@@ -39,7 +40,7 @@ const mockZones: Zone[] = [
 ];
 
 function App() {
-  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings'>('plan');
+  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print'>('plan');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -387,6 +388,13 @@ function App() {
             <span>Analiz & Raporlar</span>
           </button>
           <button 
+            onClick={() => setCurrentView('print')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+          >
+            <Printer size={20} />
+            <span>Çizelge (Yazdır)</span>
+          </button>
+          <button 
             onClick={() => setCurrentView('import')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'import' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
@@ -422,6 +430,16 @@ function App() {
 
           {currentView === 'reports' && (
             <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={appZones} slots={appSlots} />
+          )}
+
+          {currentView === 'print' && (
+            <PrintableView 
+               schedule={currentSchedule} 
+               teachers={teachers} 
+               zones={appZones} 
+               slots={appSlots} 
+               weekString={getWeekString(weekOffset)} 
+            />
           )}
 
           {currentView === 'settings' && (
