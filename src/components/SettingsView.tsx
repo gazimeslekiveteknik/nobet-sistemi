@@ -80,17 +80,18 @@ export function SettingsView() {
             <div>
                <label className="block text-xs font-medium text-blue-800 mb-1">Ders Süresi</label>
                <select className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
+                 <option value="30">30 Dakika</option>
                  <option value="40">40 Dakika</option>
                  <option value="45">45 Dakika</option>
-                 <option value="30">30 Dakika</option>
+                 <option value="60">60 Dakika</option>
                </select>
             </div>
             <div>
                <label className="block text-xs font-medium text-blue-800 mb-1">Teneffüs Süresi</label>
                <select className="px-3 py-1.5 border border-blue-200 rounded outline-none text-sm bg-white">
+                 <option value="5">5 Dakika</option>
                  <option value="10">10 Dakika</option>
                  <option value="15">15 Dakika</option>
-                 <option value="5">5 Dakika</option>
                </select>
             </div>
             <button 
