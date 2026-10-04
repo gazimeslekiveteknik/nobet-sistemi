@@ -3,6 +3,30 @@ import { db } from './config';
 import type { Teacher, Lesson, DutyPlan } from '../types';
 
 export const FirebaseService = {
+  saveSettings: async (settings: any) => {
+    try {
+      const ref = doc(db, 'settings', 'global');
+      await setDoc(ref, settings);
+      return true;
+    } catch (error) {
+      console.error("Error saving settings: ", error);
+      throw error;
+    }
+  },
+
+  loadSettings: async () => {
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'global'));
+      if (snap.exists()) {
+        return snap.data();
+      }
+      return null;
+    } catch (error) {
+      console.error("Error loading settings: ", error);
+      return null;
+    }
+  },
+
   // Save the entire state (Teachers + Lessons + Schedule) for a specific week
   saveWeeklyPlan: async (weekId: string, teachers: Teacher[], lessons: Lesson[], plan: DutyPlan) => {
     try {

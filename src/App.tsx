@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FirebaseService } from './firebase/service';
 import { generateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek } from './types';
@@ -58,7 +59,20 @@ function App() {
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
 
-  const handleSaveSettings = () => {
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    FirebaseService.loadSettings().then(settings => {
+      if (settings) {
+        if (settings.appZones) setAppZones(settings.appZones);
+        if (settings.appPeriods) setAppPeriods(settings.appPeriods);
+        if (settings.appTimetable) setAppTimetable(settings.appTimetable);
+        if (settings.appSlots) setAppSlots(settings.appSlots);
+      }
+      setIsInitializing(false);
+    });
+  }, []);
+  const handleSaveSettings = async () => {
     const newSlots: Slot[] = [];
     const days = [1, 2, 3, 4, 5];
     const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
@@ -131,6 +145,13 @@ function App() {
     // Regenerate schedule with new slots and zones
     const newSchedule = generateSchedule(teachers, lessons, newSlots, appZones, currentSchedule?.assignments || []);
     updateCurrentSchedule(newSchedule);
+    
+    await FirebaseService.saveSettings({
+      appZones,
+      appPeriods,
+      appTimetable,
+      appSlots: newSlots
+    });
     
     alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
     setCurrentView('plan');
@@ -313,6 +334,7 @@ function App() {
   // Only show slots for the selected day in the table
   const currentDaySlots = appSlots.filter(s => s.day === selectedDay);
 
+  if (isInitializing) { return <div className="flex h-screen items-center justify-center bg-gray-50"><div className="text-xl font-medium text-gray-500 animate-pulse">Sistem Yükleniyor...</div></div>; }
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
