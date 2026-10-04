@@ -1,4 +1,6 @@
-import { useState } from 'react';
+const fs = require('fs');
+
+const code = `import { useState } from 'react';
 import { Save, Plus, Trash2, Clock, MapPin, Copy, Link as LinkIcon } from 'lucide-react';
 
 export function SettingsView() {
@@ -19,7 +21,7 @@ export function SettingsView() {
 
   const addZone = () => {
     setZones([...zones, { 
-      id: `z${Date.now()}`, 
+      id: \`z\${Date.now()}\`, 
       name: 'Yeni Bölge', 
       idealStaff: 2, 
       priority: zones.length + 1,
@@ -98,7 +100,7 @@ export function SettingsView() {
                       {idx > 0 && (
                         <button 
                           onClick={() => toggleBlock(lesson.id)}
-                          className={`px-2 py-1 text-xs rounded-md font-medium border flex items-center justify-center gap-1 w-full ${lesson.isBlock ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-100'}`}
+                          className={\`px-2 py-1 text-xs rounded-md font-medium border flex items-center justify-center gap-1 w-full \${lesson.isBlock ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-100'}\`}
                           title="Önceki ders ile blok yap (Araya teneffüs koyma)"
                         >
                           <LinkIcon className="w-3 h-3" />
@@ -109,7 +111,7 @@ export function SettingsView() {
                     {days.map((day, dIdx) => (
                       <td key={day} className="p-2 min-w-[130px] border-r border-gray-100 relative group">
                         <div className="flex items-center gap-1">
-                          <input type="time" className={`w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 ${lesson.isBlock ? 'bg-gray-100 text-gray-400' : 'bg-white'}`} disabled={lesson.isBlock} title={lesson.isBlock ? 'Blok derslerde saat girişi yapılmaz, önceki dersle bitişik sayılır.' : 'Başlangıç Saati'} />
+                          <input type="time" className={\`w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 \${lesson.isBlock ? 'bg-gray-100 text-gray-400' : 'bg-white'}\`} disabled={lesson.isBlock} title={lesson.isBlock ? 'Blok derslerde saat girişi yapılmaz, önceki dersle bitişik sayılır.' : 'Başlangıç Saati'} />
                           <span className="text-gray-400">-</span>
                           <input type="time" className="w-full px-1 py-1 text-xs border rounded bg-white outline-none focus:ring-1 focus:ring-indigo-500" title="Bitiş Saati" />
                         </div>
@@ -203,3 +205,6 @@ export function SettingsView() {
     </div>
   );
 }
+`
+
+fs.writeFileSync('src/components/SettingsView.tsx', code);
