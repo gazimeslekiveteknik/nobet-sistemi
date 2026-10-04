@@ -46,10 +46,24 @@ export function generateSchedule(
      }
   });
 
-  // Sort slots by priority: Closing first, then Opening, then Breaks (because pools are smaller)
+  // Sort slots by "Most Constrained First" (Minimum available teachers)
+  // This is crucial for balancing: fill the slots that have the fewest available teachers first!
   const sortedSlots = [...slots].sort((a, b) => {
-    const typePriority = { 'CLOSING': 1, 'OPENING': 2, 'BREAK': 3 };
-    return typePriority[a.type] - typePriority[b.type];
+    // Count how many teachers are available for slot a
+    let aAvail = 0;
+    teachers.forEach(t => { if (availabilityMatrix[t.id][a.id]?.canDuty) aAvail++; });
+    
+    // Count how many teachers are available for slot b
+    let bAvail = 0;
+    teachers.forEach(t => { if (availabilityMatrix[t.id][b.id]?.canDuty) bAvail++; });
+    
+    // If they have the same availability, prioritize CLOSING > OPENING > BREAK
+    if (aAvail === bAvail) {
+       const typePriority = { 'CLOSING': 1, 'OPENING': 2, 'BREAK': 3 };
+       return typePriority[a.type] - typePriority[b.type];
+    }
+    
+    return aAvail - bAvail; // Ascending: fewest available teachers first
   });
 
   // Sort zones by priority
@@ -96,8 +110,8 @@ export function generateSchedule(
           if (isAssigned) continue;
 
           // Calculate score (lower is better)
-          // Multiply weekly load by 15 so the algorithm strongly balances total weekly duties
-          let score = teacherLoads[teacher.id] * 15;
+          // Multiply weekly load by 1000 so the algorithm strongly balances total weekly duties above all else
+          let score = teacherLoads[teacher.id] * 1000;
           
           // HARD LIMIT PENALTY: Prevent anyone from getting more than 8 duties if possible
           if (teacherLoads[teacher.id] >= 8) {
