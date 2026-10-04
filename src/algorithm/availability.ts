@@ -64,7 +64,7 @@ export function calculateAvailability(
         // For closing, they can only do it if they have a class at the end of the day.
         // Assuming the school day has 'N' periods. 
         // For now, if their last class is before the closing slot's "afterLesson", they can't do it.
-        if (lastLesson.period < (slot.afterLesson || 99)) {
+        if (lastLesson.period < (slot.afterLesson || 8)) {
           availabilityMatrix[teacher.id][slot.id] = { canDuty: false, reason: `Son dersi erken bitiyor` };
           return;
         }

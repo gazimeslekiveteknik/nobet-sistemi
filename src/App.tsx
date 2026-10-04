@@ -16,7 +16,8 @@ const baseSlots = [
   { id: 's2', type: 'BREAK', afterLesson: 2, startTime: '10:30', endTime: '10:45' },
   { id: 's3', type: 'BREAK', afterLesson: 4, startTime: '12:15', endTime: '12:30' },
   { id: 's4', type: 'BREAK', afterLesson: 6, startTime: '14:00', endTime: '14:15' },
-  { id: 's5', type: 'CLOSING', afterLesson: 8, startTime: '17:00', endTime: '17:20' },
+  { id: 's5', type: 'CLOSING',
+ afterLesson: 8, startTime: '17:00', endTime: '17:20' },
   // 3. Kat Özel Saatler
   { id: 's_kat3_1', type: 'OPENING', startTime: '08:00', endTime: '08:20', zoneSpecificIds: ['z4'] },
   { id: 's_kat3_2', type: 'BREAK', afterLesson: 2, startTime: '09:50', endTime: '10:05', zoneSpecificIds: ['z4'] }
@@ -118,6 +119,7 @@ function App() {
              id: `s_close_d${dayNum}`,
              day: dayNum as any,
              type: 'CLOSING',
+             afterLesson: lastPeriod.id,
              startTime: lastEnd,
              endTime: closeEnd
           });
