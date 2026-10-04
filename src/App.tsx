@@ -45,6 +45,24 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isLocked, setIsLocked] = useState<boolean>(false);
 
+  
+  const getWeekString = () => {
+    const curr = new Date();
+    const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
+    const last = first + 4; // Friday
+    
+    const startDate = new Date(curr.setDate(first));
+    const endDate = new Date(curr.setDate(last));
+    
+    const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+    
+    if (startDate.getMonth() === endDate.getMonth()) {
+       return `${startDate.getDate()} - ${endDate.getDate()} ${months[startDate.getMonth()]} Haftası`;
+    } else {
+       return `${startDate.getDate()} ${months[startDate.getMonth()]} - ${endDate.getDate()} ${months[endDate.getMonth()]} Haftası`;
+    }
+  };
+
   const daysList = [
     { id: 1, name: 'Pazartesi' },
     { id: 2, name: 'Salı' },
@@ -259,8 +277,8 @@ function App() {
 
           {currentView === 'settings' && (
             <SettingsView 
-               zones={mockZones} 
-               slots={mockSlots} 
+                
+                
             />
           )}
 
@@ -268,7 +286,7 @@ function App() {
             <>
               <header className="flex justify-between items-center mb-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-800">Haftalık Nöbet Planı</h2>
+                  <h2 className="text-3xl font-bold text-gray-800">Nöbet Planı <span className="text-lg font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full ml-3 align-middle">{getWeekString()}</span></h2>
                   <p className="text-gray-500 mt-2">Sistemdeki Aktif Öğretmen: {teachers.length}</p>
                 </div>
                 <div className="flex gap-3">
