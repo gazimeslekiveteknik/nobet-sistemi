@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, UserX, UserCheck, Share2 } from 'lucide-react';
+import { Search, UserX, UserCheck, Share2, Eye, X } from 'lucide-react';
 import type { Teacher, Assignment, Slot, Zone } from '../types';
 
 interface TeacherListProps {
@@ -11,9 +11,12 @@ interface TeacherListProps {
 }
 
 export function TeacherList({ teachers, schedule, slots, zones, onToggleExclude }: TeacherListProps) {
-  const getShareLink = (teacher: Teacher) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+
+  const getScheduleText = (teacher: Teacher) => {
     const teacherAssignments = schedule.assignments.filter(a => a.teacherId === teacher.id);
-    if (teacherAssignments.length === 0) return '#';
+    if (teacherAssignments.length === 0) return 'Bu hafta nöbet görevi bulunmamaktadır.';
     
     // Group by day
     const byDay: Record<number, Assignment[]> = { 1: [], 2: [], 3: [], 4: [], 5: [] };
@@ -51,9 +54,15 @@ export function TeacherList({ teachers, schedule, slots, zones, onToggleExclude 
     }
     
     text += `İyi çalışmalar dileriz.`;
+    return text;
+  };
+
+  const getShareLink = (teacher: Teacher) => {
+    const text = getScheduleText(teacher);
+    if (text.includes('bulunmamaktadır')) return '#';
+    
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };
-  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredTeachers = teachers.filter(t => 
     t.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -115,15 +124,24 @@ export function TeacherList({ teachers, schedule, slots, zones, onToggleExclude 
                 </td>
                 <td className="py-4 px-6 text-right">
                   {!teacher.isExcluded && (
-                    <a
-                      href={getShareLink(teacher)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600 mr-2"
-                      title="WhatsApp'ta Paylaş"
-                    >
-                      <Share2 className="w-4 h-4" /> Paylaş
-                    </a>
+                    <>
+                      <button
+                        onClick={() => setSelectedTeacher(teacher)}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 mr-2"
+                        title="Programı Görüntüle"
+                      >
+                        <Eye className="w-4 h-4" /> Program
+                      </button>
+                      <a
+                        href={getShareLink(teacher)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600 mr-2"
+                        title="WhatsApp'ta Paylaş"
+                      >
+                        <Share2 className="w-4 h-4" /> Paylaş
+                      </a>
+                    </>
                   )}
                   <button
                     onClick={() => onToggleExclude(teacher.id, !teacher.isExcluded)}
@@ -153,6 +171,33 @@ export function TeacherList({ teachers, schedule, slots, zones, onToggleExclude 
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      {selectedTeacher && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-indigo-50">
+              <h3 className="font-bold text-indigo-900 text-lg">{selectedTeacher.name} - Nöbet Programı</h3>
+              <button onClick={() => setSelectedTeacher(null)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto whitespace-pre-wrap font-sans text-gray-700 leading-relaxed text-sm">
+              {getScheduleText(selectedTeacher)}
+            </div>
+            <div className="p-4 border-t border-gray-200 bg-gray-50 flex justify-end">
+               <a
+                  href={getShareLink(selectedTeacher)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors bg-green-500 text-white hover:bg-green-600"
+               >
+                  <Share2 className="w-4 h-4" /> WhatsApp'ta Paylaş
+               </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
