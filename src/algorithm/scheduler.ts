@@ -57,6 +57,11 @@ export function generateSchedule(
 
   sortedSlots.forEach(slot => {
     sortedZones.forEach(zone => {
+      // If this slot is restricted to specific zones and this zone is not in the list, skip
+      if (slot.zoneSpecificIds && !slot.zoneSpecificIds.includes(zone.id)) {
+        return;
+      }
+      
       let assignedCount = assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id).length;
       
       while (assignedCount < zone.idealStaff) {

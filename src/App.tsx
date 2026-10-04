@@ -6,6 +6,7 @@ import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3 } fr
 import { ExcelImport } from './components/ExcelImport';
 import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
+import { SettingsView } from './components/SettingsView';
 
 import { bilsaData } from './data/bilsaData';
 
@@ -16,6 +17,9 @@ const baseSlots = [
   { id: 's3', type: 'BREAK', afterLesson: 4, startTime: '12:15', endTime: '12:30' },
   { id: 's4', type: 'BREAK', afterLesson: 6, startTime: '14:00', endTime: '14:15' },
   { id: 's5', type: 'CLOSING', afterLesson: 8, startTime: '17:00', endTime: '17:20' },
+  // 3. Kat Özel Saatler
+  { id: 's_kat3_1', type: 'OPENING', startTime: '08:00', endTime: '08:20', zoneSpecificIds: ['z4'] },
+  { id: 's_kat3_2', type: 'BREAK', afterLesson: 2, startTime: '09:50', endTime: '10:05', zoneSpecificIds: ['z4'] }
 ];
 
 const mockSlots: Slot[] = [];
@@ -33,12 +37,13 @@ const mockZones: Zone[] = [
 ];
 
 function App() {
-  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports'>('plan');
+  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings'>('plan');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
   const [schedule, setSchedule] = useState(() => generateSchedule(bilsaData.teachers as Teacher[], bilsaData.lessons as Lesson[], mockSlots, mockZones));
   const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [isLocked, setIsLocked] = useState<boolean>(false);
 
   const daysList = [
     { id: 1, name: 'Pazartesi' },
@@ -227,7 +232,10 @@ function App() {
             <FileSpreadsheet size={20} />
             <span>Veri Aktarımı</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 font-medium rounded-lg">
+          <button 
+            onClick={() => setCurrentView('settings')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'settings' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+          >
             <Settings size={20} />
             <span>Ayarlar</span>
           </button>
@@ -247,6 +255,13 @@ function App() {
 
           {currentView === 'reports' && (
             <Analytics teachers={teachers} assignments={schedule.assignments} zones={mockZones} slots={mockSlots} />
+          )}
+
+          {currentView === 'settings' && (
+            <SettingsView 
+               zones={mockZones} 
+               slots={mockSlots} 
+            />
           )}
 
           {currentView === 'plan' && (
@@ -277,9 +292,29 @@ function App() {
                   >
                     Buluta Kaydet
                   </button>
+                  
                   <button 
-                    onClick={() => setSchedule(generateSchedule(teachers, lessons, mockSlots, mockZones, schedule.assignments))}
-                    className="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm"
+                    onClick={() => setIsLocked(!isLocked)}
+                    className={`px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2 ${
+                      isLocked 
+                        ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300' 
+                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                    }`}
+                  >
+                    {isLocked ? '🔒 Plan Kilitli (Korumada)' : '🔓 Planı Kilitle'}
+                  </button>
+
+<button 
+                    onClick={() => {
+                       if (isLocked) {
+                          alert('Bu plan kilitlenmiş! Yanlışlıkla bozulmaması için yeniden optimize etme işlemi engellendi. İşlem yapmak için kilidi açın.');
+                          return;
+                       }
+                       setSchedule(generateSchedule(teachers, lessons, mockSlots, mockZones, schedule.assignments));
+                    }}
+                    className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
+                      isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+                    }`}
                   >
                     Yeniden Optimize Et
                   </button>
@@ -351,7 +386,17 @@ function App() {
                           key={zone.id} 
                           className="py-4 px-6 border-l border-gray-100"
                           onDragOver={handleDragOver}
-                          onDrop={(e) => handleDrop(e, slot.id, zone.id)}
+                          onDrop={(e) => {
+                                if (isLocked) {
+                                  alert('Plan kilitliyken sürükle-bırak yapılamaz!');
+                                  return;
+                                }
+                                if (slot.zoneSpecificIds && !slot.zoneSpecificIds.includes(zone.id)) {
+                                  alert('Bu zaman dilimi bu bölge için geçerli değil!');
+                                  return;
+                                }
+                                handleDrop(e, slot.id, zone.id);
+                              }}
                         >
                           <div className="flex flex-col gap-1.5 min-h-[40px]">
                             {assigned.length > 0 ? assigned.map(a => {
@@ -360,8 +405,14 @@ function App() {
                                 <div 
                                   key={a.id} 
                                   draggable
-                                  onDragStart={(e) => handleDragStart(e, a)}
-                                  onClick={() => handleTeacherClick(a)}
+                                  onDragStart={(e) => { if (!isLocked) handleDragStart(e, a); }}
+                                  onClick={() => {
+                                        if (isLocked) {
+                                           alert('Plan kilitliyken raporlama işlemi yapılamaz!');
+                                           return;
+                                        }
+                                        handleTeacherClick(a);
+                                      }}
                                   className={`flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-grab active:cursor-grabbing border transition-transform hover:scale-[1.02] ${
                                     a.isManual 
                                       ? 'bg-amber-50 border-amber-200 text-amber-800' 

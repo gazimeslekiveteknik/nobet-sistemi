@@ -7,6 +7,7 @@ export interface Slot {
   afterLesson?: number; // E.g., break after 2nd lesson
   startTime: string; // HH:mm
   endTime: string; // HH:mm
+  zoneSpecificIds?: string[]; // If set, this slot only applies to these zones
 }
 
 export interface Zone {
