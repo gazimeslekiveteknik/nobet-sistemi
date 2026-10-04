@@ -1,27 +1,24 @@
 import { useState } from 'react';
 import { Save, Plus, Trash2, Clock, MapPin, Copy, Wand2 } from 'lucide-react';
+import type { Zone } from '../types';
 
-export function SettingsView() {
-  const [zones, setZones] = useState([
-    { id: 'z1', name: 'Bahçe', idealStaff: 2, priority: 1, startPeriod: 1, endPeriod: 8 },
-    { id: 'z2', name: 'Zemin Kat', idealStaff: 2, priority: 2, startPeriod: 1, endPeriod: 8 },
-    { id: 'z3', name: '2. Kat', idealStaff: 2, priority: 3, startPeriod: 1, endPeriod: 8 },
-    { id: 'z4', name: '3. Kat', idealStaff: 2, priority: 4, startPeriod: 1, endPeriod: 10 },
-  ]);
+interface SettingsProps {
+  appZones: Zone[];
+  setAppZones: (z: Zone[]) => void;
+  appPeriods: any[];
+  setAppPeriods: (p: any[]) => void;
+  appTimetable: Record<string, {start: string, end: string}>;
+  setAppTimetable: (t: any) => void;
+  onSave: () => void;
+}
 
-  const [lessons, setLessons] = useState([
-    { id: 1, name: '1. Ders' }, { id: 2, name: '2. Ders' }, { id: 3, name: '3. Ders' },
-    { id: 4, name: '4. Ders' }, { id: 5, name: '5. Ders' }, { id: 6, name: '6. Ders' },
-    { id: 7, name: '7. Ders' }, { id: 8, name: '8. Ders' }, { id: 9, name: '9. Ders' }, { id: 10, name: '10. Ders' }
-  ]);
-
+export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods, appTimetable, setAppTimetable, onSave }: SettingsProps) {
   const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
   const [lessonDuration, setLessonDuration] = useState(40);
   const [breakDuration, setBreakDuration] = useState(15);
-  const [timetable, setTimetable] = useState<Record<string, {start: string, end: string}>>({});
 
   const handleTimeChange = (lessonId: number, day: string, field: 'start' | 'end', val: string) => {
-    setTimetable(prev => ({
+    setAppTimetable((prev: any) => ({
       ...prev,
       [`${lessonId}_${day}`]: {
         ...(prev[`${lessonId}_${day}`] || { start: '', end: '' }),
@@ -42,19 +39,19 @@ export function SettingsView() {
   };
 
   const handleAutoFill = () => {
-    const firstStart = timetable['1_Pazartesi']?.start;
+    const firstStart = appTimetable['1_Pazartesi']?.start;
     if (!firstStart) {
       alert('Lütfen Pazartesi 1. Dersin başlangıç saatini girin! (Örn: 09:00)');
       return;
     }
 
-    const newTimetable = { ...timetable };
+    const newTimetable = { ...appTimetable };
     const startMins = parseTime(firstStart);
 
     days.forEach(day => {
       let currentMins = startMins;
       
-      lessons.forEach(lesson => {
+      appPeriods.forEach(lesson => {
         const endMins = currentMins + lessonDuration;
         
         newTimetable[`${lesson.id}_${day}`] = {
@@ -66,49 +63,51 @@ export function SettingsView() {
       });
     });
 
-    setTimetable(newTimetable);
+    setAppTimetable(newTimetable);
   };
 
   const copyToAllDays = (lessonId: number) => {
-     const pztStart = timetable[`${lessonId}_Pazartesi`]?.start || '';
-     const pztEnd = timetable[`${lessonId}_Pazartesi`]?.end || '';
+     const pztStart = appTimetable[`${lessonId}_Pazartesi`]?.start || '';
+     const pztEnd = appTimetable[`${lessonId}_Pazartesi`]?.end || '';
      
      if (!pztStart && !pztEnd) return;
      
-     const newTimetable = { ...timetable };
+     const newTimetable = { ...appTimetable };
      days.forEach(day => {
         if (day !== 'Pazartesi') {
            newTimetable[`${lessonId}_${day}`] = { start: pztStart, end: pztEnd };
         }
      });
-     setTimetable(newTimetable);
+     setAppTimetable(newTimetable);
   };
 
   const addZone = () => {
-    setZones([...zones, { 
+    setAppZones([...appZones, { 
       id: `z${Date.now()}`, 
       name: 'Yeni Bölge', 
       idealStaff: 2, 
-      priority: zones.length + 1,
+      priority: appZones.length + 1,
+      minStaff: 1,
+      riskMultiplier: 1,
       startPeriod: 1,
       endPeriod: 8
     }]);
   };
 
   const removeZone = (id: string) => {
-    setZones(zones.filter(z => z.id !== id));
+    setAppZones(appZones.filter(z => z.id !== id));
   };
 
   const addLesson = () => {
-    setLessons([...lessons, { id: lessons.length + 1, name: `${lessons.length + 1}. Ders` }]);
+    setAppPeriods([...appPeriods, { id: appPeriods.length + 1, name: `${appPeriods.length + 1}. Ders` }]);
   };
 
   const removeLesson = (id: number) => {
-    setLessons(lessons.filter(l => l.id !== id));
+    setAppPeriods(appPeriods.filter(l => l.id !== id));
   };
 
   const updateLessonName = (id: number, newName: string) => {
-    setLessons(lessons.map(l => l.id === id ? { ...l, name: newName } : l));
+    setAppPeriods(appPeriods.map(l => l.id === id ? { ...l, name: newName } : l));
   };
 
   return (
@@ -120,7 +119,7 @@ export function SettingsView() {
           </h2>
           <p className="text-gray-500 mt-1">Ders saatlerini ve nöbet bölgelerini okulunuza göre özelleştirin.</p>
         </div>
-        <button className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+        <button onClick={onSave} className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm">
           <Save className="w-5 h-5" />
           Tüm Ayarları Kaydet
         </button>
@@ -182,7 +181,7 @@ export function SettingsView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {lessons.map((lesson) => (
+                {appPeriods.map((lesson) => (
                   <tr key={lesson.id} className="hover:bg-gray-50/50">
                     <td className="py-3 px-4 font-medium text-gray-900 border-r bg-gray-50">
                       <input 
@@ -195,9 +194,9 @@ export function SettingsView() {
                     {days.map((day, dIdx) => (
                       <td key={day} className="p-2 min-w-[130px] border-r border-gray-100 relative group">
                         <div className="flex items-center gap-1">
-                          <input type="time" value={timetable[`${lesson.id}_${day}`]?.start || ''} onChange={e => handleTimeChange(lesson.id, day, 'start', e.target.value)} className="w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 bg-white" title="Başlangıç Saati" />
+                          <input type="time" value={appTimetable[`${lesson.id}_${day}`]?.start || ''} onChange={e => handleTimeChange(lesson.id, day, 'start', e.target.value)} className="w-full px-1 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-indigo-500 bg-white" title="Başlangıç Saati" />
                           <span className="text-gray-400">-</span>
-                          <input type="time" value={timetable[`${lesson.id}_${day}`]?.end || ''} onChange={e => handleTimeChange(lesson.id, day, 'end', e.target.value)} className="w-full px-1 py-1 text-xs border rounded bg-white outline-none focus:ring-1 focus:ring-indigo-500" title="Bitiş Saati" />
+                          <input type="time" value={appTimetable[`${lesson.id}_${day}`]?.end || ''} onChange={e => handleTimeChange(lesson.id, day, 'end', e.target.value)} className="w-full px-1 py-1 text-xs border rounded bg-white outline-none focus:ring-1 focus:ring-indigo-500" title="Bitiş Saati" />
                         </div>
                         {dIdx === 0 && (
                           <button 
@@ -241,35 +240,55 @@ export function SettingsView() {
           </div>
           
           <div className="space-y-4">
-            {zones.map((z) => (
+            {appZones.map((z, idx) => (
               <div key={z.id} className="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-colors group">
                 
                 <div className="flex flex-col flex-1">
                   <label className="text-xs text-gray-500 font-medium mb-1">Bölge Adı</label>
-                  <input type="text" defaultValue={z.name} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-gray-900" />
+                  <input type="text" value={z.name} onChange={(e) => {
+                     const newZones = [...appZones];
+                     newZones[idx].name = e.target.value;
+                     setAppZones(newZones);
+                  }} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-gray-900" />
                 </div>
                 
                 <div className="flex flex-col w-24">
                   <label className="text-xs text-gray-500 font-medium mb-1">Gereken Kişi</label>
-                  <input type="number" defaultValue={z.idealStaff} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center" />
+                  <input type="number" value={z.idealStaff} onChange={(e) => {
+                     const newZones = [...appZones];
+                     newZones[idx].idealStaff = Number(e.target.value);
+                     setAppZones(newZones);
+                  }} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center" />
                 </div>
                 
                 <div className="flex flex-col w-24">
                   <label className="text-xs text-gray-500 font-medium mb-1">Öncelik</label>
-                  <input type="number" defaultValue={z.priority} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center" />
+                  <input type="number" value={z.priority} onChange={(e) => {
+                     const newZones = [...appZones];
+                     newZones[idx].priority = Number(e.target.value);
+                     setAppZones(newZones);
+                  }} className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center" />
                 </div>
 
                 <div className="flex flex-col w-32 border-l pl-4 border-gray-200">
                   <label className="text-xs text-gray-500 font-medium mb-1">Başlangıç</label>
-                  <select defaultValue={z.startPeriod} className="px-3 py-2 border border-gray-300 rounded-lg outline-none bg-gray-50 text-sm">
-                    {lessons.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                  <select value={z.startPeriod} onChange={(e) => {
+                     const newZones = [...appZones];
+                     newZones[idx].startPeriod = Number(e.target.value);
+                     setAppZones(newZones);
+                  }} className="px-3 py-2 border border-gray-300 rounded-lg outline-none bg-gray-50 text-sm">
+                    {appPeriods.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                   </select>
                 </div>
 
                 <div className="flex flex-col w-32">
                   <label className="text-xs text-gray-500 font-medium mb-1">Bitiş</label>
-                  <select defaultValue={z.endPeriod} className="px-3 py-2 border border-gray-300 rounded-lg outline-none bg-gray-50 text-sm">
-                    {lessons.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                  <select value={z.endPeriod} onChange={(e) => {
+                     const newZones = [...appZones];
+                     newZones[idx].endPeriod = Number(e.target.value);
+                     setAppZones(newZones);
+                  }} className="px-3 py-2 border border-gray-300 rounded-lg outline-none bg-gray-50 text-sm">
+                    {appPeriods.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                   </select>
                 </div>
 

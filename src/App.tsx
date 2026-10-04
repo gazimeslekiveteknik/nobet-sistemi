@@ -41,10 +41,98 @@ function App() {
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
+  
+  // App-level settings state
+  const [appZones, setAppZones] = useState<Zone[]>(mockZones);
+  const [appPeriods, setAppPeriods] = useState([
+    { id: 1, name: '1. Ders' }, { id: 2, name: '2. Ders' }, { id: 3, name: '3. Ders' },
+    { id: 4, name: '4. Ders' }, { id: 5, name: '5. Ders' }, { id: 6, name: '6. Ders' },
+    { id: 7, name: '7. Ders' }, { id: 8, name: '8. Ders' }, { id: 9, name: '9. Ders' }, { id: 10, name: '10. Ders' }
+  ]);
+  const [appTimetable, setAppTimetable] = useState<Record<string, {start: string, end: string}>>({});
+  const [appSlots, setAppSlots] = useState<Slot[]>(mockSlots);
+
   const [schedule, setSchedule] = useState(() => generateSchedule(bilsaData.teachers as Teacher[], bilsaData.lessons as Lesson[], mockSlots, mockZones));
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
+
+  const handleSaveSettings = () => {
+    const newSlots: Slot[] = [];
+    const days = [1, 2, 3, 4, 5];
+    const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+    
+    // Validate minimum data
+    if (!appTimetable['1_Pazartesi']?.start) {
+       alert("Lütfen önce ders saatlerini doldurunuz!");
+       return;
+    }
+
+    days.forEach((dayNum, idx) => {
+       const dayName = dayNames[idx];
+       
+       // 1. OPENING SLOT
+       const firstStart = appTimetable[`1_${dayName}`]?.start;
+       if (firstStart) {
+          const [h,m] = firstStart.split(':').map(Number);
+          let totalMins = h * 60 + m - 20; // 20 mins before
+          const openStart = `${Math.floor(totalMins / 60).toString().padStart(2, '0')}:${(totalMins % 60).toString().padStart(2, '0')}`;
+          
+          newSlots.push({
+             id: `s_open_d${dayNum}`,
+             day: dayNum as any,
+             type: 'OPENING',
+             startTime: openStart,
+             endTime: firstStart
+          });
+       }
+
+       // 2. BREAK SLOTS
+       for(let i=0; i<appPeriods.length - 1; i++) {
+          const curr = appPeriods[i];
+          const next = appPeriods[i+1];
+          const currEnd = appTimetable[`${curr.id}_${dayName}`]?.end;
+          const nextStart = appTimetable[`${next.id}_${dayName}`]?.start;
+          
+          if (currEnd && nextStart && currEnd !== nextStart) {
+             newSlots.push({
+               id: `s_break_${curr.id}_d${dayNum}`,
+               day: dayNum as any,
+               type: 'BREAK',
+               afterLesson: curr.id,
+               startTime: currEnd,
+               endTime: nextStart
+             });
+          }
+       }
+
+       // 3. CLOSING SLOT
+       const lastPeriod = appPeriods[appPeriods.length - 1];
+       const lastEnd = appTimetable[`${lastPeriod.id}_${dayName}`]?.end;
+       if (lastEnd) {
+          const [h,m] = lastEnd.split(':').map(Number);
+          let totalMins = h * 60 + m + 20; // 20 mins after
+          const closeEnd = `${Math.floor(totalMins / 60).toString().padStart(2, '0')}:${(totalMins % 60).toString().padStart(2, '0')}`;
+          
+          newSlots.push({
+             id: `s_close_d${dayNum}`,
+             day: dayNum as any,
+             type: 'CLOSING',
+             startTime: lastEnd,
+             endTime: closeEnd
+          });
+       }
+    });
+
+    setAppSlots(newSlots);
+    
+    // Regenerate schedule with new slots and zones
+    const newSchedule = generateSchedule(teachers, lessons, newSlots, appZones, currentSchedule?.assignments || []);
+    updateCurrentSchedule(newSchedule);
+    
+    alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
+    setCurrentView('plan');
+  };
 
   const currentSchedule = weekSchedules[weekOffset] || schedule;
   const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
@@ -85,7 +173,7 @@ function App() {
   const handleDataImported = (importedTeachers: Teacher[], importedLessons: Lesson[]) => {
     setTeachers(importedTeachers);
     setLessons(importedLessons);
-    updateCurrentSchedule(generateSchedule(importedTeachers, importedLessons, mockSlots, mockZones));
+    updateCurrentSchedule(generateSchedule(importedTeachers, importedLessons, appSlots, appZones));
     setTimeout(() => setCurrentView('plan'), 1500); // Switch to plan view after showing success
   };
 
@@ -93,7 +181,7 @@ function App() {
     setTeachers(prev => {
       const updated = prev.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
       // Auto-regenerate schedule with updated teachers, keeping manual assignments
-      updateCurrentSchedule(generateSchedule(updated, lessons, mockSlots, mockZones, currentSchedule.assignments));
+      updateCurrentSchedule(generateSchedule(updated, lessons, appSlots, appZones, currentSchedule?.assignments || []));
       return updated;
     });
   };
@@ -111,17 +199,17 @@ function App() {
 
     updateCurrentSchedule(prev => {
       let newAssignments = [...prev.assignments];
-      const availability = calculateAvailability(teachers, lessons, mockSlots);
+      const availability = calculateAvailability(teachers, lessons, appSlots);
       
       // Find all assignments for the absent teacher ON THIS DAY
       const todayAssignments = newAssignments.filter(
-        a => a.teacherId === t.id && mockSlots.find(s => s.id === a.slotId)?.day === selectedDay
+        a => a.teacherId === t.id && appSlots.find(s => s.id === a.slotId)?.day === selectedDay
       );
 
       const logs: string[] = [];
 
       todayAssignments.forEach(absentAssignment => {
-        const slot = mockSlots.find(s => s.id === absentAssignment.slotId);
+        const slot = appSlots.find(s => s.id === absentAssignment.slotId);
         if (!slot) return;
 
         // Find a replacement teacher
@@ -158,13 +246,13 @@ function App() {
           // 2. Try to settle the debt immediately by finding a future duty of the replacement
           const futureDutyIndex = newAssignments.findIndex(a => {
              if (a.teacherId !== bestReplacement) return false;
-             const s = mockSlots.find(slot => slot.id === a.slotId);
+             const s = appSlots.find(slot => slot.id === a.slotId);
              // Find a duty later in the week
              return s && s.day > selectedDay;
           });
 
           if (futureDutyIndex !== -1) {
-             const futureDutySlot = mockSlots.find(s => s.id === newAssignments[futureDutyIndex].slotId);
+             const futureDutySlot = appSlots.find(s => s.id === newAssignments[futureDutyIndex].slotId);
              newAssignments[futureDutyIndex] = { ...newAssignments[futureDutyIndex], teacherId: t.id, isManual: true };
              logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${futureDutySlot?.day}. gündeki nöbeti alındı)`);
           } else {
@@ -201,7 +289,7 @@ function App() {
     if (assignment.slotId === targetSlotId && assignment.zoneId === targetZoneId) return;
 
     // Calculate if teacher is available in target slot
-    const availability = calculateAvailability(teachers, lessons, mockSlots);
+    const availability = calculateAvailability(teachers, lessons, appSlots);
     const isAvail = availability[assignment.teacherId]?.[targetSlotId];
 
     if (!isAvail || !isAvail.canDuty) {
@@ -221,7 +309,7 @@ function App() {
   };
 
   // Only show slots for the selected day in the table
-  const currentDaySlots = mockSlots.filter(s => s.day === selectedDay);
+  const currentDaySlots = appSlots.filter(s => s.day === selectedDay);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -283,13 +371,15 @@ function App() {
           )}
 
           {currentView === 'reports' && (
-            <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={mockZones} slots={mockSlots} />
+            <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={appZones} slots={appSlots} />
           )}
 
           {currentView === 'settings' && (
             <SettingsView 
-                
-                
+              appZones={appZones} setAppZones={setAppZones}
+              appPeriods={appPeriods} setAppPeriods={setAppPeriods}
+              appTimetable={appTimetable} setAppTimetable={setAppTimetable}
+              onSave={handleSaveSettings}
             />
           )}
 
@@ -346,7 +436,7 @@ function App() {
                           alert('Bu plan kilitlenmiş! Yanlışlıkla bozulmaması için yeniden optimize etme işlemi engellendi. İşlem yapmak için kilidi açın.');
                           return;
                        }
-                       updateCurrentSchedule(generateSchedule(teachers, lessons, mockSlots, mockZones, currentSchedule.assignments));
+                       updateCurrentSchedule(generateSchedule(teachers, lessons, appSlots, appZones, currentSchedule?.assignments || []));
                     }}
                     className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
                       isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
@@ -395,7 +485,7 @@ function App() {
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="py-4 px-6 font-semibold text-gray-700">Zaman Dilimi</th>
                   <th className="py-4 px-6 font-semibold text-gray-700">Türü</th>
-                  {mockZones.map(z => (
+                  {appZones.map(z => (
                     <th key={z.id} className="py-4 px-6 font-semibold text-gray-700">{z.name}</th>
                   ))}
                 </tr>
@@ -415,7 +505,7 @@ function App() {
                          `${slot.afterLesson}. Ders Sonu`}
                       </span>
                     </td>
-                    {mockZones.map(zone => {
+                    {appZones.map(zone => {
                       const assigned = currentSchedule.assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id);
                       return (
                         <td 

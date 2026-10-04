@@ -16,7 +16,9 @@ export interface Zone {
   priority: number; // 1 = Highest
   minStaff: number; // E.g., 1
   idealStaff: number; // E.g., 2
-  riskMultiplier: number; 
+  riskMultiplier: number;
+  startPeriod?: number;
+  endPeriod?: number; 
 }
 
 export interface Teacher {
