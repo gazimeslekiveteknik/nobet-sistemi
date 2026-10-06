@@ -55,7 +55,17 @@ function App() {
   const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
   const [settingsTab, setSettingsTab] = useState<'config' | 'teachers' | 'import'>('import');
   const [printTab, setPrintTab] = useState<'master' | 'personal' | 'timetable'>('master');
-  const [printSearchTerm, setPrintSearchTerm] = useState('');
+  const [schedulesSearch, setSchedulesSearch] = useState('');
+  const [timetablesSearch, setTimetablesSearch] = useState('');
+
+  // Clear search states when leaving the print menu
+  useEffect(() => {
+    if (currentView !== 'print') {
+      setSchedulesSearch('');
+      setTimetablesSearch('');
+    }
+  }, [currentView]);
+
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -548,16 +558,16 @@ function App() {
                   slots={appSlots}
                   zones={appZones}
                   weekString={getWeekString(weekOffset)}
-                  searchTerm={printSearchTerm}
-                  setSearchTerm={setPrintSearchTerm}
+                  searchTerm={schedulesSearch}
+                  setSearchTerm={setSchedulesSearch}
                 />
               )}
               {printTab === 'timetable' && (
                 <TeacherTimetablesPrintView
                   teachers={teachers}
                   lessons={lessons}
-                  searchTerm={printSearchTerm}
-                  setSearchTerm={setPrintSearchTerm}
+                  searchTerm={timetablesSearch}
+                  setSearchTerm={setTimetablesSearch}
                 />
               )}
             </div>
