@@ -103,6 +103,8 @@ function App() {
   };
 
   const [isInitializing, setIsInitializing] = useState(true);
+  const [telegramToken, setTelegramToken] = useState('');
+  const [telegramChatId, setTelegramChatId] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -126,6 +128,8 @@ function App() {
         if (settings.appSlots) setAppSlots(settings.appSlots);
         if (settings.teachers) setTeachers(settings.teachers);
         if (settings.lessons) setLessons(settings.lessons);
+        if (settings.telegramToken) setTelegramToken(settings.telegramToken);
+        if (settings.telegramChatId) setTelegramChatId(settings.telegramChatId);
         
         if (settings.lastScheduleAssignments) {
            setSchedule(prev => ({ ...prev, assignments: settings.lastScheduleAssignments }));
@@ -224,7 +228,8 @@ function App() {
       appTimetable,
       appSlots: newSlots,
       teachers,
-      lessons
+      lessons,
+      telegramToken, telegramChatId
     });
     
     alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
@@ -251,11 +256,12 @@ function App() {
     const timeout = setTimeout(() => {
       FirebaseService.saveSettings({
         appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
-        lastScheduleAssignments: currentSchedule.assignments
+        lastScheduleAssignments: currentSchedule.assignments,
+        telegramToken, telegramChatId
       }).catch(console.error);
     }, 1500);
     return () => clearTimeout(timeout);
-  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing]);
+  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing, telegramToken, telegramChatId]);
 
   
   const getWeekString = (offset = 0) => {
@@ -552,6 +558,8 @@ function App() {
                   appZones={appZones} setAppZones={setAppZones}
                   appPeriods={appPeriods} setAppPeriods={setAppPeriods}
                   appTimetable={appTimetable} setAppTimetable={setAppTimetable}
+                  telegramToken={telegramToken} setTelegramToken={setTelegramToken}
+                  telegramChatId={telegramChatId} setTelegramChatId={setTelegramChatId}
                   onSave={handleSaveSettings}
                 />
               )}
