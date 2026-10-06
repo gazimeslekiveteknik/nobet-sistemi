@@ -121,6 +121,13 @@ function App() {
         if (settings.appPeriods) setAppPeriods(settings.appPeriods);
         if (settings.appTimetable) setAppTimetable(settings.appTimetable);
         if (settings.appSlots) setAppSlots(settings.appSlots);
+        if (settings.teachers) setTeachers(settings.teachers);
+        if (settings.lessons) setLessons(settings.lessons);
+        
+        if (settings.lastScheduleAssignments) {
+           setSchedule(prev => ({ ...prev, assignments: settings.lastScheduleAssignments }));
+           setWeekSchedules({ 0: { assignments: settings.lastScheduleAssignments, warnings: [] } });
+        }
       }
       setIsInitializing(false);
     }).catch(err => {
@@ -132,6 +139,8 @@ function App() {
     
     return () => { isMounted = false; };
   }, []);
+
+
   const handleSaveSettings = async () => {
     const newSlots: Slot[] = [];
     const days = [1, 2, 3, 4, 5];
@@ -210,7 +219,9 @@ function App() {
       appZones,
       appPeriods,
       appTimetable,
-      appSlots: newSlots
+      appSlots: newSlots,
+      teachers,
+      lessons
     });
     
     alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
@@ -225,6 +236,18 @@ function App() {
   };
 
   const [isLocked, setIsLocked] = useState<boolean>(false);
+
+  // Otomatik yedekleme (Herhangi bir ayar, öğretmen veya liste değiştiğinde)
+  useEffect(() => {
+    if (isInitializing) return;
+    const timeout = setTimeout(() => {
+      FirebaseService.saveSettings({
+        appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
+        lastScheduleAssignments: currentSchedule.assignments
+      }).catch(console.error);
+    }, 1500);
+    return () => clearTimeout(timeout);
+  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing]);
 
   
   const getWeekString = (offset = 0) => {
