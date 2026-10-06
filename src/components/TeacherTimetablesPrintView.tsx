@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Search } from 'lucide-react';
 import type { Teacher, Lesson, DayOfWeek } from '../types';
 
 interface Props {
@@ -6,6 +8,7 @@ interface Props {
 }
 
 export function TeacherTimetablesPrintView({ teachers, lessons }: Props) {
+  const [searchTerm, setSearchTerm] = useState('');
   const days: { id: DayOfWeek; name: string }[] = [
     { id: 1, name: 'Pazartesi' },
     { id: 2, name: 'Salı' },
@@ -19,7 +22,9 @@ export function TeacherTimetablesPrintView({ teachers, lessons }: Props) {
 
   // Filter teachers who actually have lessons
   const activeTeachers = teachers.filter(t => 
-    !t.isExcluded && lessons.some(l => l.teacherId === t.id)
+    !t.isExcluded && 
+    lessons.some(l => l.teacherId === t.id) &&
+    t.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -29,12 +34,25 @@ export function TeacherTimetablesPrintView({ teachers, lessons }: Props) {
           @page { size: landscape; margin: 1cm; }
         }
       `}} />
-      <div className="print:hidden mb-6">
+      <div className="print:hidden mb-8">
         <h1 className="text-2xl font-bold text-gray-800">Öğretmen Ders Programları</h1>
-        <p className="text-gray-500 mt-1">Bu sayfayı yazdırarak veya PDF'e çevirerek her öğretmenin haftalık ders programını inceleyebilirsiniz. Çizelgeler sayfaya sığacak şekilde otomatik boyutlandırılır.</p>
-        <button onClick={() => window.print()} className="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">
-          Yazdır / PDF Olarak Kaydet
-        </button>
+        <p className="text-gray-500 mt-1 mb-6">Bu sayfayı yazdırarak veya PDF'e çevirerek her öğretmenin haftalık ders programını inceleyebilirsiniz. Çizelgeler sayfaya sığacak şekilde otomatik boyutlandırılır.</p>
+        
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input 
+              type="text" 
+              placeholder="Öğretmen ara..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+            />
+          </div>
+          <button onClick={() => window.print()} className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 whitespace-nowrap">
+            Yazdır / PDF Olarak Kaydet
+          </button>
+        </div>
       </div>
 
       <div className="space-y-12">
