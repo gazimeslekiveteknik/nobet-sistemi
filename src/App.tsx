@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
 import { generateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
-import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek } from './types';
+import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
 import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
+interface Schedule {
+  assignments: Assignment[];
+  warnings: string[];
+}
+
+
+interface Snapshot {
+  schedule: Schedule;
+  teachers: Teacher[];
+}
 import { ExcelImport } from './components/ExcelImport';
 import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
@@ -59,6 +69,35 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
+
+  const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
+
+  const saveHistory = () => {
+    const currentHistSched = weekSchedules[weekOffset] || schedule;
+    setHistory(prev => {
+      const weekHist = prev[weekOffset] || [];
+      return {
+        ...prev,
+        [weekOffset]: [...weekHist, { schedule: currentHistSched, teachers: JSON.parse(JSON.stringify(teachers)) }].slice(-20)
+      };
+    });
+  };
+
+  const handleUndo = () => {
+    setHistory(prev => {
+      const weekHist = prev[weekOffset] || [];
+      if (weekHist.length === 0) return prev;
+      
+      const lastSnapshot = weekHist[weekHist.length - 1];
+      const newHist = weekHist.slice(0, -1);
+      
+      setTeachers(lastSnapshot.teachers);
+      setWeekSchedules(weeks => ({ ...weeks, [weekOffset]: lastSnapshot.schedule }));
+      setSchedule(lastSnapshot.schedule);
+      
+      return { ...prev, [weekOffset]: newHist };
+    });
+  };
 
   const [isInitializing, setIsInitializing] = useState(true);
 
@@ -222,6 +261,7 @@ function App() {
   };
 
   const handleToggleExclude = (teacherId: string, isExcluded: boolean) => {
+    saveHistory();
     setTeachers(prev => {
       const updated = prev.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
       // Auto-regenerate schedule with updated teachers, keeping manual assignments
@@ -231,6 +271,7 @@ function App() {
   };
 
   const handleTeacherClick = (assignment: Assignment) => {
+    saveHistory();
     const t = teachers.find(t => t.id === assignment.teacherId);
     if (!t) return;
 
@@ -322,6 +363,7 @@ function App() {
   };
 
   const handleDrop = (e: React.DragEvent<HTMLTableCellElement>, targetSlotId: string, targetZoneId: string) => {
+    saveHistory();
     e.preventDefault();
     const assignmentId = e.dataTransfer.getData('assignmentId');
     if (!assignmentId) return;
@@ -488,6 +530,16 @@ function App() {
                   </button>
                   
                   <button 
+                    onClick={handleUndo}
+                    disabled={!(history[weekOffset] && history[weekOffset].length > 0)}
+                    className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Geri Al (Ctrl+Z)"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+                    Geri Al
+                  </button>
+
+                  <button 
                     onClick={() => setIsLocked(!isLocked)}
                     className={`px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2 ${
                       isLocked 
@@ -504,6 +556,7 @@ function App() {
                           alert('Bu plan kilitlenmiş! Yanlışlıkla bozulmaması için yeniden optimize etme işlemi engellendi. İşlem yapmak için kilidi açın.');
                           return;
                        }
+                       saveHistory();
                        updateCurrentSchedule(generateSchedule(teachers, lessons, appSlots, appZones, currentSchedule?.assignments || []));
                     }}
                     className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
