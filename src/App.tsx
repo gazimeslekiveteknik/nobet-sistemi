@@ -3,7 +3,7 @@ import { FirebaseService } from './firebase/service';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
-import { Calendar, ShieldAlert, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
+import { Calendar, ShieldAlert, Settings, BarChart3, ChevronLeft, ChevronRight, Printer, X, Plus } from 'lucide-react';
 interface Schedule {
   assignments: Assignment[];
   warnings: string[];
@@ -251,6 +251,7 @@ function App() {
   };
 
   const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [addTeacherModal, setAddTeacherModal] = useState<{slotId: string, zoneId: string} | null>(null);
 
   // Otomatik yedekleme (Herhangi bir ayar, öğretmen veya liste değiştiğinde)
   useEffect(() => {
@@ -399,6 +400,14 @@ function App() {
 
   const handleDragOver = (e: React.DragEvent<HTMLTableCellElement>) => {
     e.preventDefault(); // allow drop
+  };
+
+  const handleRemoveAssignment = (assignmentId: string) => {
+    saveHistory();
+    updateCurrentSchedule(prev => ({
+      ...prev,
+      assignments: prev.assignments.filter(a => a.id !== assignmentId)
+    }));
   };
 
   const handleDrop = (e: React.DragEvent<HTMLTableCellElement>, targetSlotId: string, targetZoneId: string) => {
@@ -737,12 +746,12 @@ function App() {
                                 handleDrop(e, slot.id, zone.id);
                               }}
                         >
-                          <div className="flex flex-col gap-1.5 min-h-[40px]">
+                          <div className="flex flex-col gap-1.5 min-h-[40px] group/cell relative pb-5">
                             {assigned.length > 0 ? assigned.map(a => {
                               const t = teachers.find(t => t.id === a.teacherId);
                               return (
+                                <div key={a.id} className="relative group">
                                 <div 
-                                  key={a.id} 
                                   draggable
                                   onDragStart={(e) => { if (!isLocked) handleDragStart(e, a); }}
                                   onClick={() => {
@@ -752,7 +761,7 @@ function App() {
                                         }
                                         handleTeacherClick(a);
                                       }}
-                                  className={`flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-grab active:cursor-grabbing border transition-transform hover:scale-[1.02] ${
+                                  className={`flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-grab active:cursor-grabbing border transition-transform group-hover:scale-[1.02] ${
                                     a.isManual 
                                       ? 'bg-amber-50 border-amber-200 text-amber-800' 
                                       : 'bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100'
@@ -761,11 +770,37 @@ function App() {
                                   <span>{t?.name}</span>
                                   {a.isManual && <span className="text-[10px] uppercase font-bold px-1.5 bg-amber-200 rounded text-amber-800 ml-2">Manuel</span>}
                                 </div>
+                                {!isLocked && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleRemoveAssignment(a.id);
+                                    }}
+                                    className="absolute -top-1.5 -right-1.5 bg-red-100 text-red-600 rounded-full p-0.5 border border-red-200 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 shadow-sm z-10"
+                                    title="Görevi Sil"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                                </div>
                               );
                             }) : (
                               <div className="h-full w-full flex items-center text-gray-400 text-sm italic border-2 border-dashed border-transparent hover:border-gray-200 rounded-md p-2 transition-colors">
                                 Boş
                               </div>
+                            )}
+
+                            {!isLocked && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setAddTeacherModal({ slotId: slot.id, zoneId: zone.id });
+                                }}
+                                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 bg-green-100 text-green-700 rounded-full p-1 border border-green-300 opacity-0 group-hover/cell:opacity-100 transition-all hover:bg-green-200 hover:scale-110 shadow-sm z-10"
+                                title="Öğretmen Ekle"
+                              >
+                                <Plus className="w-4 h-4" />
+                              </button>
                             )}
                           </div>
                         </td>
@@ -780,6 +815,55 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* MANUEL ÖĞRETMEN EKLEME MODALI */}
+      {addTeacherModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[80vh] flex flex-col">
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="font-bold text-gray-800">Öğretmen Ekle (Manuel)</h3>
+              <button 
+                onClick={() => setAddTeacherModal(null)}
+                className="text-gray-400 hover:text-gray-600 bg-gray-100 p-1.5 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto flex-1">
+              <div className="space-y-2">
+                {teachers.filter(t => !t.isExcluded).map(t => {
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        saveHistory();
+                        updateCurrentSchedule(prev => ({
+                          ...prev,
+                          assignments: [
+                            ...prev.assignments,
+                            {
+                              id: `manual_${Date.now()}_${t.id}`,
+                              slotId: addTeacherModal.slotId,
+                              zoneId: addTeacherModal.zoneId,
+                              teacherId: t.id,
+                              isManual: true
+                            }
+                          ]
+                        }));
+                        setAddTeacherModal(null);
+                      }}
+                      className="w-full text-left px-4 py-3 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 border border-transparent hover:border-indigo-100 transition-colors"
+                    >
+                      {t.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
