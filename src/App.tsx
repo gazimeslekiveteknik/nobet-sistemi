@@ -3,7 +3,7 @@ import { FirebaseService } from './firebase/service';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
-import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
+import { Calendar, ShieldAlert, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
 interface Schedule {
   assignments: Assignment[];
   warnings: string[];
@@ -52,6 +52,7 @@ const mockZones: Zone[] = [
 
 function App() {
   const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
+  const [settingsTab, setSettingsTab] = useState<'config' | 'teachers' | 'import'>('config');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -444,13 +445,15 @@ function App() {
             <Calendar size={20} />
             <span>Haftalık Plan</span>
           </button>
+          
           <button 
-            onClick={() => setCurrentView('teachers')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'teachers' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+            onClick={() => { setCurrentView('settings'); setSettingsTab('config'); }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'settings' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
-            <Users size={20} />
-            <span>Öğretmenler</span>
+            <Settings size={20} />
+            <span>Ayarlar</span>
           </button>
+
           <button 
             onClick={() => setCurrentView('reports')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'reports' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
@@ -458,33 +461,21 @@ function App() {
             <BarChart3 size={20} />
             <span>Analiz & Raporlar</span>
           </button>
+
           <button 
             onClick={() => setCurrentView('print')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
             <Printer size={20} />
-            <span>Çizelge (Yazdır)</span>
+            <span>Çizelge (Okul Panosu)</span>
           </button>
+
           <button 
             onClick={() => setCurrentView('print-teachers')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print-teachers' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
             <Printer size={20} />
-            <span>Kişisel Çizelgeler</span>
-          </button>
-          <button 
-            onClick={() => setCurrentView('import')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'import' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
-          >
-            <FileSpreadsheet size={20} />
-            <span>Veri Aktarımı</span>
-          </button>
-          <button 
-            onClick={() => setCurrentView('settings')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'settings' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
-          >
-            <Settings size={20} />
-            <span>Ayarlar</span>
+            <span>Çizelge (Öğretmen El)</span>
           </button>
         </nav>
       </div>
@@ -492,19 +483,7 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 p-8">
         <div className="max-w-6xl mx-auto">
-          {currentView === 'import' && (
-            <ExcelImport onDataImported={handleDataImported} />
-          )}
 
-          {currentView === 'teachers' && (
-            <TeacherList 
-              teachers={teachers} 
-              schedule={currentSchedule} 
-              slots={appSlots} 
-              zones={appZones} 
-              onToggleExclude={handleToggleExclude} 
-            />
-          )}
 
           {currentView === 'reports' && (
             <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={appZones} slots={appSlots} />
@@ -530,12 +509,51 @@ function App() {
           )}
 
           {currentView === 'settings' && (
-            <SettingsView 
-              appZones={appZones} setAppZones={setAppZones}
-              appPeriods={appPeriods} setAppPeriods={setAppPeriods}
-              appTimetable={appTimetable} setAppTimetable={setAppTimetable}
-              onSave={handleSaveSettings}
-            />
+            <div className="space-y-6">
+              <div className="flex border-b border-gray-200 gap-6">
+                <button 
+                  onClick={() => setSettingsTab('config')} 
+                  className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${settingsTab === 'config' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                >
+                  Program & Bölgeler
+                </button>
+                <button 
+                  onClick={() => setSettingsTab('teachers')} 
+                  className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${settingsTab === 'teachers' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                >
+                  Öğretmenler
+                </button>
+                <button 
+                  onClick={() => setSettingsTab('import')} 
+                  className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${settingsTab === 'import' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                >
+                  Veri Aktarımı
+                </button>
+              </div>
+              
+              {settingsTab === 'config' && (
+                <SettingsView 
+                  appZones={appZones} setAppZones={setAppZones}
+                  appPeriods={appPeriods} setAppPeriods={setAppPeriods}
+                  appTimetable={appTimetable} setAppTimetable={setAppTimetable}
+                  onSave={handleSaveSettings}
+                />
+              )}
+
+              {settingsTab === 'teachers' && (
+                <TeacherList 
+                  teachers={teachers} 
+                  schedule={currentSchedule} 
+                  slots={appSlots} 
+                  zones={appZones} 
+                  onToggleExclude={handleToggleExclude} 
+                />
+              )}
+
+              {settingsTab === 'import' && (
+                <ExcelImport onDataImported={handleDataImported} />
+              )}
+            </div>
           )}
 
           {currentView === 'plan' && (
