@@ -592,7 +592,9 @@ function App() {
                       <button onClick={() => setWeekOffset(o => o + 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Sonraki Hafta"><ChevronRight className="w-5 h-5" /></button>
                     </div>
                   </div>
-                  <p className="text-gray-500 mt-2">Sistemdeki Aktif Öğretmen: {teachers.length}</p>
+                  <p className="text-gray-500 mt-2">
+                    Toplam {teachers.length} öğretmen. Nöbet tutan: <span className="font-semibold text-green-600">{teachers.filter(t => !t.isExcluded).length}</span>, Muaf: <span className="font-semibold text-red-500">{teachers.filter(t => t.isExcluded).length}</span>
+                  </p>
                 </div>
                 <div className="flex gap-3">
                   <button 
