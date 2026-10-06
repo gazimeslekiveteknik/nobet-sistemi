@@ -6,9 +6,10 @@ interface Props {
   assignments: Assignment[];
   slots: Slot[];
   zones: Zone[];
+  weekString: string;
 }
 
-export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones }: Props) {
+export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones, weekString }: Props) {
   const days: { id: DayOfWeek; name: string }[] = [
     { id: 1, name: 'Pazartesi' },
     { id: 2, name: 'Salı' },
@@ -63,10 +64,9 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones 
             <div className="bg-gray-100 px-6 py-4 border-b border-gray-300 flex justify-between items-center">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{teacher.name}</h2>
-                <p className="text-sm text-gray-600 font-medium">{teacher.branch}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-500">Haftalık Nöbet Çizelgesi</p>
+                <p className="text-sm text-gray-500 font-medium">{weekString} Nöbet Çizelgesi</p>
               </div>
             </div>
             

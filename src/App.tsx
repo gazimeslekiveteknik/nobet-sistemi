@@ -464,19 +464,11 @@ function App() {
           </button>
 
           <button 
-            onClick={() => setCurrentView('print')}
+            onClick={() => { setCurrentView('print'); setPrintTab('master'); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
             <Printer size={20} />
-            <span>Çizelge (Okul Panosu)</span>
-          </button>
-
-          <button 
-            onClick={() => setCurrentView('print-teachers')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print-teachers' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
-          >
-            <Printer size={20} />
-            <span>Çizelge (Öğretmen El)</span>
+            <span>Çıktılar & Çizelgeler</span>
           </button>
         </nav>
       </div>
@@ -492,19 +484,27 @@ function App() {
 
           {currentView === 'print' && (
             <div className="space-y-6">
-              <div className="flex border-b border-gray-200 gap-6 print:hidden">
-                <button 
-                  onClick={() => setPrintTab('master')} 
-                  className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'master' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-                >
-                  Okul Panosu (Genel)
-                </button>
-                <button 
-                  onClick={() => setPrintTab('personal')} 
-                  className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'personal' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-                >
-                  Öğretmen El Programı
-                </button>
+              <div className="flex justify-between items-center border-b border-gray-200 pb-4 print:hidden">
+                <div className="flex gap-6">
+                  <button 
+                    onClick={() => setPrintTab('master')} 
+                    className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'master' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  >
+                    Okul Panosu (Genel)
+                  </button>
+                  <button 
+                    onClick={() => setPrintTab('personal')} 
+                    className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'personal' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  >
+                    Öğretmen El Programı
+                  </button>
+                </div>
+                
+                <div className="flex items-center bg-indigo-50 rounded-full p-1 border border-indigo-100 shadow-sm mb-2">
+                  <button onClick={() => setWeekOffset(o => o - 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Önceki Hafta"><ChevronLeft className="w-5 h-5" /></button>
+                  <span className="text-sm font-medium text-indigo-700 px-4 min-w-[140px] text-center">{getWeekString(weekOffset)}</span>
+                  <button onClick={() => setWeekOffset(o => o + 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Sonraki Hafta"><ChevronRight className="w-5 h-5" /></button>
+                </div>
               </div>
 
               {printTab === 'master' && (
@@ -522,6 +522,7 @@ function App() {
                   assignments={currentSchedule.assignments}
                   slots={appSlots}
                   zones={appZones}
+                  weekString={getWeekString(weekOffset)}
                 />
               )}
             </div>
