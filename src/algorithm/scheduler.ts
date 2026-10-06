@@ -85,13 +85,9 @@ export function generateSchedule(
       if (slot.type === 'OPENING' && zone.startPeriod !== undefined && zone.startPeriod > 1) {
          return; // Zone does not open at period 1, so no morning opening
       }
-      if (slot.type === 'BREAK' && zone.startPeriod !== undefined && zone.endPeriod !== undefined) {
-         // A break is AFTER slot.afterLesson.
-         // If a zone starts at Period 3, the break just before it is after period 2.
-         // So if slot.afterLesson < zone.startPeriod - 1, we skip.
-         // Also skip if slot.afterLesson >= zone.endPeriod.
-         if (slot.afterLesson !== undefined && slot.afterLesson < zone.startPeriod - 1) return;
-         if (slot.afterLesson !== undefined && slot.afterLesson >= zone.endPeriod) return;
+      if (slot.type === 'BREAK') {
+         if (zone.startPeriod !== undefined && slot.afterLesson !== undefined && slot.afterLesson < zone.startPeriod - 1) return;
+         if (zone.endPeriod !== undefined && slot.afterLesson !== undefined && slot.afterLesson >= zone.endPeriod) return;
       }
       if (slot.type === 'CLOSING' && zone.endPeriod !== undefined) {
          // If closing slot is after last period (e.g. 10), and zone ends at 7, skip closing duty for this zone.

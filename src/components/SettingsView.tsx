@@ -258,7 +258,7 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
                 <MapPin className="w-6 h-6 text-indigo-600" />
                 <h3 className="text-xl font-bold text-gray-900">Nöbet Bölgeleri (Katlar)</h3>
               </div>
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg flex items-start gap-3">
+              <div className="mt-4 p-5 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3 shadow-sm">
                 <input 
                    type="checkbox" 
                    id="genericMode" 
@@ -266,11 +266,36 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
                    onChange={e => handleToggleGenericMode(e.target.checked)} 
                    className="mt-1 w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer" 
                 />
-                <div>
-                  <label htmlFor="genericMode" className="font-medium text-gray-800 cursor-pointer">Açılış ve Kapanış Nöbetlerini Katlardan Bağımsız Olarak Ata</label>
-                  <p className="text-sm text-gray-600 mt-1 max-w-2xl">
-                    Bu seçenek aktifken katlara ayrı ayrı açılış/kapanış nöbeti eklenmez. Aşağıdaki listeye otomatik eklenen <b>Tüm Katlar (Açılış)</b> ve <b>(Kapanış)</b> görevlerinden gereken kişi sayısını (ör. 2) ayarlayabilirsiniz.
+                <div className="flex-1">
+                  <label htmlFor="genericMode" className="font-bold text-gray-800 cursor-pointer text-lg">Açılış ve Kapanış Nöbetlerini Genel Olarak Ata</label>
+                  <p className="text-sm text-gray-600 mt-1 max-w-3xl">
+                    Bu seçenek aktifken her kata ayrı ayrı açılış/kapanış görevlisi <b>eklenmez</b>. Tüm katları kontrol edecek genel nöbetçiler belirlenir. Başlangıç/bitiş saati seçilmez, sadece kişi sayısını ayarlarsınız.
                   </p>
+                  
+                  {genericMode && (
+                    <div className="mt-5 p-4 bg-white border border-blue-100 rounded-lg flex flex-wrap gap-8 items-center shadow-sm">
+                       <div className="flex items-center gap-3">
+                         <span className="font-semibold text-gray-700">Açılış İçin Gereken Kişi:</span>
+                         <input type="number" min="1" max="10" 
+                           value={appZones.find(z => z.id === 'z_gen_open')?.idealStaff || 2}
+                           onChange={e => {
+                              const v = Number(e.target.value);
+                              setAppZones(appZones.map(z => z.id === 'z_gen_open' ? {...z, idealStaff: v} : z));
+                           }}
+                           className="w-16 px-2 py-1.5 border border-gray-300 rounded text-center font-bold focus:ring-2 focus:ring-indigo-500 outline-none" />
+                       </div>
+                       <div className="flex items-center gap-3">
+                         <span className="font-semibold text-gray-700">Kapanış İçin Gereken Kişi:</span>
+                         <input type="number" min="1" max="10" 
+                           value={appZones.find(z => z.id === 'z_gen_close')?.idealStaff || 2}
+                           onChange={e => {
+                              const v = Number(e.target.value);
+                              setAppZones(appZones.map(z => z.id === 'z_gen_close' ? {...z, idealStaff: v} : z));
+                           }}
+                           className="w-16 px-2 py-1.5 border border-gray-300 rounded text-center font-bold focus:ring-2 focus:ring-indigo-500 outline-none" />
+                       </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -280,7 +305,9 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
           </div>
           
           <div className="space-y-4">
-            {appZones.map((z, idx) => (
+            {appZones.filter(z => z.id !== 'z_gen_open' && z.id !== 'z_gen_close').map((z) => {
+              const idx = appZones.findIndex(orig => orig.id === z.id);
+              return (
               <div key={z.id} className="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-colors group">
                 
                 <div className="flex flex-col flex-1">
@@ -340,7 +367,8 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
                   <Trash2 className="w-5 h-5" />
                 </button>
               </div>
-            ))}
+            );
+            })}
           </div>
         </section>
 
