@@ -44,6 +44,11 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones 
 
   return (
     <div className="bg-white min-h-screen p-8 text-gray-900 print:p-0 print:bg-white">
+      <style dangerouslySetInnerHTML={{__html: `
+        @media print {
+          @page { size: landscape; margin: 1cm; }
+        }
+      `}} />
       <div className="print:hidden mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Öğretmen Bireysel Nöbet Programları</h1>
         <p className="text-gray-500 mt-1">Bu sayfayı doğrudan yazdırarak öğretmenlere dağıtabilirsiniz. Her tablo sayfaya sığacak şekilde otomatik ayarlanır.</p>
