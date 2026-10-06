@@ -55,6 +55,7 @@ function App() {
   const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
   const [settingsTab, setSettingsTab] = useState<'config' | 'teachers' | 'import'>('import');
   const [printTab, setPrintTab] = useState<'master' | 'personal' | 'timetable'>('master');
+  const [printSearchTerm, setPrintSearchTerm] = useState('');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -547,12 +548,16 @@ function App() {
                   slots={appSlots}
                   zones={appZones}
                   weekString={getWeekString(weekOffset)}
+                  searchTerm={printSearchTerm}
+                  setSearchTerm={setPrintSearchTerm}
                 />
               )}
               {printTab === 'timetable' && (
                 <TeacherTimetablesPrintView
                   teachers={teachers}
                   lessons={lessons}
+                  searchTerm={printSearchTerm}
+                  setSearchTerm={setPrintSearchTerm}
                 />
               )}
             </div>

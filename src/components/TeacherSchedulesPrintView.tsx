@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Search } from 'lucide-react';
 import type { Teacher, Assignment, Slot, Zone, DayOfWeek } from '../types';
 
@@ -8,10 +7,11 @@ interface Props {
   slots: Slot[];
   zones: Zone[];
   weekString: string;
+  searchTerm: string;
+  setSearchTerm: (s: string) => void;
 }
 
-export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones, weekString }: Props) {
-  const [searchTerm, setSearchTerm] = useState('');
+export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones, weekString, searchTerm, setSearchTerm }: Props) {
   const days: { id: DayOfWeek; name: string }[] = [
     { id: 1, name: 'Pazartesi' },
     { id: 2, name: 'Salı' },
