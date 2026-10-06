@@ -19,6 +19,7 @@ import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
 import { PrintableView } from './components/PrintableView';
 import { TeacherSchedulesPrintView } from './components/TeacherSchedulesPrintView';
+import { TeacherTimetablesPrintView } from './components/TeacherTimetablesPrintView';
 import { SettingsView } from './components/SettingsView';
 
 import { bilsaData } from './data/bilsaData';
@@ -53,7 +54,7 @@ const mockZones: Zone[] = [
 function App() {
   const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
   const [settingsTab, setSettingsTab] = useState<'config' | 'teachers' | 'import'>('import');
-  const [printTab, setPrintTab] = useState<'master' | 'personal'>('master');
+  const [printTab, setPrintTab] = useState<'master' | 'personal' | 'timetable'>('master');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -515,9 +516,15 @@ function App() {
                   >
                     Öğretmen El Programı
                   </button>
+                  <button 
+                    onClick={() => setPrintTab('timetable')} 
+                    className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'timetable' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  >
+                    Ders Programları
+                  </button>
                 </div>
                 
-                <div className="flex items-center bg-indigo-50 rounded-full p-1 border border-indigo-100 shadow-sm mb-2">
+                <div className={`flex items-center bg-indigo-50 rounded-full p-1 border border-indigo-100 shadow-sm mb-2 ${printTab === 'timetable' ? 'opacity-0 pointer-events-none' : ''}`}>
                   <button onClick={() => setWeekOffset(o => o - 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Önceki Hafta"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-sm font-medium text-indigo-700 px-4 min-w-[140px] text-center">{getWeekString(weekOffset)}</span>
                   <button onClick={() => setWeekOffset(o => o + 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Sonraki Hafta"><ChevronRight className="w-5 h-5" /></button>
@@ -540,6 +547,12 @@ function App() {
                   slots={appSlots}
                   zones={appZones}
                   weekString={getWeekString(weekOffset)}
+                />
+              )}
+              {printTab === 'timetable' && (
+                <TeacherTimetablesPrintView
+                  teachers={teachers}
+                  lessons={lessons}
                 />
               )}
             </div>
