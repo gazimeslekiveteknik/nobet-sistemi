@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
-import { generateSchedule } from './algorithm/scheduler';
+import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
 import { Calendar, Users, ShieldAlert, FileSpreadsheet, Settings, BarChart3, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
@@ -228,7 +228,12 @@ function App() {
     setCurrentView('plan');
   };
 
-  const currentSchedule = weekSchedules[weekOffset] || schedule;
+  const baseSchedule = weekSchedules[0] || schedule;
+  const computedSchedule = weekOffset === 0 
+      ? baseSchedule 
+      : { ...baseSchedule, assignments: rotateSchedule(baseSchedule.assignments, weekOffset, appSlots, appZones) };
+      
+  const currentSchedule = weekSchedules[weekOffset] || computedSchedule;
   const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
     const resolved = typeof newSched === 'function' ? newSched(currentSchedule) : newSched;
     setWeekSchedules(prev => ({ ...prev, [weekOffset]: resolved }));
