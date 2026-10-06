@@ -44,7 +44,7 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones,
   const activeTeachers = teachers.filter(t => 
     !t.isExcluded && 
     assignments.some(a => a.teacherId === t.id) &&
-    t.name.toLowerCase().includes(searchTerm.toLowerCase())
+    t.name.toLocaleLowerCase('tr-TR').includes(searchTerm.toLocaleLowerCase('tr-TR'))
   );
 
   return (

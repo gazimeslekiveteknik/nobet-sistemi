@@ -24,7 +24,7 @@ export function TeacherTimetablesPrintView({ teachers, lessons }: Props) {
   const activeTeachers = teachers.filter(t => 
     !t.isExcluded && 
     lessons.some(l => l.teacherId === t.id) &&
-    t.name.toLowerCase().includes(searchTerm.toLowerCase())
+    t.name.toLocaleLowerCase('tr-TR').includes(searchTerm.toLocaleLowerCase('tr-TR'))
   );
 
   return (

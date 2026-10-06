@@ -65,7 +65,7 @@ export function TeacherList({ teachers, schedule, slots, zones, onToggleExclude 
   };
 
   const filteredTeachers = teachers.filter(t => 
-    t.name.toLowerCase().includes(searchTerm.toLowerCase())
+    t.name.toLocaleLowerCase('tr-TR').includes(searchTerm.toLocaleLowerCase('tr-TR'))
   );
 
   const activeCount = teachers.filter(t => !t.isExcluded).length;
