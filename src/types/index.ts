@@ -18,7 +18,8 @@ export interface Zone {
   idealStaff: number; // E.g., 2
   riskMultiplier: number;
   startPeriod?: number;
-  endPeriod?: number; 
+  endPeriod?: number;
+  activeSlotTypes?: ('OPENING' | 'BREAK' | 'CLOSING')[]; 
 }
 
 export interface Teacher {

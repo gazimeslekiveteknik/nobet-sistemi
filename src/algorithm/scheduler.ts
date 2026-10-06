@@ -76,6 +76,11 @@ export function generateSchedule(
         return;
       }
       
+      // Filter by active slot types if defined
+      if (zone.activeSlotTypes && !zone.activeSlotTypes.includes(slot.type)) {
+        return;
+      }
+      
       // Skip if this slot is outside the zone's active periods
       if (slot.type === 'OPENING' && zone.startPeriod !== undefined && zone.startPeriod > 1) {
          return; // Zone does not open at period 1, so no morning opening
@@ -95,7 +100,14 @@ export function generateSchedule(
       
       let assignedCount = assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id).length;
       
-      const targetStaff = (slot.type === 'OPENING' || slot.type === 'CLOSING') ? 1 : zone.idealStaff;
+      let targetStaff = zone.idealStaff;
+      if (slot.type === 'OPENING' || slot.type === 'CLOSING') {
+         if (zone.activeSlotTypes && !zone.activeSlotTypes.includes('BREAK')) {
+            targetStaff = zone.idealStaff;
+         } else {
+            targetStaff = 1;
+         }
+      }
       while (assignedCount < targetStaff) {
         // Find best candidate
         let bestCandidate: Teacher | null = null;

@@ -81,6 +81,29 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
      setAppTimetable(newTimetable);
   };
 
+  const genericMode = appZones.some(z => z.id === 'z_gen_open' || z.id === 'z_gen_close');
+
+  const handleToggleGenericMode = (enabled: boolean) => {
+     if (enabled) {
+        const genOpen = {
+           id: 'z_gen_open', name: 'Tüm Katlar (Açılış)', priority: 0, minStaff: 1, idealStaff: 2, riskMultiplier: 1.0, activeSlotTypes: ['OPENING'] as any
+        };
+        const genClose = {
+           id: 'z_gen_close', name: 'Tüm Katlar (Kapanış)', priority: 99, minStaff: 1, idealStaff: 2, riskMultiplier: 1.0, activeSlotTypes: ['CLOSING'] as any
+        };
+        const updated = appZones.map(z => ({ ...z, activeSlotTypes: ['BREAK'] as any }));
+        setAppZones([...updated, genOpen, genClose]);
+     } else {
+        const filtered = appZones.filter(z => z.id !== 'z_gen_open' && z.id !== 'z_gen_close');
+        const updated = filtered.map(z => {
+           const newZ = { ...z };
+           delete newZ.activeSlotTypes;
+           return newZ;
+        });
+        setAppZones(updated);
+     }
+  };
+
   const addZone = () => {
     setAppZones([...appZones, { 
       id: `z${Date.now()}`, 
@@ -229,12 +252,29 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
 
         {/* 2. NÖBET BÖLGELERİ */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-indigo-600" />
-              <h3 className="text-xl font-bold text-gray-900">Nöbet Bölgeleri (Katlar)</h3>
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-6 h-6 text-indigo-600" />
+                <h3 className="text-xl font-bold text-gray-900">Nöbet Bölgeleri (Katlar)</h3>
+              </div>
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg flex items-start gap-3">
+                <input 
+                   type="checkbox" 
+                   id="genericMode" 
+                   checked={genericMode} 
+                   onChange={e => handleToggleGenericMode(e.target.checked)} 
+                   className="mt-1 w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 cursor-pointer" 
+                />
+                <div>
+                  <label htmlFor="genericMode" className="font-medium text-gray-800 cursor-pointer">Açılış ve Kapanış Nöbetlerini Katlardan Bağımsız Olarak Ata</label>
+                  <p className="text-sm text-gray-600 mt-1 max-w-2xl">
+                    Bu seçenek aktifken katlara ayrı ayrı açılış/kapanış nöbeti eklenmez. Aşağıdaki listeye otomatik eklenen <b>Tüm Katlar (Açılış)</b> ve <b>(Kapanış)</b> görevlerinden gereken kişi sayısını (ör. 2) ayarlayabilirsiniz.
+                  </p>
+                </div>
+              </div>
             </div>
-            <button onClick={addZone} className="flex items-center gap-2 text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors">
+            <button onClick={addZone} className="flex items-center gap-2 text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors mt-8">
               <Plus className="w-4 h-4" /> Yeni Bölge Ekle
             </button>
           </div>
