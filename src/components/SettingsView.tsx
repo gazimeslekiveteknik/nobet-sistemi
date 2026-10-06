@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Save, Plus, Trash2, Clock, MapPin, Copy, Wand2 } from 'lucide-react';
+import { Save, Plus, Trash2, Clock, MapPin, Copy, Wand2, Lock, Unlock } from 'lucide-react';
 import type { Zone } from '../types';
 
 interface SettingsProps {
@@ -13,13 +13,25 @@ interface SettingsProps {
   setTelegramToken: (s: string) => void;
   telegramChatId: string;
   setTelegramChatId: (s: string) => void;
+  adminPassword?: string;
+  setAdminPassword?: (s: string) => void;
   onSave: () => void;
 }
 
-export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods, appTimetable, setAppTimetable, telegramToken, setTelegramToken, telegramChatId, setTelegramChatId, onSave }: SettingsProps) {
+export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods, appTimetable, setAppTimetable, telegramToken, setTelegramToken, telegramChatId, setTelegramChatId, adminPassword = '1234', setAdminPassword, onSave }: SettingsProps) {
   const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
   const [lessonDuration, setLessonDuration] = useState(40);
   const [breakDuration, setBreakDuration] = useState(15);
+  const [isLocked, setIsLocked] = useState(true);
+
+  const handleUnlock = () => {
+    const pwd = prompt("Lütfen Yönetici Şifresini girin (Varsayılan: 1234):");
+    if (pwd === adminPassword) {
+      setIsLocked(false);
+    } else if (pwd !== null) {
+      alert("Hatalı şifre!");
+    }
+  };
 
   const handleTimeChange = (lessonId: number, day: string, field: 'start' | 'end', val: string) => {
     setAppTimetable((prev: any) => ({
@@ -409,37 +421,66 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
             Öğretmenler grubuna her nöbet saatinde otomatik bildirim gitmesi için Telegram Bot API bilgilerini girin. 
             Botfather'dan aldığınız Token'ı yapıştırın, gruba bir deneme mesajı yazın ve "Test Et ve Grubu Bul" butonuna basın.
           </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Telegram Bot Token</label>
-              <input 
-                type="text" 
-                value={telegramToken}
-                onChange={(e) => setTelegramToken(e.target.value)}
-                placeholder="Örn: 8079043852:AAFjL3..." 
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-              />
+          {isLocked ? (
+            <div className="bg-white p-8 rounded-xl border border-gray-200 text-center shadow-sm">
+              <Lock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">Güvenlik Kilidi Aktif</h4>
+              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                Telegram ayarları ve bot şifresi sadece yetkili idareciler tarafından değiştirilebilir. Ayarları açmak için yönetici şifrenizi girin.
+              </p>
+              <button 
+                onClick={handleUnlock}
+                className="bg-gray-800 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-900 transition-colors inline-flex items-center gap-2"
+              >
+                <Unlock className="w-5 h-5" />
+                Kilidi Aç
+              </button>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Grup Chat ID (Otomatik Bulunur)</label>
-              <div className="flex gap-2">
+          ) : (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Telegram Bot Token</label>
+                  <input 
+                    type="text" 
+                    value={telegramToken}
+                    onChange={(e) => setTelegramToken(e.target.value)}
+                    placeholder="Örn: 8079043852:AAFjL3..." 
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Grup Chat ID (Otomatik Bulunur)</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={telegramChatId}
+                      onChange={(e) => setTelegramChatId(e.target.value)}
+                      placeholder="Test butonuna basınca dolar..." 
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    <button 
+                      onClick={testTelegram}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-medium whitespace-nowrap transition-colors"
+                    >
+                      Grubu Bul
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-blue-200">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Yeni Yönetici Şifresi Belirle</label>
                 <input 
                   type="text" 
-                  value={telegramChatId}
-                  onChange={(e) => setTelegramChatId(e.target.value)}
-                  placeholder="Test butonuna basınca dolar..." 
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword && setAdminPassword(e.target.value)}
+                  placeholder="Yönetici Şifresi" 
+                  className="w-full max-w-xs border border-gray-300 rounded-lg px-4 py-2.5 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
-                <button 
-                  onClick={testTelegram}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-medium whitespace-nowrap transition-colors"
-                >
-                  Grubu Bul
-                </button>
+                <p className="text-xs text-gray-500 mt-2">Bu şifre, Telegram ayarlarını kilitlemek için kullanılır.</p>
               </div>
             </div>
-          </div>
+          )}
         </section>
 
       </div>

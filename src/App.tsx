@@ -105,6 +105,7 @@ function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [telegramToken, setTelegramToken] = useState('');
   const [telegramChatId, setTelegramChatId] = useState('');
+  const [adminPassword, setAdminPassword] = useState('1234');
 
   useEffect(() => {
     let isMounted = true;
@@ -130,6 +131,7 @@ function App() {
         if (settings.lessons) setLessons(settings.lessons);
         if (settings.telegramToken) setTelegramToken(settings.telegramToken);
         if (settings.telegramChatId) setTelegramChatId(settings.telegramChatId);
+        if (settings.adminPassword) setAdminPassword(settings.adminPassword);
         
         if (settings.lastScheduleAssignments) {
            setSchedule(prev => ({ ...prev, assignments: settings.lastScheduleAssignments }));
@@ -229,7 +231,7 @@ function App() {
       appSlots: newSlots,
       teachers,
       lessons,
-      telegramToken, telegramChatId
+      telegramToken, telegramChatId, adminPassword
     });
     
     alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
@@ -257,11 +259,11 @@ function App() {
       FirebaseService.saveSettings({
         appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
         lastScheduleAssignments: currentSchedule.assignments,
-        telegramToken, telegramChatId
+        telegramToken, telegramChatId, adminPassword
       }).catch(console.error);
     }, 1500);
     return () => clearTimeout(timeout);
-  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing, telegramToken, telegramChatId]);
+  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing, telegramToken, telegramChatId, adminPassword]);
 
   
   const getWeekString = (offset = 0) => {
@@ -560,6 +562,7 @@ function App() {
                   appTimetable={appTimetable} setAppTimetable={setAppTimetable}
                   telegramToken={telegramToken} setTelegramToken={setTelegramToken}
                   telegramChatId={telegramChatId} setTelegramChatId={setTelegramChatId}
+                  adminPassword={adminPassword} setAdminPassword={setAdminPassword}
                   onSave={handleSaveSettings}
                 />
               )}
