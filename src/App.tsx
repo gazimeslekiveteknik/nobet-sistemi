@@ -18,6 +18,7 @@ import { ExcelImport } from './components/ExcelImport';
 import { TeacherList } from './components/TeacherList';
 import { Analytics } from './components/Analytics';
 import { PrintableView } from './components/PrintableView';
+import { TeacherSchedulesPrintView } from './components/TeacherSchedulesPrintView';
 import { SettingsView } from './components/SettingsView';
 
 import { bilsaData } from './data/bilsaData';
@@ -50,7 +51,7 @@ const mockZones: Zone[] = [
 ];
 
 function App() {
-  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print'>('plan');
+  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
   // Load the 35 teachers and 934 lessons parsed from the PDF
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
@@ -465,6 +466,13 @@ function App() {
             <span>Çizelge (Yazdır)</span>
           </button>
           <button 
+            onClick={() => setCurrentView('print-teachers')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print-teachers' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+          >
+            <Printer size={20} />
+            <span>Kişisel Çizelgeler</span>
+          </button>
+          <button 
             onClick={() => setCurrentView('import')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'import' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
@@ -509,6 +517,15 @@ function App() {
                zones={appZones} 
                slots={appSlots} 
                weekString={getWeekString(weekOffset)} 
+            />
+          )}
+
+          {currentView === 'print-teachers' && (
+            <TeacherSchedulesPrintView
+               teachers={teachers}
+               assignments={currentSchedule.assignments}
+               slots={appSlots}
+               zones={appZones}
             />
           )}
 
