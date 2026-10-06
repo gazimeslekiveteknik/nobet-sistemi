@@ -58,15 +58,19 @@ export default async function handler(req, res) {
        return res.status(200).json({ message: 'Hafta sonu' });
     }
     
-    const hours = String(trtDate.getHours()).padStart(2, '0');
-    const minutes = String(trtDate.getMinutes()).padStart(2, '0');
-    const currentTime = `${hours}:${minutes}`;
+    // Mesajların 5 dakika önce gitmesi için, şu anki saate 5 dakika EKLİYORUZ.
+    // Örn: Saat 10:25 ise, +5 dk eklenip 10:30 yuvası aranır ve bulunur.
+    const targetDate = new Date(trtDate.getTime() + 5 * 60 * 1000);
     
-    // 3. Find matching slots (that START right now)
-    const activeSlots = (settings.appSlots || []).filter(s => s.day === currentDay && s.startTime === currentTime);
+    const hours = String(targetDate.getHours()).padStart(2, '0');
+    const minutes = String(targetDate.getMinutes()).padStart(2, '0');
+    const targetTime = `${hours}:${minutes}`;
+    
+    // 3. Find matching slots (that START in exactly 5 minutes)
+    const activeSlots = (settings.appSlots || []).filter(s => s.day === currentDay && s.startTime === targetTime);
     
     if (activeSlots.length === 0) {
-       return res.status(200).json({ message: `No active slots at ${currentTime}` });
+       return res.status(200).json({ message: `No active slots starting at ${targetTime}` });
     }
     
     // 4. Find assignments for these slots
@@ -74,7 +78,7 @@ export default async function handler(req, res) {
     const teachers = settings.teachers || [];
     const zones = settings.appZones || [];
     
-    let messageText = `🔔 *Nöbet Vakti! (${currentTime})*\n\n`;
+    let messageText = `🔔 *Nöbet Hatırlatması*\n*🕒 Teneffüs / Görev Saati:* ${targetTime}\n\n`;
     let foundAny = false;
     
     for (const slot of activeSlots) {
