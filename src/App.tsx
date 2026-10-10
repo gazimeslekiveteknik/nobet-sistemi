@@ -83,6 +83,22 @@ function App() {
   const [schedule, setSchedule] = useState(() => generateSchedule(bilsaData.teachers as Teacher[], bilsaData.lessons as Lesson[], mockSlots, mockZones));
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [weekOffset, setWeekOffset] = useState<number>(0);
+  const getWeekString = (offset = 0) => {
+    const curr = new Date();
+    curr.setDate(curr.getDate() + (offset * 7));
+    const day = curr.getDay();
+    const diff = curr.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(curr.setDate(diff));
+    const friday = new Date(monday);
+    friday.setDate(monday.getDate() + 4);
+    
+    const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+    
+    if (monday.getMonth() === friday.getMonth()) {
+      return `${monday.getDate()} - ${friday.getDate()} ${monthNames[monday.getMonth()]} Haftası`;
+    }
+    return `${monday.getDate()} ${monthNames[monday.getMonth()]} - ${friday.getDate()} ${monthNames[friday.getMonth()]} Haftası`;
+  };
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
 
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
@@ -290,23 +306,6 @@ function App() {
   }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, (weekSchedules[0] || schedule).assignments, publishedWeeks, isInitializing, telegramToken, telegramChatId, adminPassword]);
 
   
-  const getWeekString = (offset = 0) => {
-    const curr = new Date();
-    curr.setDate(curr.getDate() + (offset * 7));
-    const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-    const last = first + 4; // Friday
-    
-    const startDate = new Date(curr.setDate(first));
-    const endDate = new Date(curr.setDate(last));
-    
-    const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-    
-    if (startDate.getMonth() === endDate.getMonth()) {
-       return `${startDate.getDate()} - ${endDate.getDate()} ${months[startDate.getMonth()]} Haftası`;
-    } else {
-       return `${startDate.getDate()} ${months[startDate.getMonth()]} - ${endDate.getDate()} ${months[endDate.getMonth()]} Haftası`;
-    }
-  };
 
   const daysList = [
     { id: 1, name: 'Pazartesi' },
@@ -884,6 +883,55 @@ function App() {
                   );
                 })}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {publishModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Yeni Program Ne Zaman Devreye Girsin?</h3>
+            <p className="text-gray-600 mb-6">
+              Hazırladığınız bu yeni program TV Kiosk ve Telegram bildirimlerinde ne zaman yayınlansın?
+            </p>
+            
+            <div className="space-y-3">
+              <button 
+                onClick={() => {
+                  const weekStr = getWeekString(weekOffset);
+                  setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
+                  setPublishModalOpen(false);
+                  alert(weekStr + ' programı HEMEN YAYINLANDI! TV Kiosk anında güncellenecek.');
+                }}
+                className="w-full text-left p-4 rounded-lg border-2 border-indigo-100 hover:border-indigo-600 hover:bg-indigo-50 transition-colors"
+              >
+                <div className="font-semibold text-indigo-900">Hemen Şimdi (Mevcut Haftayı Ez)</div>
+                <div className="text-sm text-indigo-700 mt-1">İçinde bulunduğumuz haftanın programı yenisiyle değişir. Acil değişiklikler için.</div>
+              </button>
+
+              <button 
+                onClick={() => {
+                  const nextWeekStr = getWeekString(weekOffset + 1);
+                  setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
+                  setPublishModalOpen(false);
+                  alert(nextWeekStr + ' programı YAYINLANDI! Mevcut hafta bozulmadı, yeni program Pazartesi devreye girecek.');
+                }}
+                className="w-full text-left p-4 rounded-lg border-2 border-emerald-100 hover:border-emerald-600 hover:bg-emerald-50 transition-colors"
+              >
+                <div className="font-semibold text-emerald-900">Gelecek Hafta Pazartesi (Önerilen)</div>
+                <div className="text-sm text-emerald-700 mt-1">Mevcut haftanın eski programı Cuma'ya kadar çalışmaya devam eder. Yeni program Pazartesi sabahı devreye girer.</div>
+              </button>
+            </div>
+
+            <div className="mt-6 text-right">
+              <button 
+                onClick={() => setPublishModalOpen(false)}
+                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+              >
+                İptal Et
+              </button>
             </div>
           </div>
         </div>
