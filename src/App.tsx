@@ -251,8 +251,9 @@ function App() {
     setAppSlots(newSlots);
     
     // Regenerate schedule with new slots and zones
-    const newSchedule = generateSchedule(teachers, lessons, newSlots, appZones, currentSchedule?.assignments || []);
+    const newSchedule = generateSchedule(teachers, lessons, newSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
     updateCurrentSchedule(newSchedule);
+    setSchedule(newSchedule);
     
     await FirebaseService.saveSettings({
       appZones,
@@ -269,7 +270,7 @@ function App() {
   };
 
   
-  const baseSchedule = weekSchedules[0] || schedule;
+  const baseSchedule = schedule;
   const targetWeekStr = getWeekString(weekOffset);
   const computedSchedule = {
     ...baseSchedule,
@@ -285,7 +286,6 @@ function App() {
   const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
     const resolved = typeof newSched === 'function' ? newSched(currentSchedule) : newSched;
     setWeekSchedules(prev => ({ ...prev, [weekOffset]: resolved }));
-    setSchedule(resolved);
   };
 
   const [isLocked, setIsLocked] = useState<boolean>(false);
@@ -318,7 +318,9 @@ function App() {
   const handleDataImported = (importedTeachers: Teacher[], importedLessons: Lesson[]) => {
     setTeachers(importedTeachers);
     setLessons(importedLessons);
-    updateCurrentSchedule(generateSchedule(importedTeachers, importedLessons, appSlots, appZones));
+    const newSched = generateSchedule(importedTeachers, importedLessons, appSlots, appZones);
+    updateCurrentSchedule(newSched);
+    setSchedule(newSched);
     setTimeout(() => setCurrentView('plan'), 1500); // Switch to plan view after showing success
   };
 
@@ -327,7 +329,9 @@ function App() {
     setTeachers(prev => {
       const updated = prev.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
       // Auto-regenerate schedule with updated teachers, keeping manual assignments
-      updateCurrentSchedule(generateSchedule(updated, lessons, appSlots, appZones, currentSchedule?.assignments || []));
+      const newSched = generateSchedule(updated, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+      updateCurrentSchedule(newSched);
+      setSchedule(newSched);
       return updated;
     });
   };
@@ -682,7 +686,9 @@ function App() {
                           return;
                        }
                        saveHistory();
-                       updateCurrentSchedule(generateSchedule(teachers, lessons, appSlots, appZones, currentSchedule?.assignments || []));
+                       const newSched = generateSchedule(teachers, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+                       updateCurrentSchedule(newSched);
+                       setSchedule(newSched);
                     }}
                     className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
                       isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
