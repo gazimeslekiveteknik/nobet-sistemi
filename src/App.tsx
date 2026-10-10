@@ -355,6 +355,8 @@ function App() {
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [addTeacherModal, setAddTeacherModal] = useState<{slotId: string, zoneId: string} | null>(null);
   const [leaveModal, setLeaveModal] = useState<{assignment: Assignment, teacher: Teacher} | null>(null);
+  const [telegramSpecificModal, setTelegramSpecificModal] = useState<{title: string, message: string, affectedTeachers: Teacher[]} | null>(null);
+  const [longLeaveDate, setLongLeaveDate] = useState<string>('');
 
   // Otomatik yedekleme (Herhangi bir ayar, öğretmen veya liste değiştiğinde)
   useEffect(() => {
@@ -409,8 +411,13 @@ function App() {
   
   const processOneDayLeave = (t: Teacher) => {
     saveHistory();
+    let affectedTeacherIds = new Set<string>();
+    affectedTeacherIds.add(t.id);
+    let finalLogs = "";
+    
     updateCurrentSchedule(prev => {
       let newAssignments = [...prev.assignments];
+      
       const todayAssignments = newAssignments.filter(
         a => a.teacherId === t.id && appSlots.find(s => s.id === a.slotId)?.day === selectedDay
       );
@@ -430,6 +437,7 @@ function App() {
         let bestReplacement = availableTeachers[0]?.id;
         
         if (bestReplacement) {
+          affectedTeacherIds.add(bestReplacement);
           const replTeacher = teachers.find(x => x.id === bestReplacement);
           
           const oldIndex = newAssignments.findIndex(a => a.id === absentAssignment.id);
@@ -446,18 +454,31 @@ function App() {
           if (futureDutyIndex !== -1) {
              const futureDutySlot = appSlots.find(s => s.id === newAssignments[futureDutyIndex].slotId);
              newAssignments[futureDutyIndex] = { ...newAssignments[futureDutyIndex], teacherId: t.id, isManual: true };
-             logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${futureDutySlot?.day}. gündeki nöbeti alındı)`);
+             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${futureDutySlot?.day}. gündeki nöbeti alındı)`);
           } else {
-             logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Devredilecek nöbet bulunamadı)`);
+             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Devredilecek nöbet bulunamadı, sistem borçlandırdı)`);
           }
         } else {
-          logs.push(`${slot.startTime} saati için uygun yedek öğretmen bulunamadı!`);
+          logs.push(`• ${slot.startTime} saati için uygun yedek öğretmen bulunamadı!`);
         }
       });
-
-      setTimeout(() => alert(logs.join('\n\n')), 100);
+      
+      finalLogs = logs.join('
+');
       return { ...prev, assignments: newAssignments };
     });
+    
+    setTimeout(() => {
+       setTelegramSpecificModal({
+          title: "Günlük Rapor Değişikliği",
+          message: `🚨 Duyuru: ${t.name} hocamız bugün raporlu/izinli olduğu için nöbetlerde aşağıdaki zorunlu değişiklikler yapılmıştır:
+
+${finalLogs}
+
+Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
+          affectedTeachers: teachers.filter(x => affectedTeacherIds.has(x.id))
+       });
+    }, 200);
   };
 
   const processLongLeave = (t: Teacher) => {
@@ -1043,15 +1064,16 @@ function App() {
       )}
 
 
+      
       {leaveModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold text-gray-900 mb-2">İzin / Rapor Yönetimi</h3>
             <p className="text-gray-600 mb-6 font-medium text-indigo-700">
               Seçilen Öğretmen: {leaveModal.teacher.name}
             </p>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               <button 
                 onClick={() => {
                   processOneDayLeave(leaveModal.teacher);
@@ -1060,27 +1082,79 @@ function App() {
                 className="w-full text-left p-4 rounded-lg border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition-colors"
               >
                 <div className="font-semibold text-orange-900">Günlük Rapor / Kısa İzin (Sadece Bugün)</div>
-                <div className="text-sm text-orange-700 mt-1">Sadece bugünkü nöbetleri boşta olan başka bir öğretmene devredilir. Karşılığında yedek öğretmenin ileri bir tarihteki nöbeti bu hocaya verilir (Takas/Borçlandırma). Diğer günler ve geçmiş haftalar ETKİLENMEZ.</div>
+                <div className="text-sm text-orange-700 mt-1">Sadece bugünkü nöbetleri boşta olan başka bir öğretmene devredilir. (Geçmiş ve gelecek haftalar bozulmaz)</div>
               </button>
 
-              <button 
-                onClick={() => {
-                  processLongLeave(leaveModal.teacher);
-                  setLeaveModal(null);
-                }}
-                className="w-full text-left p-4 rounded-lg border-2 border-red-100 hover:border-red-600 hover:bg-red-50 transition-colors"
-              >
-                <div className="font-semibold text-red-900">Uzun Süreli Rapor / Görevli İzinli (Haftalık)</div>
-                <div className="text-sm text-red-700 mt-1">Öğretmen bu haftalık tamamen MUAF kabul edilir. Sistem bu haftanın programını, eksik öğretmeni hesaba katarak diğer öğretmenler arasında yeniden adil bir şekilde dağıtır. (Geçmiş haftalar ETKİLENMEZ)</div>
-              </button>
+              <div className="p-4 rounded-lg border-2 border-red-100 bg-red-50">
+                <div className="font-semibold text-red-900 mb-2">Uzun Süreli Rapor / Görevli İzinli</div>
+                <div className="text-sm text-red-700 mb-3">Öğretmen belirttiğiniz tarihe kadar sistemden muaf tutulur ve program kalan öğretmenlere yeniden dağıtılır. Tarih dolduğunda sistem yöneticiye hatırlatma mesajı atar.</div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Öğretmenin Dönüş Tarihi:</label>
+                <input 
+                  type="date" 
+                  value={longLeaveDate}
+                  onChange={e => setLongLeaveDate(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded mb-3"
+                />
+                <button 
+                  onClick={() => {
+                    processLongLeave(leaveModal.teacher, longLeaveDate);
+                    setLeaveModal(null);
+                    setLongLeaveDate('');
+                  }}
+                  className="w-full bg-red-600 text-white py-2 rounded font-medium hover:bg-red-700"
+                >
+                  Şablonu Güncelle ve Muaf Tut
+                </button>
+              </div>
             </div>
 
-            <div className="mt-6 text-right">
+            <div className="mt-4 text-right">
               <button 
                 onClick={() => setLeaveModal(null)}
                 className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
               >
                 İptal Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
+      {telegramSpecificModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{telegramSpecificModal.title}</h3>
+            <p className="text-gray-600 mb-4 text-sm">
+              Bu değişikliği Telegram grubuna anında PDF (El Programı) ve açıklama ile göndermek ister misiniz?
+            </p>
+
+            <textarea 
+              value={telegramSpecificModal.message}
+              onChange={e => setTelegramSpecificModal(prev => prev ? {...prev, message: e.target.value} : null)}
+              className="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50 h-36 mb-4"
+            />
+            
+            <div className="flex space-x-3">
+              <button 
+                onClick={() => setTelegramSpecificModal(null)}
+                className="flex-1 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+              >
+                Gönderme (Kapat)
+              </button>
+              <button 
+                onClick={async () => {
+                  const weekStr = getWeekString(weekOffset);
+                  // Generate PDF only for the affected teachers
+                  const ok = await sendTelegramNotification(weekStr, currentSchedule.assignments, telegramSpecificModal.affectedTeachers, telegramSpecificModal.message);
+                  if(ok) alert('Telegram mesajı ve PDF başarıyla gönderildi!');
+                  else alert('Gönderim başarısız oldu. Bot ayarlarını kontrol edin.');
+                  setTelegramSpecificModal(null);
+                }}
+                className="flex-1 py-2 bg-[#0088cc] text-white rounded-lg transition-colors font-medium hover:bg-[#0077b3]"
+              >
+                Telegram'a Gönder
               </button>
             </div>
           </div>

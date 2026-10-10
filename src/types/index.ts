@@ -26,7 +26,8 @@ export interface Teacher {
   id: string;
   name: string;
   branch: string;
-  isExcluded: boolean; // Rehber, idareci, ücretli vb.
+  isExcluded: boolean;
+  excludedUntil?: string; // Rehber, idareci, ücretli vb.
   historyStats: {
     totalScore: number;
     zoneCounts: Record<string, number>;
