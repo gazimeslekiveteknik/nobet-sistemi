@@ -78,7 +78,7 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones,
 
       <div className="space-y-12">
         {activeTeachers.map(teacher => (
-          <div key={teacher.id} className="print:break-inside-avoid border border-gray-300 rounded-xl overflow-hidden shadow-sm">
+          <div key={teacher.id} id={`teacher-print-${teacher.id}`} className="print:break-inside-avoid border border-gray-300 rounded-xl overflow-hidden shadow-sm bg-white p-4">
             <div className="bg-gray-100 px-6 py-4 border-b border-gray-300 flex justify-between items-center">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{teacher.name}</h2>

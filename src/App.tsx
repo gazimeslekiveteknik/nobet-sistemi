@@ -84,32 +84,49 @@ function App() {
       if (!hiddenPrintRef.current) return false;
       
       // Use html-to-image which natively supports CSS features like oklch via SVG foreignObject
-      const imgData = await toPng(hiddenPrintRef.current, {
-         cacheBust: true,
-         pixelRatio: 2,
-         backgroundColor: '#ffffff',
-         skipFonts: true
-      });
       
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      // We will create a landscape PDF
+      const pdf = new jsPDF('l', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      // Calculate image dimensions
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-      let heightLeft = pdfHeight;
-      let position = 0;
-      
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
-      
-      // Handle multiple pages if the image is too long
-      while (heightLeft > 0) {
-        position = heightLeft - pdfHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
+      let addedPage = false;
+
+      // Loop through each affected teacher and take a separate screenshot
+      const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
+      for (let i = 0; i < filteredTeachers.length; i++) {
+         const teacher = filteredTeachers[i];
+         const el = document.getElementById(`teacher-print-${teacher.id}`);
+         
+         if (el) {
+            const imgData = await toPng(el, {
+               cacheBust: true,
+               pixelRatio: 2,
+               backgroundColor: '#ffffff',
+               skipFonts: true
+            });
+            
+            if (addedPage) pdf.addPage();
+            addedPage = true;
+            
+            const imgProps = pdf.getImageProperties(imgData);
+            
+            // Calculate scale to fit page horizontally or vertically with some padding
+            const padding = 10;
+            const availableWidth = pdfWidth - (padding * 2);
+            const availableHeight = pdfHeight - (padding * 2);
+            
+            const ratio = Math.min(availableWidth / imgProps.width, availableHeight / imgProps.height);
+            
+            const finalW = imgProps.width * ratio;
+            const finalH = imgProps.height * ratio;
+            
+            // Center the image
+            const x = (pdfWidth - finalW) / 2;
+            const y = (pdfHeight - finalH) / 2;
+            
+            pdf.addImage(imgData, 'PNG', x, y, finalW, finalH);
+         }
       }
       
       const pdfBlob = pdf.output('blob');
