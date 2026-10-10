@@ -34,8 +34,9 @@ export default async function handler(req, res) {
     };
 
     const settings = parseFirestore({ mapValue: { fields: settingsData.fields } });
-    const assignments = settings.lastScheduleAssignments || [];
-    const teachers = settings.teachers || [];
+    let assignments = settings.lastScheduleAssignments || [];
+    let teachers = settings.teachers || [];
+    let lessons = settings.lessons || [];
     const zones = settings.appZones || [];
     const slots = settings.appSlots || [];
 
@@ -43,6 +44,30 @@ export default async function handler(req, res) {
     const now = new Date();
     const trtOffset = 3 * 60 * 60 * 1000;
     const trtDate = new Date(now.getTime() + trtOffset);
+
+    // HELPER: Get Week String
+    const getWeekString = (dateObj) => {
+      const d = new Date(dateObj);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(d.setDate(diff));
+      const friday = new Date(monday);
+      friday.setDate(monday.getDate() + 4);
+      const monthNames = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+      if (monday.getMonth() === friday.getMonth()) {
+        return `${monday.getDate()} - ${friday.getDate()} ${monthNames[monday.getMonth()]} Haftası`;
+      }
+      return `${monday.getDate()} ${monthNames[monday.getMonth()]} - ${friday.getDate()} ${monthNames[friday.getMonth()]} Haftası`;
+    };
+
+    const currentWeekStr = getWeekString(trtDate);
+    if (settings.publishedWeeks && settings.publishedWeeks[currentWeekStr]) {
+       const pub = settings.publishedWeeks[currentWeekStr];
+       if (pub.assignments) assignments = pub.assignments;
+       if (pub.teachers) teachers = pub.teachers;
+       if (pub.lessons) lessons = pub.lessons;
+    }
+
 
     const currentDay = req.query.day ? Number(req.query.day) : trtDate.getDay();
     const currentMins = req.query.time ? ((Number(req.query.time.split(':')[0]) * 60) + Number(req.query.time.split(':')[1])) : ((trtDate.getHours() * 60) + trtDate.getMinutes());

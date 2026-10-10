@@ -25,6 +25,14 @@ export default async function handler(req, res) {
     
     const settings = parseFirestore({ mapValue: { fields: settingsData.fields } });
     const telegramToken = settings.telegramToken;
+    
+
+    const currentWeekStr = getWeekString(trtDate);
+    if (settings.publishedWeeks && settings.publishedWeeks[currentWeekStr]) {
+       const pub = settings.publishedWeeks[currentWeekStr];
+       if (pub.assignments) assignments = pub.assignments;
+       if (pub.teachers) teachers = pub.teachers;
+    }
     const telegramChatId = settings.telegramChatId;
     if (!telegramToken || !telegramChatId) return res.status(200).json({ message: 'Telegram setup incomplete' });
     
