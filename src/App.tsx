@@ -114,11 +114,17 @@ function App() {
          method: 'POST',
          body: formData
       });
+      if (!res.ok) {
+         const errText = await res.text();
+         console.error('Telegram Error:', errText);
+         alert('Telegram Hatası: ' + errText);
+      }
       
       setPdfTeachers([]); // Cleanup
       return res.ok;
     } catch(e) {
       console.error(e);
+      alert("PDF Üretim Hatası: " + (e instanceof Error ? e.message : String(e)));
       setPdfTeachers([]);
       return false;
     }
