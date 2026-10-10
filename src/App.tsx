@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FirebaseService } from './firebase/service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
@@ -71,7 +70,7 @@ function App() {
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
   
-    const sendTelegramNotification = async (weekStr: string, activeAssignments: Assignment[], activeTeachers: Teacher[], msg: string) => {
+    const sendTelegramNotification = async (weekStr: string, activeTeachers: Teacher[], msg: string) => {
     if (!telegramToken || !telegramChatId) {
        alert("Telegram ayarları eksik!");
        return false;
@@ -1016,7 +1015,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
                   
                   if (sendTelegramPdf) {
-                     const ok = await sendTelegramNotification(weekStr, currentSchedule.assignments, teachers, telegramMessage);
+                     const ok = await sendTelegramNotification(weekStr, teachers, telegramMessage);
                      if(ok) alert(weekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
                      else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi (Bot ayarlarını kontrol edin).');
                   } else {
@@ -1039,7 +1038,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
                   
                   if (sendTelegramPdf) {
-                     const ok = await sendTelegramNotification(nextWeekStr, currentSchedule.assignments, teachers, telegramMessage);
+                     const ok = await sendTelegramNotification(nextWeekStr, teachers, telegramMessage);
                      if(ok) alert(nextWeekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
                      else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi.');
                   } else {
@@ -1152,7 +1151,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 onClick={async () => {
                   const weekStr = getWeekString(weekOffset);
                   // Generate PDF only for the affected teachers
-                  const ok = await sendTelegramNotification(weekStr, currentSchedule.assignments, telegramSpecificModal.affectedTeachers, telegramSpecificModal.message);
+                  const ok = await sendTelegramNotification(weekStr, telegramSpecificModal.affectedTeachers, telegramSpecificModal.message);
                   if(ok) alert('Telegram mesajı ve PDF başarıyla gönderildi!');
                   else alert('Gönderim başarısız oldu. Bot ayarlarını kontrol edin.');
                   setTelegramSpecificModal(null);
