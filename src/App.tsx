@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
-import { storage } from './firebase/config';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import jsPDF from 'jspdf';
 import { toJpeg } from 'html-to-image';
 import { useRef } from 'react';
@@ -1049,26 +1047,12 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   setIsPublishing(true);
                   const weekStr = getWeekString(weekOffset);
                   try {
-                    let pdfUrl = null;
                     setPdfTeachers(teachers);
                     await new Promise(r => setTimeout(r, 1500));
                     const pdfBlob = await generatePdfBlob(teachers);
-                    const filename = `weekly_pdfs/${weekStr.replace(/ /g, '_')}.pdf`;
-                    const storageRef = ref(storage, filename);
-                    await new Promise<void>((resolve, reject) => {
-                      const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
-                      uploadTask.on('state_changed', 
-                        (snapshot) => {
-                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                          setPublishingProgress(`Buluta Yükleniyor... (%${progress.toFixed(0)})`);
-                        }, 
-                        (error) => reject(error), 
-                        () => resolve()
-                      );
-                    });
-                    pdfUrl = await getDownloadURL(storageRef);
                       
                     if (sendTelegramPdf && telegramToken && telegramChatId) {
+                      setPublishingProgress("Telegram'a Gönderiliyor...");
                       const formData = new FormData();
                       formData.append("chat_id", telegramChatId);
                       formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
@@ -1078,10 +1062,10 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     
                     setPdfTeachers([]);
                     
-                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons, pdfUrl };
+                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons };
                     await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [weekStr]: updatedData } });
                     setPublishedWeeks(prev => ({ ...prev, [weekStr]: updatedData }));
-                    alert("Yayınlandı ve buluta kaydedildi!");
+                    alert("Yayınlandı ve Telegram'a gönderildi!");
                   } catch (e) {
                     console.error(e);
                     alert("Hata: " + e);
@@ -1105,32 +1089,25 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   setIsPublishing(true);
                   const nextWeekStr = getWeekString(weekOffset + 1);
                   try {
-                    let pdfUrl = null;
                     setPdfTeachers(teachers);
                     await new Promise(r => setTimeout(r, 1500));
                     const pdfBlob = await generatePdfBlob(teachers);
-                    const filename = `weekly_pdfs/${nextWeekStr.replace(/ /g, '_')}.pdf`;
-                    const storageRef = ref(storage, filename);
-                    await new Promise<void>((resolve, reject) => {
-                      const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
-                      uploadTask.on('state_changed', 
-                        (snapshot) => {
-                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                          setPublishingProgress(`Buluta Yükleniyor... (%${progress.toFixed(0)})`);
-                        }, 
-                        (error) => reject(error), 
-                        () => resolve()
-                      );
-                    });
-                    pdfUrl = await getDownloadURL(storageRef);
+                    
+                    if (telegramToken && telegramChatId) {
+                      setPublishingProgress("Telegram'a Gönderiliyor...");
+                      const formData = new FormData();
+                      formData.append("chat_id", telegramChatId);
+                      formData.append("document", new File([pdfBlob], `${nextWeekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
+                      formData.append("caption", telegramMessage);
+                      await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: formData });
+                    }
+                    
                     setPdfTeachers([]);
 
-                    // SADECE KAYDET (GÖNDERME) - CRON İÇİN HAZIRLA
-                    const telegramPending = true;
-                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons, pdfUrl, telegramPending, telegramMessage };
+                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons };
                     await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [nextWeekStr]: updatedData } });
                     setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: updatedData }));
-                    alert(`${nextWeekStr} için PDF oluşturuldu ve kaydedildi! Pazar saat 18:00'de otomatik gönderilecektir.`);
+                    alert(`${nextWeekStr} programı Telegram grubuna anında gönderildi ve kaydedildi!`);
                   } catch (e) {
                     console.error(e);
                     alert("Hata: " + e);
