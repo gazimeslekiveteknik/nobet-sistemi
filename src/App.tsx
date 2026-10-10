@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
 import jsPDF from 'jspdf';
-import { toPng } from 'html-to-image';
+import { toJpeg } from 'html-to-image';
 import { useRef } from 'react';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
@@ -99,9 +99,10 @@ function App() {
          const el = document.getElementById(`teacher-print-${teacher.id}`);
          
          if (el) {
-            const imgData = await toPng(el, {
+            const imgData = await toJpeg(el, {
                cacheBust: true,
-               pixelRatio: 2,
+               pixelRatio: 1, // Standard resolution instead of 2x
+               quality: 0.85, // Compress jpeg to reduce file size significantly
                backgroundColor: '#ffffff',
                skipFonts: true
             });
@@ -125,7 +126,7 @@ function App() {
             const x = (pdfWidth - finalW) / 2;
             const y = (pdfHeight - finalH) / 2;
             
-            pdf.addImage(imgData, 'PNG', x, y, finalW, finalH);
+            pdf.addImage(imgData, 'JPEG', x, y, finalW, finalH);
          }
       }
       
