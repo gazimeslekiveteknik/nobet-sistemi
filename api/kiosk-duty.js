@@ -44,8 +44,8 @@ export default async function handler(req, res) {
     const trtOffset = 3 * 60 * 60 * 1000;
     const trtDate = new Date(now.getTime() + trtOffset);
 
-    const currentDay = 1; // 🚨 TEST MODE FORCED TO MONDAY
-    const currentMins = (10 * 60) + 30; // 🚨 TEST MODE FORCED TO 10:30
+    const currentDay = req.query.day ? Number(req.query.day) : trtDate.getDay();
+    const currentMins = req.query.time ? ((Number(req.query.time.split(':')[0]) * 60) + Number(req.query.time.split(':')[1])) : ((trtDate.getHours() * 60) + trtDate.getMinutes());
 
     const timeToMins = (tStr) => {
       if (!tStr || !tStr.includes(':')) return 0;
