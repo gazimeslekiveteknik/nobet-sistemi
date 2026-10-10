@@ -9,9 +9,10 @@ interface Props {
   weekString: string;
   searchTerm: string;
   setSearchTerm: (s: string) => void;
+  hideControls?: boolean;
 }
 
-export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones, weekString, searchTerm, setSearchTerm }: Props) {
+export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones, weekString, searchTerm, setSearchTerm, hideControls = false }: Props) {
   const days: { id: DayOfWeek; name: string }[] = [
     { id: 1, name: 'Pazartesi' },
     { id: 2, name: 'Salı' },

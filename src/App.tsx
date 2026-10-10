@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FirebaseService } from './firebase/service';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
@@ -70,50 +71,44 @@ function App() {
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
   
-  const sendTelegramNotification = async (weekStr: string, activeAssignments: Assignment[], activeTeachers: Teacher[], msg: string) => {
+    const sendTelegramNotification = async (weekStr: string, activeAssignments: Assignment[], activeTeachers: Teacher[], msg: string) => {
     if (!telegramToken || !telegramChatId) {
        alert("Telegram ayarları eksik!");
        return false;
     }
     try {
-      const doc = new jsPDF();
+      setPdfTeachers(activeTeachers);
+      // Wait for React to render the hidden div
+      await new Promise(r => setTimeout(r, 1000));
       
-      // Türkçe karakter desteği için font eklememiz lazım normalde, ama varsayılan fontta sıkıntı olursa diye basic tablolar iş görür.
-      doc.setFontSize(16);
-      doc.text(weekStr + " - Nöbet Öğretmen El Programı", 14, 15);
+      if (!hiddenPrintRef.current) return false;
       
-      const tableData: any[] = [];
-      activeTeachers.filter(t => !t.isExcluded).forEach(t => {
-         const tAssignments = activeAssignments.filter(a => a.teacherId === t.id);
-         if (tAssignments.length === 0) return;
-         
-         let dutyStr = "";
-         tAssignments.forEach(a => {
-            const s = appSlots.find(slot => slot.id === a.slotId);
-            const z = appZones.find(zone => zone.id === a.zoneId);
-            if(s && z) {
-               const days = ["Pzr", "Pzt", "Sal", "Çar", "Per", "Cum", "Cts"];
-               dutyStr += `${days[s.day]} ${s.startTime}-${s.endTime} (${z.name})\n`;
-            }
-         });
-         
-         tableData.push([t.name, dutyStr]);
-      });
-
-      autoTable(doc, {
-        startY: 25,
-        head: [['Öğretmen Adı', 'Nöbet Görevleri']],
-        body: tableData,
-        theme: 'grid',
-        styles: { fontSize: 10, cellPadding: 3 },
-        headStyles: { fillColor: [79, 70, 229] }
-      });
-
-      const pdfBlob = doc.output('blob');
+      const canvas = await html2canvas(hiddenPrintRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+      
+      // Handle multiple pages if the image is too long
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
+      }
+      
+      const pdfBlob = pdf.output('blob');
       
       const formData = new FormData();
       formData.append("chat_id", telegramChatId);
-      formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}.pdf`, { type: 'application/pdf' }));
+      formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
       formData.append("caption", msg);
 
       const res = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, {
@@ -121,9 +116,11 @@ function App() {
          body: formData
       });
       
+      setPdfTeachers([]); // Cleanup
       return res.ok;
     } catch(e) {
       console.error(e);
+      setPdfTeachers([]);
       return false;
     }
   };
@@ -165,6 +162,8 @@ function App() {
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
   const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
   const [publishModalOpen, setPublishModalOpen] = useState(false);
+  const hiddenPrintRef = useRef<HTMLDivElement>(null);
+  const [pdfTeachers, setPdfTeachers] = useState<Teacher[]>([]);
   const [telegramMessage, setTelegramMessage] = useState("Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.");
   const [sendTelegramPdf, setSendTelegramPdf] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -1166,6 +1165,28 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
           </div>
         </div>
       )}
+
+
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '1000px', background: '#fff', zIndex: -100 }}>
+        <div ref={hiddenPrintRef} className="p-8 bg-white text-black">
+           {pdfTeachers.length > 0 && (
+               <>
+                   <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">{getWeekString(weekOffset)} - Öğretmen El Programları</h2>
+                   <TeacherSchedulesPrintView 
+                       teachers={pdfTeachers}
+                       assignments={currentSchedule.assignments}
+                       slots={appSlots}
+                       zones={appZones}
+                       weekString={getWeekString(weekOffset)}
+                       searchTerm=""
+                       setSearchTerm={() => {}}
+                       hideControls={true}
+                   />
+               </>
+           )}
+        </div>
+      </div>
+
 
     </div>
   );
