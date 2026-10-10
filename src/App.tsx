@@ -87,6 +87,7 @@ function App() {
 
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
   const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
+  const [publishModalOpen, setPublishModalOpen] = useState(false);
 
   const saveHistory = () => {
     const currentHistSched = weekSchedules[weekOffset] || schedule;
@@ -648,11 +649,7 @@ function App() {
                 </div>
                 <div className="flex gap-3">
                   <button 
-                    onClick={() => {
-                      const weekStr = getWeekString(weekOffset);
-                      setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
-                      alert(weekStr + ' programı başarıyla YAYINLANDI!\n\nArtık yeni optimize yapsanız bile bu haftanın Nöbetleri ve Ders Programları asla değişmeyecek.');
-                    }}
+                    onClick={() => setPublishModalOpen(true)}
                     className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors shadow-sm"
                   >
                     Programı Yayınla (Kilitle)
