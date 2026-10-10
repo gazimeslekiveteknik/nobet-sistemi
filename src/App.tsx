@@ -86,6 +86,7 @@ function App() {
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
 
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
+  const [publishedWeeks, setPublishedWeeks] = useState<Record<string, Assignment[]>>({});
 
   const saveHistory = () => {
     const currentHistSched = weekSchedules[weekOffset] || schedule;
@@ -250,10 +251,18 @@ function App() {
     setCurrentView('plan');
   };
 
+  
   const baseSchedule = weekSchedules[0] || schedule;
-  const computedSchedule = weekOffset === 0 
-      ? baseSchedule 
-      : { ...baseSchedule, assignments: rotateSchedule(baseSchedule.assignments, weekOffset, appSlots, appZones) };
+  const targetWeekStr = getWeekString(weekOffset);
+  const computedSchedule = {
+    ...baseSchedule,
+    assignments: publishedWeeks[targetWeekStr] 
+      ? publishedWeeks[targetWeekStr]
+      : (weekOffset === 0 
+          ? baseSchedule.assignments 
+          : rotateSchedule(baseSchedule.assignments, weekOffset, appSlots, appZones))
+  };
+
       
   const currentSchedule = weekSchedules[weekOffset] || computedSchedule;
   const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
@@ -271,12 +280,13 @@ function App() {
     const timeout = setTimeout(() => {
       FirebaseService.saveSettings({
         appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
-        lastScheduleAssignments: currentSchedule.assignments,
+        lastScheduleAssignments: (weekSchedules[0] || schedule).assignments,
+        publishedWeeks,
         telegramToken, telegramChatId, adminPassword
       }).catch(console.error);
     }, 1500);
     return () => clearTimeout(timeout);
-  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, currentSchedule.assignments, isInitializing, telegramToken, telegramChatId, adminPassword]);
+  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, (weekSchedules[0] || schedule).assignments, publishedWeeks, isInitializing, telegramToken, telegramChatId, adminPassword]);
 
   
   const getWeekString = (offset = 0) => {
@@ -638,24 +648,14 @@ function App() {
                 </div>
                 <div className="flex gap-3">
                   <button 
-                    onClick={async () => {
-                      const { FirebaseService } = await import('./firebase/service');
-                      const planToSave = {
-                        id: 'week_1',
-                        weekStartDate: new Date().toISOString(),
-                        status: 'PUBLISHED' as const,
-                        assignments: currentSchedule.assignments
-                      };
-                      try {
-                        await FirebaseService.saveWeeklyPlan('week_1', teachers, lessons, planToSave);
-                        alert('Başarıyla buluta kaydedildi!');
-                      } catch(e) {
-                        alert('Kaydedilirken hata oluştu!');
-                      }
+                    onClick={() => {
+                      const weekStr = getWeekString(weekOffset);
+                      setPublishedWeeks(prev => ({ ...prev, [weekStr]: currentSchedule.assignments }));
+                      alert(weekStr + ' programı başarıyla YAYINLANDI!\n\nArtık yeni optimize yapsanız bile bu haftanın programı (ve geçmişteki diğer yayınlanan haftalar) asla değişmeyecek.');
                     }}
                     className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors shadow-sm"
                   >
-                    Buluta Kaydet
+                    Programı Yayınla (Kilitle)
                   </button>
                   
                   <button 
