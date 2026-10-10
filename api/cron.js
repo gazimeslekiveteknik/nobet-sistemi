@@ -158,7 +158,35 @@ export default async function handler(req, res) {
     }
     
     
-    // --- FEATURE 3: RETURN FROM LONG LEAVE REMINDER ---
+    
+    // --- FEATURE 4: SEND NEXT WEEK PDF ON SUNDAY 18:00 ---
+    if (currentTime === '18:00' && currentDay === 0) {
+       const nextWeekDate = new Date(trtDate.getTime() + 24 * 60 * 60 * 1000); // Next Monday
+       const nextWeekStr = getWeekString(nextWeekDate);
+       
+       if (settings.publishedWeeks && settings.publishedWeeks[nextWeekStr]) {
+          const nextWeekData = settings.publishedWeeks[nextWeekStr];
+          
+          if (nextWeekData.telegramPending && nextWeekData.pdfUrl) {
+             const docUrl = `https://api.telegram.org/bot${telegramToken}/sendDocument`;
+             const caption = nextWeekData.telegramMessage || 'Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.';
+             
+             await fetch(docUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                   chat_id: telegramChatId,
+                   document: nextWeekData.pdfUrl,
+                   caption: caption
+                })
+             });
+             
+             didSomething = true;
+          }
+       }
+    }
+
+// --- FEATURE 3: RETURN FROM LONG LEAVE REMINDER ---
     // Check if any teacher's excludedUntil is tomorrow. Run this check daily at 16:00
     if (currentTime === '16:00') {
        const tomorrow = new Date(trtDate.getTime() + 24 * 60 * 60 * 1000);

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
+import { storage } from './firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import jsPDF from 'jspdf';
 import { toJpeg } from 'html-to-image';
 import { useRef } from 'react';
@@ -71,7 +73,49 @@ function App() {
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
   
-    const sendTelegramNotification = async (weekStr: string, activeTeachers: Teacher[], msg: string) => {
+    const generatePdfBlob = async (activeTeachers: Teacher[]) => {
+      const pdf = new jsPDF('l', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      let addedPage = false;
+      const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
+      for (let i = 0; i < filteredTeachers.length; i++) {
+         const teacher = filteredTeachers[i];
+         const el = document.getElementById(`teacher-print-${teacher.id}`);
+         
+         if (el) {
+            const imgData = await toJpeg(el, {
+               cacheBust: true,
+               pixelRatio: 1,
+               quality: 0.85,
+               backgroundColor: '#ffffff',
+               skipFonts: true
+            });
+            
+            if (addedPage) pdf.addPage();
+            addedPage = true;
+            
+            const imgProps = pdf.getImageProperties(imgData);
+            const padding = 10;
+            const availableWidth = pdfWidth - (padding * 2);
+            const availableHeight = pdfHeight - (padding * 2);
+            const ratio = Math.min(availableWidth / imgProps.width, availableHeight / imgProps.height);
+            
+            const finalW = imgProps.width * ratio;
+            const finalH = imgProps.height * ratio;
+            
+            const x = (pdfWidth - finalW) / 2;
+            const y = (pdfHeight - finalH) / 2;
+            
+            pdf.addImage(imgData, 'JPEG', x, y, finalW, finalH);
+         }
+      }
+      
+      return pdf.output('blob');
+   };
+
+   const sendTelegramNotification = async (weekStr: string, activeTeachers: Teacher[], msg: string) => {
     if (!telegramToken || !telegramChatId) {
        alert("Telegram ayarları eksik!");
        return false;
@@ -85,52 +129,7 @@ function App() {
       
       // Use html-to-image which natively supports CSS features like oklch via SVG foreignObject
       
-      // We will create a landscape PDF
-      const pdf = new jsPDF('l', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      let addedPage = false;
-
-      // Loop through each affected teacher and take a separate screenshot
-      const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
-      for (let i = 0; i < filteredTeachers.length; i++) {
-         const teacher = filteredTeachers[i];
-         const el = document.getElementById(`teacher-print-${teacher.id}`);
-         
-         if (el) {
-            const imgData = await toJpeg(el, {
-               cacheBust: true,
-               pixelRatio: 1, // Standard resolution instead of 2x
-               quality: 0.85, // Compress jpeg to reduce file size significantly
-               backgroundColor: '#ffffff',
-               skipFonts: true
-            });
-            
-            if (addedPage) pdf.addPage();
-            addedPage = true;
-            
-            const imgProps = pdf.getImageProperties(imgData);
-            
-            // Calculate scale to fit page horizontally or vertically with some padding
-            const padding = 10;
-            const availableWidth = pdfWidth - (padding * 2);
-            const availableHeight = pdfHeight - (padding * 2);
-            
-            const ratio = Math.min(availableWidth / imgProps.width, availableHeight / imgProps.height);
-            
-            const finalW = imgProps.width * ratio;
-            const finalH = imgProps.height * ratio;
-            
-            // Center the image
-            const x = (pdfWidth - finalW) / 2;
-            const y = (pdfHeight - finalH) / 2;
-            
-            pdf.addImage(imgData, 'JPEG', x, y, finalW, finalH);
-         }
-      }
-      
-      const pdfBlob = pdf.output('blob');
+      const pdfBlob = await generatePdfBlob(activeTeachers);
       
       const formData = new FormData();
       formData.append("chat_id", telegramChatId);
@@ -1046,14 +1045,34 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 onClick={async () => {
                   setIsPublishing(true);
                   const weekStr = getWeekString(weekOffset);
-                  setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
-                  
-                  if (sendTelegramPdf) {
-                     const ok = await sendTelegramNotification(weekStr, teachers, telegramMessage);
-                     if(ok) alert(weekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
-                     else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi (Bot ayarlarını kontrol edin).');
-                  } else {
-                     alert(weekStr + ' programı HEMEN YAYINLANDI! TV Kiosk güncellendi.');
+                  try {
+                    let pdfUrl = null;
+                    setPdfTeachers(teachers);
+                    await new Promise(r => setTimeout(r, 1500));
+                    const pdfBlob = await generatePdfBlob(teachers);
+                    const filename = `weekly_pdfs/${weekStr.replace(/ /g, '_')}.pdf`;
+                    const storageRef = ref(storage, filename);
+                    await uploadBytes(storageRef, pdfBlob);
+                    pdfUrl = await getDownloadURL(storageRef);
+                      
+                    if (sendTelegramPdf && telegramToken && telegramChatId) {
+                      const formData = new FormData();
+                      formData.append("chat_id", telegramChatId);
+                      formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
+                      formData.append("caption", telegramMessage);
+                      await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: formData });
+                    }
+                    
+                    setPdfTeachers([]);
+                    
+                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons, pdfUrl };
+                    await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [weekStr]: updatedData } });
+                    setPublishedWeeks(prev => ({ ...prev, [weekStr]: updatedData }));
+                    alert("Yayınlandı ve buluta kaydedildi!");
+                  } catch (e) {
+                    console.error(e);
+                    alert("Hata: " + e);
+                    setPdfTeachers([]);
                   }
                   setIsPublishing(false);
                   setPublishModalOpen(false);
@@ -1069,14 +1088,27 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 onClick={async () => {
                   setIsPublishing(true);
                   const nextWeekStr = getWeekString(weekOffset + 1);
-                  setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
-                  
-                  if (sendTelegramPdf) {
-                     const ok = await sendTelegramNotification(nextWeekStr, teachers, telegramMessage);
-                     if(ok) alert(nextWeekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
-                     else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi.');
-                  } else {
-                     alert(nextWeekStr + ' programı YAYINLANDI! (Yeni hafta için)');
+                  try {
+                    let pdfUrl = null;
+                    setPdfTeachers(teachers);
+                    await new Promise(r => setTimeout(r, 1500));
+                    const pdfBlob = await generatePdfBlob(teachers);
+                    const filename = `weekly_pdfs/${nextWeekStr.replace(/ /g, '_')}.pdf`;
+                    const storageRef = ref(storage, filename);
+                    await uploadBytes(storageRef, pdfBlob);
+                    pdfUrl = await getDownloadURL(storageRef);
+                    setPdfTeachers([]);
+
+                    // SADECE KAYDET (GÖNDERME) - CRON İÇİN HAZIRLA
+                    const telegramPending = true;
+                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons, pdfUrl, telegramPending, telegramMessage };
+                    await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [nextWeekStr]: updatedData } });
+                    setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: updatedData }));
+                    alert(`${nextWeekStr} için PDF oluşturuldu ve kaydedildi! Pazar saat 18:00'de otomatik gönderilecektir.`);
+                  } catch (e) {
+                    console.error(e);
+                    alert("Hata: " + e);
+                    setPdfTeachers([]);
                   }
                   setIsPublishing(false);
                   setPublishModalOpen(false);
