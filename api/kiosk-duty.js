@@ -69,41 +69,42 @@ export default async function handler(req, res) {
     // Sort today's slots chronologically
     todaySlots.sort((a, b) => timeToMins(a.startTime) - timeToMins(b.startTime));
 
-    // Determine target slot:
-    // 1. Is there an active slot right now? (startTime - 5 mins <= currentMins <= endTime + 5 mins)
-    // 2. If not, pick the NEXT upcoming slot today.
-    // 3. If school day ended, show the last slot of today.
+    // KURAL (USER İSTEĞİ):
+    // 1. Bir slotun ekranda görünme başlangıcı: slot.startTime - 5 dk (Telegram mesajının atıldığı tam an!)
+    // 2. Bir slotun ekranda kalma bitişi: Bir sonraki slotun başlangıcından 5 dk öncesine kadar!
+    //    (Örnek: 1. teneffüs bittikten sonra 2. ders boyunca ekranda kalmaya devam eder, ta ki 2. teneffüse 5 dk kalana kadar!)
+    // 3. Günün ilk slotundan önceki saatlerde (sabah erkenden): İlk slot (Açılış) gösterilir.
+    // 4. Günün son slotu (Kapanış): Günün sonuna kadar ekranda kalır.
+
     let selectedSlot = null;
-    let slotStatus = 'upcoming';
+    let slotStatus = 'normal';
 
-    for (const slot of todaySlots) {
-      const sStart = timeToMins(slot.startTime);
-      const sEnd = timeToMins(slot.endTime);
+    for (let i = 0; i < todaySlots.length; i++) {
+      const slot = todaySlots[i];
+      const slotThreshold = timeToMins(slot.startTime) - 5; // Teneffüse 5 dk kala geçiş anı
+      
+      const nextSlot = todaySlots[i + 1];
+      const nextThreshold = nextSlot ? (timeToMins(nextSlot.startTime) - 5) : 24 * 60; // Bir sonrakine 5 dk kalana kadar
 
-      // Active interval: Starts showing 5 mins before start, lasts until 5 mins after end
-      if (currentMins >= (sStart - 5) && currentMins <= (sEnd + 5)) {
+      // Eğer sabah ilk slotun 5 dk öncesinden daha erkense, ilk slotu göster
+      if (i === 0 && currentMins < slotThreshold) {
         selectedSlot = slot;
-        slotStatus = 'active';
+        slotStatus = 'morning_preview';
+        break;
+      }
+
+      // Aktif aralık: Bu slotun 5 dk öncesi ile sonraki slotun 5 dk öncesi arası
+      if (currentMins >= slotThreshold && currentMins < nextThreshold) {
+        selectedSlot = slot;
+        slotStatus = currentMins <= (timeToMins(slot.endTime) + 5) ? 'active_duty' : 'lesson_continuation';
         break;
       }
     }
 
-    if (!selectedSlot) {
-      // Find next upcoming slot today
-      for (const slot of todaySlots) {
-        const sStart = timeToMins(slot.startTime);
-        if (sStart > currentMins) {
-          selectedSlot = slot;
-          slotStatus = 'next';
-          break;
-        }
-      }
-    }
-
-    // If still none, all slots today have passed -> show the last slot
+    // Güvenlik yedeği (eğer bir şekilde seçilmediyse son slot)
     if (!selectedSlot && todaySlots.length > 0) {
       selectedSlot = todaySlots[todaySlots.length - 1];
-      slotStatus = 'passed';
+      slotStatus = 'day_end';
     }
 
     if (!selectedSlot) {
