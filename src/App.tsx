@@ -86,7 +86,7 @@ function App() {
   const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
 
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
-  const [publishedWeeks, setPublishedWeeks] = useState<Record<string, Assignment[]>>({});
+  const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
 
   const saveHistory = () => {
     const currentHistSched = weekSchedules[weekOffset] || schedule;
@@ -257,7 +257,7 @@ function App() {
   const computedSchedule = {
     ...baseSchedule,
     assignments: publishedWeeks[targetWeekStr] 
-      ? publishedWeeks[targetWeekStr]
+      ? publishedWeeks[targetWeekStr].assignments
       : (weekOffset === 0 
           ? baseSchedule.assignments 
           : rotateSchedule(baseSchedule.assignments, weekOffset, appSlots, appZones))
@@ -555,7 +555,7 @@ function App() {
               {printTab === 'master' && (
                 <PrintableView 
                   schedule={currentSchedule} 
-                  teachers={teachers} 
+                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers} 
                   zones={appZones} 
                   slots={appSlots} 
                   weekString={getWeekString(weekOffset)} 
@@ -563,7 +563,7 @@ function App() {
               )}
               {printTab === 'personal' && (
                 <TeacherSchedulesPrintView
-                  teachers={teachers}
+                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers}
                   assignments={currentSchedule.assignments}
                   slots={appSlots}
                   zones={appZones}
@@ -574,8 +574,8 @@ function App() {
               )}
               {printTab === 'timetable' && (
                 <TeacherTimetablesPrintView
-                  teachers={teachers}
-                  lessons={lessons}
+                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers}
+                  lessons={publishedWeeks[getWeekString(weekOffset)]?.lessons || lessons}
                   searchTerm={timetablesSearch}
                   setSearchTerm={setTimetablesSearch}
                 />
@@ -650,8 +650,8 @@ function App() {
                   <button 
                     onClick={() => {
                       const weekStr = getWeekString(weekOffset);
-                      setPublishedWeeks(prev => ({ ...prev, [weekStr]: currentSchedule.assignments }));
-                      alert(weekStr + ' programı başarıyla YAYINLANDI!\n\nArtık yeni optimize yapsanız bile bu haftanın programı (ve geçmişteki diğer yayınlanan haftalar) asla değişmeyecek.');
+                      setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
+                      alert(weekStr + ' programı başarıyla YAYINLANDI!\n\nArtık yeni optimize yapsanız bile bu haftanın Nöbetleri ve Ders Programları asla değişmeyecek.');
                     }}
                     className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors shadow-sm"
                   >
