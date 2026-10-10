@@ -87,7 +87,8 @@ function App() {
       const imgData = await toPng(hiddenPrintRef.current, {
          cacheBust: true,
          pixelRatio: 2,
-         backgroundColor: '#ffffff'
+         backgroundColor: '#ffffff',
+         skipFonts: true
       });
       
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -175,6 +176,7 @@ function App() {
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
   const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
   const [publishModalOpen, setPublishModalOpen] = useState(false);
+  const [isSendingTelegram, setIsSendingTelegram] = useState(false);
   const hiddenPrintRef = useRef<HTMLDivElement>(null);
   const [pdfTeachers, setPdfTeachers] = useState<Teacher[]>([]);
   const [telegramMessage, setTelegramMessage] = useState("Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.");
@@ -1163,16 +1165,23 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
               </button>
               <button 
                 onClick={async () => {
-                  const weekStr = getWeekString(weekOffset);
-                  // Generate PDF only for the affected teachers
-                  const ok = await sendTelegramNotification(weekStr, telegramSpecificModal.affectedTeachers, telegramSpecificModal.message);
-                  if(ok) alert('Telegram mesajı ve PDF başarıyla gönderildi!');
-                  else alert('Gönderim başarısız oldu. Bot ayarlarını kontrol edin.');
-                  setTelegramSpecificModal(null);
+                  try {
+                    setIsSendingTelegram(true);
+                    const weekStr = getWeekString(weekOffset);
+                    const ok = await sendTelegramNotification(weekStr, telegramSpecificModal.affectedTeachers, telegramSpecificModal.message);
+                    if(ok) alert('Telegram mesajı ve PDF başarıyla gönderildi!');
+                    // Note: if !ok, sendTelegramNotification already alerts the specific error.
+                    setTelegramSpecificModal(null);
+                  } catch (err) {
+                    alert('Beklenmeyen Hata: ' + String(err));
+                  } finally {
+                    setIsSendingTelegram(false);
+                  }
                 }}
-                className="flex-1 py-2 bg-[#0088cc] text-white rounded-lg transition-colors font-medium hover:bg-[#0077b3]"
+                disabled={isSendingTelegram}
+                className="flex-1 py-2 bg-[#0088cc] text-white rounded-lg transition-colors font-medium hover:bg-[#0077b3] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Telegram'a Gönder
+                {isSendingTelegram ? 'Gönderiliyor...' : "Telegram'a Gönder"}
               </button>
             </div>
           </div>
