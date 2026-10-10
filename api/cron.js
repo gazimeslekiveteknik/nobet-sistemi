@@ -51,6 +51,9 @@ export default async function handler(req, res) {
     const minsStr = String(trtDate.getMinutes()).padStart(2, '0');
     const currentTime = `${hoursStr}:${minsStr}`;
 
+    let assignments = settings.lastScheduleAssignments || [];
+    let teachers = settings.teachers || [];
+    const zones = settings.appZones || [];
     const currentWeekStr = getWeekString(trtDate);
     if (settings.publishedWeeks && settings.publishedWeeks[currentWeekStr]) {
        const pub = settings.publishedWeeks[currentWeekStr];
@@ -62,9 +65,7 @@ export default async function handler(req, res) {
     
     
     
-    const assignments = settings.lastScheduleAssignments || [];
-    const teachers = settings.teachers || [];
-    const zones = settings.appZones || [];
+
 
     const sendTg = async (text) => {
         const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
