@@ -81,6 +81,8 @@ function App() {
       let addedPage = false;
       const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
       for (let i = 0; i < filteredTeachers.length; i++) {
+         setPublishingProgress(`PDF Oluşturuluyor... (${i+1}/${filteredTeachers.length})`);
+         await new Promise(r => setTimeout(r, 50)); // let UI update
          const teacher = filteredTeachers[i];
          const el = document.getElementById(`teacher-print-${teacher.id}`);
          
@@ -199,6 +201,7 @@ function App() {
   const [telegramMessage, setTelegramMessage] = useState("Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.");
   const [sendTelegramPdf, setSendTelegramPdf] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [publishingProgress, setPublishingProgress] = useState<string | null>(null);
 
   const saveHistory = () => {
     const currentHistSched = weekSchedules[weekOffset] || schedule;
@@ -1052,6 +1055,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     const pdfBlob = await generatePdfBlob(teachers);
                     const filename = `weekly_pdfs/${weekStr.replace(/ /g, '_')}.pdf`;
                     const storageRef = ref(storage, filename);
+                    setPublishingProgress('Buluta yükleniyor...');
                     await uploadBytes(storageRef, pdfBlob);
                     pdfUrl = await getDownloadURL(storageRef);
                       
@@ -1075,12 +1079,15 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     setPdfTeachers([]);
                   }
                   setIsPublishing(false);
+                  setPublishingProgress(null);
                   setPublishModalOpen(false);
                 }}
                 className="w-full text-left p-4 rounded-lg border-2 border-indigo-100 hover:border-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50"
               >
                 <div className="font-semibold text-indigo-900">Hemen Şimdi (Mevcut Haftayı Ez)</div>
-                <div className="text-sm text-indigo-700 mt-1">Acil durum değişiklikleri için uygundur.</div>
+                <div className="text-sm text-indigo-700 mt-1">
+                  {isPublishing && publishingProgress ? publishingProgress : "Acil durum değişiklikleri için uygundur."}
+                </div>
               </button>
 
               <button 
@@ -1095,6 +1102,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     const pdfBlob = await generatePdfBlob(teachers);
                     const filename = `weekly_pdfs/${nextWeekStr.replace(/ /g, '_')}.pdf`;
                     const storageRef = ref(storage, filename);
+                    setPublishingProgress('Buluta yükleniyor...');
                     await uploadBytes(storageRef, pdfBlob);
                     pdfUrl = await getDownloadURL(storageRef);
                     setPdfTeachers([]);
@@ -1111,12 +1119,15 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     setPdfTeachers([]);
                   }
                   setIsPublishing(false);
+                  setPublishingProgress(null);
                   setPublishModalOpen(false);
                 }}
                 className="w-full text-left p-4 rounded-lg border-2 border-emerald-100 hover:border-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-50"
               >
                 <div className="font-semibold text-emerald-900">Gelecek Hafta Pazartesi</div>
-                <div className="text-sm text-emerald-700 mt-1">Mevcut haftanın programı Cuma'ya kadar çalışmaya devam eder.</div>
+                <div className="text-sm text-emerald-700 mt-1">
+                  {isPublishing && publishingProgress ? publishingProgress : "Mevcut haftanın programı Cuma'ya kadar çalışmaya devam eder."}
+                </div>
               </button>
             </div>
 
