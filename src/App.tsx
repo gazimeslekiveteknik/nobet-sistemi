@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
 import { storage } from './firebase/config';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import jsPDF from 'jspdf';
 import { toJpeg } from 'html-to-image';
 import { useRef } from 'react';
@@ -1055,8 +1055,17 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     const pdfBlob = await generatePdfBlob(teachers);
                     const filename = `weekly_pdfs/${weekStr.replace(/ /g, '_')}.pdf`;
                     const storageRef = ref(storage, filename);
-                    setPublishingProgress('Buluta yükleniyor...');
-                    await uploadBytes(storageRef, pdfBlob);
+                    await new Promise<void>((resolve, reject) => {
+                      const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
+                      uploadTask.on('state_changed', 
+                        (snapshot) => {
+                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                          setPublishingProgress(`Buluta Yükleniyor... (%${progress.toFixed(0)})`);
+                        }, 
+                        (error) => reject(error), 
+                        () => resolve()
+                      );
+                    });
                     pdfUrl = await getDownloadURL(storageRef);
                       
                     if (sendTelegramPdf && telegramToken && telegramChatId) {
@@ -1102,8 +1111,17 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     const pdfBlob = await generatePdfBlob(teachers);
                     const filename = `weekly_pdfs/${nextWeekStr.replace(/ /g, '_')}.pdf`;
                     const storageRef = ref(storage, filename);
-                    setPublishingProgress('Buluta yükleniyor...');
-                    await uploadBytes(storageRef, pdfBlob);
+                    await new Promise<void>((resolve, reject) => {
+                      const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
+                      uploadTask.on('state_changed', 
+                        (snapshot) => {
+                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                          setPublishingProgress(`Buluta Yükleniyor... (%${progress.toFixed(0)})`);
+                        }, 
+                        (error) => reject(error), 
+                        () => resolve()
+                      );
+                    });
                     pdfUrl = await getDownloadURL(storageRef);
                     setPdfTeachers([]);
 
