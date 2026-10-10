@@ -454,7 +454,7 @@ function App() {
           if (futureDutyIndex !== -1) {
              const futureDutySlot = appSlots.find(s => s.id === newAssignments[futureDutyIndex].slotId);
              newAssignments[futureDutyIndex] = { ...newAssignments[futureDutyIndex], teacherId: t.id, isManual: true };
-             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${futureDutySlot?.day}. gündeki nöbeti alındı)`);
+             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"][futureDutySlot?.day || 0]} günkü nöbeti alındı)`);
           } else {
              logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Devredilecek nöbet bulunamadı, sistem borçlandırdı)`);
           }
