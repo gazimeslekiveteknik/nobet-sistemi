@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
 import jsPDF from 'jspdf';
+import { toPng } from 'html-to-image';
+import { useRef } from 'react';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
@@ -75,107 +77,39 @@ function App() {
        return false;
     }
     try {
-      const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape for wider tables
-      const pageW = pdf.internal.pageSize.getWidth();
+      setPdfTeachers(activeTeachers);
+      // Wait for React to render the hidden div and load fonts
+      await new Promise(r => setTimeout(r, 1500));
       
-      const dayNames = ['', 'Pazartesi', 'Sali', 'Carsamba', 'Persembe', 'Cuma'];
+      if (!hiddenPrintRef.current) return false;
       
-      // Determine periods from slots
-      const periods: { type: string; lesson?: number; label: string }[] = [];
-      if (appSlots.some(s => s.type === 'OPENING')) periods.push({ type: 'OPENING', label: 'Acilis Nobeti' });
-      const breakSlots = appSlots.filter(s => s.type === 'BREAK' && s.afterLesson !== undefined);
-      const maxLesson = Math.max(0, ...breakSlots.map(s => s.afterLesson!));
-      for (let i = 1; i <= maxLesson; i++) {
-        if (breakSlots.some(s => s.afterLesson === i)) periods.push({ type: 'BREAK', lesson: i, label: `${i}. Ders Sonu` });
-      }
-      if (appSlots.some(s => s.type === 'CLOSING')) periods.push({ type: 'CLOSING', label: 'Kapanis Nobeti' });
-      
-      const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
-      
-      filteredTeachers.forEach((teacher, tIdx) => {
-        if (tIdx > 0) pdf.addPage();
-        
-        // Header
-        pdf.setFillColor(79, 70, 229); // indigo
-        pdf.rect(10, 8, pageW - 20, 14, 'F');
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(14);
-        pdf.text(teacher.name, 15, 17);
-        pdf.setFontSize(9);
-        pdf.text(weekStr, pageW - 15, 17, { align: 'right' });
-        
-        // Table
-        const startY = 28;
-        const colW = (pageW - 20) / 6; // 1 label col + 5 day cols
-        const rowH = 12;
-        
-        // Header row
-        pdf.setFillColor(243, 244, 246); // gray-100
-        pdf.rect(10, startY, pageW - 20, rowH, 'F');
-        pdf.setTextColor(55, 65, 81); // gray-700
-        pdf.setFontSize(9);
-        pdf.text('Zaman / Gun', 12, startY + 8);
-        for (let d = 1; d <= 5; d++) {
-          pdf.text(dayNames[d], 10 + colW * d + colW / 2, startY + 8, { align: 'center' });
-        }
-        
-        // Draw header borders
-        pdf.setDrawColor(209, 213, 219); // gray-300
-        pdf.setLineWidth(0.3);
-        pdf.rect(10, startY, pageW - 20, rowH);
-        for (let d = 0; d <= 5; d++) {
-          pdf.line(10 + colW * d, startY, 10 + colW * d, startY + rowH);
-        }
-        
-        // Data rows
-        periods.forEach((period, pIdx) => {
-          const y = startY + rowH + pIdx * rowH;
-          
-          // Alternating row bg
-          if (pIdx % 2 === 0) {
-            pdf.setFillColor(249, 250, 251); // gray-50
-            pdf.rect(10, y, pageW - 20, rowH, 'F');
-          }
-          
-          // Period label
-          pdf.setTextColor(31, 41, 55); // gray-800
-          pdf.setFontSize(8);
-          pdf.text(period.label, 12, y + 7);
-          
-          // Each day cell
-          for (let day = 1; day <= 5; day++) {
-            const slot = appSlots.find(s =>
-              s.day === day &&
-              s.type === period.type &&
-              (period.type !== 'BREAK' || s.afterLesson === period.lesson)
-            );
-            
-            if (slot) {
-              const assignment = currentSchedule.assignments.find(a => a.slotId === slot.id && a.teacherId === teacher.id);
-              if (assignment) {
-                const zone = appZones.find(z => z.id === assignment.zoneId);
-                pdf.setTextColor(67, 56, 202); // indigo-700
-                pdf.setFontSize(9);
-                pdf.text(zone?.name || '', 10 + colW * day + colW / 2, y + 5, { align: 'center' });
-                pdf.setTextColor(107, 114, 128); // gray-500
-                pdf.setFontSize(7);
-                pdf.text(`${slot.startTime} - ${slot.endTime}`, 10 + colW * day + colW / 2, y + 10, { align: 'center' });
-              } else {
-                pdf.setTextColor(209, 213, 219);
-                pdf.setFontSize(9);
-                pdf.text('-', 10 + colW * day + colW / 2, y + 7, { align: 'center' });
-              }
-            }
-          }
-          
-          // Row borders
-          pdf.setDrawColor(229, 231, 235); // gray-200
-          pdf.rect(10, y, pageW - 20, rowH);
-          for (let d = 0; d <= 5; d++) {
-            pdf.line(10 + colW * d, y, 10 + colW * d, y + rowH);
-          }
-        });
+      // Use html-to-image which natively supports CSS features like oklch via SVG foreignObject
+      const imgData = await toPng(hiddenPrintRef.current, {
+         cacheBust: true,
+         pixelRatio: 2,
+         backgroundColor: '#ffffff'
       });
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      
+      // Calculate image dimensions
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+      
+      // Handle multiple pages if the image is too long
+      while (heightLeft > 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
+      }
       
       const pdfBlob = pdf.output('blob');
       
@@ -191,13 +125,15 @@ function App() {
       if (!res.ok) {
          const errText = await res.text();
          console.error('Telegram Error:', errText);
-         alert('Telegram Hatasi: ' + errText);
+         alert('Telegram Hatası: ' + errText);
       }
       
+      setPdfTeachers([]); // Cleanup
       return res.ok;
     } catch(e) {
       console.error(e);
-      alert("PDF Uretim Hatasi: " + (e instanceof Error ? e.message : String(e)));
+      alert("PDF Üretim Hatası: " + (e instanceof Error ? e.message : String(e)));
+      setPdfTeachers([]);
       return false;
     }
   };
@@ -239,6 +175,8 @@ function App() {
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
   const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
   const [publishModalOpen, setPublishModalOpen] = useState(false);
+  const hiddenPrintRef = useRef<HTMLDivElement>(null);
+  const [pdfTeachers, setPdfTeachers] = useState<Teacher[]>([]);
   const [telegramMessage, setTelegramMessage] = useState("Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.");
   const [sendTelegramPdf, setSendTelegramPdf] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -1243,6 +1181,27 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
 
 
 
+
+    
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '1000px', background: '#fff', zIndex: -100 }}>
+        <div ref={hiddenPrintRef} className="p-8 bg-white text-black">
+           {pdfTeachers.length > 0 && (
+               <>
+                   <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">{getWeekString(weekOffset)} - Öğretmen El Programları</h2>
+                   <TeacherSchedulesPrintView 
+                       teachers={pdfTeachers}
+                       assignments={currentSchedule.assignments}
+                       slots={appSlots}
+                       zones={appZones}
+                       weekString={getWeekString(weekOffset)}
+                       searchTerm=""
+                       setSearchTerm={() => {}}
+                       hideControls={true}
+                   />
+               </>
+           )}
+        </div>
+      </div>
 
     </div>
   );
