@@ -407,12 +407,10 @@ function App() {
     setLeaveModal({ assignment, teacher: t });
   };
   
-  const processOneDayLeave = (assignment: Assignment, t: Teacher) => {
+  const processOneDayLeave = (t: Teacher) => {
     saveHistory();
     updateCurrentSchedule(prev => {
       let newAssignments = [...prev.assignments];
-      const availability = calculateAvailability(teachers, lessons, appSlots);
-      
       const todayAssignments = newAssignments.filter(
         a => a.teacherId === t.id && appSlots.find(s => s.id === a.slotId)?.day === selectedDay
       );
@@ -1056,7 +1054,7 @@ function App() {
             <div className="space-y-3">
               <button 
                 onClick={() => {
-                  processOneDayLeave(leaveModal.assignment, leaveModal.teacher);
+                  processOneDayLeave(leaveModal.teacher);
                   setLeaveModal(null);
                 }}
                 className="w-full text-left p-4 rounded-lg border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition-colors"
