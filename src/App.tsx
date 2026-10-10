@@ -463,8 +463,7 @@ function App() {
         }
       });
       
-      finalLogs = logs.join('
-');
+      finalLogs = logs.join('\n');
       return { ...prev, assignments: newAssignments };
     });
     
@@ -481,19 +480,26 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
     }, 200);
   };
 
-  const processLongLeave = (t: Teacher) => {
+  const processLongLeave = (t: Teacher, untilDate: string) => {
+    if (!untilDate) {
+      alert("Lütfen iznin bitiş (dönüş) tarihini seçiniz!");
+      return;
+    }
     saveHistory();
-    // 1. Temporarily exclude the teacher for this week ONLY (in local state)
-    // Actually, if we just generate the schedule without this teacher, we don't even need to modify the global teachers list permanently.
-    const tempTeachers = teachers.map(x => x.id === t.id ? { ...x, isExcluded: true } : x);
+    const tempTeachers = teachers.map(x => x.id === t.id ? { ...x, isExcluded: true, excludedUntil: untilDate } : x);
+    setTeachers(tempTeachers);
     
-    // 2. Regenerate the schedule for the current week using the excluded list
     const newSched = generateSchedule(tempTeachers, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
-    
-    // 3. Update the current view
     updateCurrentSchedule(newSched);
+    setSchedule(newSched);
     
-    alert(`${t.name} hocamız bu haftalık (geçici olarak) MUAF statüsüne alındı ve bu haftanın programı baştan dengeli şekilde dağıtıldı.\n\nİncelemeyi bitirdikten sonra işlemleri kaydetmek için 'Programı Yayınla' butonuna basmayı unutmayın.`);
+    setTimeout(() => {
+       setTelegramSpecificModal({
+          title: "Uzun Süreli İzin / Görevlendirme",
+          message: `🚨 Duyuru: ${t.name} hocamız ${new Date(untilDate).toLocaleDateString('tr-TR')} tarihine kadar görevli/izinli olduğu için şablon nöbet programı yeniden dengelenmiş ve güncellenmiştir.\n\nTüm öğretmenlerimizin güncel programı ektedir.`,
+          affectedTeachers: tempTeachers 
+       });
+    }, 200);
   };
 
 
