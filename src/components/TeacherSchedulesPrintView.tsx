@@ -55,7 +55,7 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones,
           @page { size: landscape; margin: 1cm; }
         }
       `}} />
-      <div className="print:hidden mb-8">
+      {!hideControls && (<div className="print:hidden mb-8">
         <h1 className="text-2xl font-bold text-gray-800">Öğretmen Bireysel Nöbet Programları</h1>
         <p className="text-gray-500 mt-1 mb-6">Bu sayfayı doğrudan yazdırarak öğretmenlere dağıtabilirsiniz. Her tablo sayfaya sığacak şekilde otomatik ayarlanır.</p>
         
@@ -74,7 +74,7 @@ export function TeacherSchedulesPrintView({ teachers, assignments, slots, zones,
             Yazdır / PDF Olarak Kaydet
           </button>
         </div>
-      </div>
+      </div>)}
 
       <div className="space-y-12">
         {activeTeachers.map(teacher => (
