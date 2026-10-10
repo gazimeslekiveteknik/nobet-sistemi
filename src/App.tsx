@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService } from './firebase/service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
 import { calculateAvailability } from './algorithm/availability';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
@@ -67,6 +69,65 @@ function App() {
   }, [currentView]);
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
+  
+  const sendTelegramNotification = async (weekStr: string, activeAssignments: Assignment[], activeTeachers: Teacher[], msg: string) => {
+    if (!telegramToken || !telegramChatId) {
+       alert("Telegram ayarları eksik!");
+       return false;
+    }
+    try {
+      const doc = new jsPDF();
+      
+      // Türkçe karakter desteği için font eklememiz lazım normalde, ama varsayılan fontta sıkıntı olursa diye basic tablolar iş görür.
+      doc.setFontSize(16);
+      doc.text(weekStr + " - Nöbet Öğretmen El Programı", 14, 15);
+      
+      const tableData: any[] = [];
+      activeTeachers.filter(t => !t.isExcluded).forEach(t => {
+         const tAssignments = activeAssignments.filter(a => a.teacherId === t.id);
+         if (tAssignments.length === 0) return;
+         
+         let dutyStr = "";
+         tAssignments.forEach(a => {
+            const s = appSlots.find(slot => slot.id === a.slotId);
+            const z = appZones.find(zone => zone.id === a.zoneId);
+            if(s && z) {
+               const days = ["Pzr", "Pzt", "Sal", "Çar", "Per", "Cum", "Cts"];
+               dutyStr += `${days[s.day]} ${s.startTime}-${s.endTime} (${z.name})\n`;
+            }
+         });
+         
+         tableData.push([t.name, dutyStr]);
+      });
+
+      autoTable(doc, {
+        startY: 25,
+        head: [['Öğretmen Adı', 'Nöbet Görevleri']],
+        body: tableData,
+        theme: 'grid',
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [79, 70, 229] }
+      });
+
+      const pdfBlob = doc.output('blob');
+      
+      const formData = new FormData();
+      formData.append("chat_id", telegramChatId);
+      formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}.pdf`, { type: 'application/pdf' }));
+      formData.append("caption", msg);
+
+      const res = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, {
+         method: 'POST',
+         body: formData
+      });
+      
+      return res.ok;
+    } catch(e) {
+      console.error(e);
+      return false;
+    }
+  };
+
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
   
@@ -104,6 +165,9 @@ function App() {
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
   const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
   const [publishModalOpen, setPublishModalOpen] = useState(false);
+  const [telegramMessage, setTelegramMessage] = useState("Yeni haftalık nöbet programımız yayınlanmıştır. Güncel Öğretmen El Programı (PDF) ektedir.\n\nİyi çalışmalar dileriz.");
+  const [sendTelegramPdf, setSendTelegramPdf] = useState(true);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const saveHistory = () => {
     const currentHistSched = weekSchedules[weekOffset] || schedule;
@@ -290,6 +354,7 @@ function App() {
 
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [addTeacherModal, setAddTeacherModal] = useState<{slotId: string, zoneId: string} | null>(null);
+  const [leaveModal, setLeaveModal] = useState<{assignment: Assignment, teacher: Teacher} | null>(null);
 
   // Otomatik yedekleme (Herhangi bir ayar, öğretmen veya liste değiştiğinde)
   useEffect(() => {
@@ -337,22 +402,17 @@ function App() {
   };
 
   const handleTeacherClick = (assignment: Assignment) => {
-    saveHistory();
     const t = teachers.find(t => t.id === assignment.teacherId);
     if (!t) return;
-
-    const confirmed = window.confirm(
-      `${t.name} hocayı BUGÜN (Gün ${selectedDay}) için RAPORLU/İZİNLİ işaretlemek istiyor musunuz?\n\n` +
-      `Sistem otomatik olarak:\n1. Bugün o hocanın nöbetlerine uygun bir yedek atayacak.\n2. Borçlandırma sistemiyle yedeğin gelecekteki bir nöbetini ${t.name} hocaya devredecek.`
-    );
-
-    if (!confirmed) return;
-
+    setLeaveModal({ assignment, teacher: t });
+  };
+  
+  const processOneDayLeave = (assignment: Assignment, t: Teacher) => {
+    saveHistory();
     updateCurrentSchedule(prev => {
       let newAssignments = [...prev.assignments];
       const availability = calculateAvailability(teachers, lessons, appSlots);
       
-      // Find all assignments for the absent teacher ON THIS DAY
       const todayAssignments = newAssignments.filter(
         a => a.teacherId === t.id && appSlots.find(s => s.id === a.slotId)?.day === selectedDay
       );
@@ -363,42 +423,25 @@ function App() {
         const slot = appSlots.find(s => s.id === absentAssignment.slotId);
         if (!slot) return;
 
-        // Find a replacement teacher
-        let bestReplacement: string | null = null;
-        let minLoad = Infinity;
+        const availableTeachers = teachers.filter(cand => 
+          cand.id !== t.id && !cand.isExcluded &&
+          !newAssignments.some(a => a.teacherId === cand.id && a.slotId === slot.id) &&
+          !lessons.some(l => l.teacherId === cand.id && l.day === slot.day && appTimetable[l.period]?.start < slot.endTime && appTimetable[l.period]?.end > slot.startTime)
+        );
 
-        for (const cand of teachers) {
-          if (cand.id === t.id || cand.isExcluded) continue;
-          
-          const candAvail = availability[cand.id]?.[slot.id];
-          if (!candAvail || !candAvail.canDuty) continue;
-
-          // Is candidate already assigned to this slot?
-          if (newAssignments.some(a => a.slotId === slot.id && a.teacherId === cand.id)) continue;
-
-          // Count candidate's current weekly load to find the one with the least duties
-          const candLoad = newAssignments.filter(a => a.teacherId === cand.id).length;
-          
-          if (candLoad < minLoad) {
-            minLoad = candLoad;
-            bestReplacement = cand.id;
-          }
-        }
-
+        let bestReplacement = availableTeachers[0]?.id;
+        
         if (bestReplacement) {
           const replTeacher = teachers.find(x => x.id === bestReplacement);
           
-          // 1. Give the absent duty to the replacement
           const oldIndex = newAssignments.findIndex(a => a.id === absentAssignment.id);
           if (oldIndex !== -1) {
              newAssignments[oldIndex] = { ...newAssignments[oldIndex], teacherId: bestReplacement, isManual: true };
           }
 
-          // 2. Try to settle the debt immediately by finding a future duty of the replacement
           const futureDutyIndex = newAssignments.findIndex(a => {
              if (a.teacherId !== bestReplacement) return false;
              const s = appSlots.find(slot => slot.id === a.slotId);
-             // Find a duty later in the week
              return s && s.day > selectedDay;
           });
 
@@ -407,8 +450,7 @@ function App() {
              newAssignments[futureDutyIndex] = { ...newAssignments[futureDutyIndex], teacherId: t.id, isManual: true };
              logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${futureDutySlot?.day}. gündeki nöbeti alındı)`);
           } else {
-             // Couldn't find a future duty in this week, so we'd just log it as a cross-week debt.
-             logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Bu haftaya ait devredilecek nöbet bulunamadı, puanlarına eklendi)`);
+             logs.push(`${t.name}'nin bugünkü nöbeti ${replTeacher?.name} hocaya verildi. (Devredilecek nöbet bulunamadı)`);
           }
         } else {
           logs.push(`${slot.startTime} saati için uygun yedek öğretmen bulunamadı!`);
@@ -419,6 +461,22 @@ function App() {
       return { ...prev, assignments: newAssignments };
     });
   };
+
+  const processLongLeave = (t: Teacher) => {
+    saveHistory();
+    // 1. Temporarily exclude the teacher for this week ONLY (in local state)
+    // Actually, if we just generate the schedule without this teacher, we don't even need to modify the global teachers list permanently.
+    const tempTeachers = teachers.map(x => x.id === t.id ? { ...x, isExcluded: true } : x);
+    
+    // 2. Regenerate the schedule for the current week using the excluded list
+    const newSched = generateSchedule(tempTeachers, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+    
+    // 3. Update the current view
+    updateCurrentSchedule(newSched);
+    
+    alert(`${t.name} hocamız bu haftalık (geçici olarak) MUAF statüsüne alındı ve bu haftanın programı baştan dengeli şekilde dağıtıldı.\n\nİncelemeyi bitirdikten sonra işlemleri kaydetmek için 'Programı Yayınla' butonuna basmayı unutmayın.`);
+  };
+
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, assignment: Assignment) => {
     e.dataTransfer.setData('assignmentId', assignment.id);
@@ -895,45 +953,133 @@ function App() {
       )}
 
 
+      
       {publishModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Yeni Programı Yayınla</h3>
+            <p className="text-gray-600 mb-4 text-sm">
+              Hazırladığınız program TV Kiosk ve Telegram'da yayınlanacaktır.
+            </p>
+
+            <div className="mb-4">
+              <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={sendTelegramPdf} 
+                  onChange={e => setSendTelegramPdf(e.target.checked)}
+                  className="rounded text-indigo-600 focus:ring-indigo-500"
+                />
+                <span>Telegram Grubuna PDF ve Mesaj Gönder</span>
+              </label>
+              
+              {sendTelegramPdf && (
+                <textarea 
+                  value={telegramMessage}
+                  onChange={e => setTelegramMessage(e.target.value)}
+                  className="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50 h-28"
+                  placeholder="Telegram mesajınızı buraya yazın..."
+                />
+              )}
+            </div>
+            
+            <div className="space-y-3 mt-4">
+              <button 
+                disabled={isPublishing}
+                onClick={async () => {
+                  setIsPublishing(true);
+                  const weekStr = getWeekString(weekOffset);
+                  setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
+                  
+                  if (sendTelegramPdf) {
+                     const ok = await sendTelegramNotification(weekStr, currentSchedule.assignments, teachers, telegramMessage);
+                     if(ok) alert(weekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
+                     else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi (Bot ayarlarını kontrol edin).');
+                  } else {
+                     alert(weekStr + ' programı HEMEN YAYINLANDI! TV Kiosk güncellendi.');
+                  }
+                  setIsPublishing(false);
+                  setPublishModalOpen(false);
+                }}
+                className="w-full text-left p-4 rounded-lg border-2 border-indigo-100 hover:border-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50"
+              >
+                <div className="font-semibold text-indigo-900">Hemen Şimdi (Mevcut Haftayı Ez)</div>
+                <div className="text-sm text-indigo-700 mt-1">Acil durum değişiklikleri için uygundur.</div>
+              </button>
+
+              <button 
+                disabled={isPublishing}
+                onClick={async () => {
+                  setIsPublishing(true);
+                  const nextWeekStr = getWeekString(weekOffset + 1);
+                  setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
+                  
+                  if (sendTelegramPdf) {
+                     const ok = await sendTelegramNotification(nextWeekStr, currentSchedule.assignments, teachers, telegramMessage);
+                     if(ok) alert(nextWeekStr + ' programı yayınlandı ve Telegram PDF başarıyla gönderildi!');
+                     else alert('Program yayınlandı fakat Telegram mesajı gönderilemedi.');
+                  } else {
+                     alert(nextWeekStr + ' programı YAYINLANDI! (Yeni hafta için)');
+                  }
+                  setIsPublishing(false);
+                  setPublishModalOpen(false);
+                }}
+                className="w-full text-left p-4 rounded-lg border-2 border-emerald-100 hover:border-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-50"
+              >
+                <div className="font-semibold text-emerald-900">Gelecek Hafta Pazartesi</div>
+                <div className="text-sm text-emerald-700 mt-1">Mevcut haftanın programı Cuma'ya kadar çalışmaya devam eder.</div>
+              </button>
+            </div>
+
+            <div className="mt-4 text-right">
+              <button 
+                disabled={isPublishing}
+                onClick={() => setPublishModalOpen(false)}
+                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+              >
+                İptal Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {leaveModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Yeni Program Ne Zaman Devreye Girsin?</h3>
-            <p className="text-gray-600 mb-6">
-              Hazırladığınız bu yeni program TV Kiosk ve Telegram bildirimlerinde ne zaman yayınlansın?
+            <h3 className="text-xl font-bold text-gray-900 mb-2">İzin / Rapor Yönetimi</h3>
+            <p className="text-gray-600 mb-6 font-medium text-indigo-700">
+              Seçilen Öğretmen: {leaveModal.teacher.name}
             </p>
             
             <div className="space-y-3">
               <button 
                 onClick={() => {
-                  const weekStr = getWeekString(weekOffset);
-                  setPublishedWeeks(prev => ({ ...prev, [weekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
-                  setPublishModalOpen(false);
-                  alert(weekStr + ' programı HEMEN YAYINLANDI! TV Kiosk anında güncellenecek.');
+                  processOneDayLeave(leaveModal.assignment, leaveModal.teacher);
+                  setLeaveModal(null);
                 }}
-                className="w-full text-left p-4 rounded-lg border-2 border-indigo-100 hover:border-indigo-600 hover:bg-indigo-50 transition-colors"
+                className="w-full text-left p-4 rounded-lg border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition-colors"
               >
-                <div className="font-semibold text-indigo-900">Hemen Şimdi (Mevcut Haftayı Ez)</div>
-                <div className="text-sm text-indigo-700 mt-1">İçinde bulunduğumuz haftanın programı yenisiyle değişir. Acil değişiklikler için.</div>
+                <div className="font-semibold text-orange-900">Günlük Rapor / Kısa İzin (Sadece Bugün)</div>
+                <div className="text-sm text-orange-700 mt-1">Sadece bugünkü nöbetleri boşta olan başka bir öğretmene devredilir. Karşılığında yedek öğretmenin ileri bir tarihteki nöbeti bu hocaya verilir (Takas/Borçlandırma). Diğer günler ve geçmiş haftalar ETKİLENMEZ.</div>
               </button>
 
               <button 
                 onClick={() => {
-                  const nextWeekStr = getWeekString(weekOffset + 1);
-                  setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: { assignments: currentSchedule.assignments, teachers, lessons } }));
-                  setPublishModalOpen(false);
-                  alert(nextWeekStr + ' programı YAYINLANDI! Mevcut hafta bozulmadı, yeni program Pazartesi devreye girecek.');
+                  processLongLeave(leaveModal.teacher);
+                  setLeaveModal(null);
                 }}
-                className="w-full text-left p-4 rounded-lg border-2 border-emerald-100 hover:border-emerald-600 hover:bg-emerald-50 transition-colors"
+                className="w-full text-left p-4 rounded-lg border-2 border-red-100 hover:border-red-600 hover:bg-red-50 transition-colors"
               >
-                <div className="font-semibold text-emerald-900">Gelecek Hafta Pazartesi (Önerilen)</div>
-                <div className="text-sm text-emerald-700 mt-1">Mevcut haftanın eski programı Cuma'ya kadar çalışmaya devam eder. Yeni program Pazartesi sabahı devreye girer.</div>
+                <div className="font-semibold text-red-900">Uzun Süreli Rapor / Görevli İzinli (Haftalık)</div>
+                <div className="text-sm text-red-700 mt-1">Öğretmen bu haftalık tamamen MUAF kabul edilir. Sistem bu haftanın programını, eksik öğretmeni hesaba katarak diğer öğretmenler arasında yeniden adil bir şekilde dağıtır. (Geçmiş haftalar ETKİLENMEZ)</div>
               </button>
             </div>
 
             <div className="mt-6 text-right">
               <button 
-                onClick={() => setPublishModalOpen(false)}
+                onClick={() => setLeaveModal(null)}
                 className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
               >
                 İptal Et
