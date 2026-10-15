@@ -62,7 +62,7 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
       } else {
         alert("Henüz bota bir mesaj gelmemiş. Lütfen Telegram grubunuza 'deneme' yazıp tekrar tıklayın.");
       }
-    } catch (e) {
+    } catch {
       alert("Bağlantı hatası: Telegram API'sine ulaşılamadı.");
     }
   };

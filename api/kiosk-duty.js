@@ -1,3 +1,4 @@
+import { turkeyDate, publishedPlan, parseFirestore } from '../lib/time.js';
 export default async function handler(req, res) {
   // Enable CORS so the TV Kiosk can fetch from any domain/local file
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,69 +10,45 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   try {
     const PROJECT_ID = 'nobetprogrami-764d6';
     const settingsUrl = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/settings/global`;
     const settingsRes = await fetch(settingsUrl);
+    if (!settingsRes.ok) throw new Error(`Veritabanı okunamadı (${settingsRes.status}).`);
     const settingsData = await settingsRes.json();
 
     if (!settingsData.fields) {
       return res.status(200).json({ status: 'empty', items: [], message: 'No settings in database' });
     }
 
-    const parseFirestore = (field) => {
-      if (!field) return null;
-      if (field.stringValue !== undefined) return field.stringValue;
-      if (field.integerValue !== undefined) return Number(field.integerValue);
-      if (field.booleanValue !== undefined) return field.booleanValue;
-      if (field.arrayValue) return field.arrayValue.values ? field.arrayValue.values.map(parseFirestore) : [];
-      if (field.mapValue) {
-        const obj = {};
-        for (const [k, v] of Object.entries(field.mapValue.fields || {})) obj[k] = parseFirestore(v);
-        return obj;
-      }
-      return field;
-    };
-
     const settings = parseFirestore({ mapValue: { fields: settingsData.fields } });
     let assignments = settings.lastScheduleAssignments || [];
     let teachers = settings.teachers || [];
-    let lessons = settings.lessons || [];
-    const zones = settings.appZones || [];
-    const slots = settings.appSlots || [];
+    let zones = settings.appZones || [];
+    let slots = settings.appSlots || [];
 
     // Current time in Turkey (UTC+3)
-    const now = new Date();
-    const trtOffset = 3 * 60 * 60 * 1000;
-    const trtDate = new Date(now.getTime() + trtOffset);
+    const trtDate = turkeyDate();
 
-    // HELPER: Get Week String
-    const getWeekString = (dateObj) => {
-      const d = new Date(dateObj);
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(d.setDate(diff));
-      const friday = new Date(monday);
-      friday.setDate(monday.getDate() + 4);
-      const monthNames = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
-      if (monday.getMonth() === friday.getMonth()) {
-        return `${monday.getDate()} - ${friday.getDate()} ${monthNames[monday.getMonth()]} Haftası`;
-      }
-      return `${monday.getDate()} ${monthNames[monday.getMonth()]} - ${friday.getDate()} ${monthNames[friday.getMonth()]} Haftası`;
-    };
-
-    const currentWeekStr = getWeekString(trtDate);
-    if (settings.publishedWeeks && settings.publishedWeeks[currentWeekStr]) {
-       const pub = settings.publishedWeeks[currentWeekStr];
-       if (pub.assignments) assignments = pub.assignments;
-       if (pub.teachers) teachers = pub.teachers;
-       if (pub.lessons) lessons = pub.lessons;
+    const publicationDate = new Date(trtDate);
+    if (publicationDate.getUTCDay() === 0) publicationDate.setUTCDate(publicationDate.getUTCDate() + 1);
+    const pub = publishedPlan(settings, publicationDate);
+    if (!pub) return res.status(200).json({ status: 'unpublished', items: [], message: 'Bu hafta için yayınlanmış plan yok.' });
+    if (pub) {
+      assignments = pub.assignments || [];
+      teachers = pub.teachers || [];
+      zones = pub.zones || zones;
+      slots = pub.slots || slots;
     }
 
 
-    const currentDay = req.query.day ? Number(req.query.day) : trtDate.getDay();
-    const currentMins = req.query.time ? ((Number(req.query.time.split(':')[0]) * 60) + Number(req.query.time.split(':')[1])) : ((trtDate.getHours() * 60) + trtDate.getMinutes());
+    const currentDay = req.query.day ? Number(req.query.day) : trtDate.getUTCDay();
+    const currentMins = req.query.time ? ((Number(req.query.time.split(':')[0]) * 60) + Number(req.query.time.split(':')[1])) : ((trtDate.getUTCHours() * 60) + trtDate.getUTCMinutes());
 
+    if (!Number.isInteger(currentDay) || currentDay < 0 || currentDay > 6 || !Number.isFinite(currentMins) || currentMins < 0 || currentMins >= 1440 || (req.query.time && !/^([01]\d|2[0-3]):[0-5]\d$/.test(req.query.time))) {
+      return res.status(400).json({ error: 'Geçersiz gün veya saat.' });
+    }
     const timeToMins = (tStr) => {
       if (!tStr || !tStr.includes(':')) return 0;
       const [h, m] = tStr.split(':').map(Number);
@@ -85,7 +62,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         status: 'weekend_or_empty',
         day: currentDay,
-        time: `${String(trtDate.getHours()).padStart(2, '0')}:${String(trtDate.getMinutes()).padStart(2, '0')}`,
+        time: `${String(trtDate.getUTCHours()).padStart(2, '0')}:${String(trtDate.getUTCMinutes()).padStart(2, '0')}`,
         slotInfo: 'Hafta sonu veya plan bulunamadı',
         items: []
       });
@@ -137,7 +114,7 @@ export default async function handler(req, res) {
     }
 
     // Get assignments for this slot
-    const slotAssignments = assignments.filter(a => a.slotId === selectedSlot.id);
+    const slotAssignments = assignments.filter(a => todaySlots.some(s => s.startTime === selectedSlot.startTime && s.id === a.slotId));
 
     // Group by zone
     const zoneMap = {};
@@ -172,7 +149,7 @@ export default async function handler(req, res) {
       slotLabel,
       startTime: selectedSlot.startTime,
       endTime: selectedSlot.endTime,
-      currentTime: `${String(trtDate.getHours()).padStart(2, '0')}:${String(trtDate.getMinutes()).padStart(2, '0')}`,
+      currentTime: `${String(trtDate.getUTCHours()).padStart(2, '0')}:${String(trtDate.getUTCMinutes()).padStart(2, '0')}`,
       items
     });
 

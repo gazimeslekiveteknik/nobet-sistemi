@@ -4,7 +4,8 @@ import jsPDF from 'jspdf';
 import { toJpeg } from 'html-to-image';
 import { useRef } from 'react';
 import { generateSchedule, rotateSchedule } from './algorithm/scheduler';
-import { calculateAvailability } from './algorithm/availability';
+import { assignmentProblem, validateSchedule } from './algorithm/validation';
+import { replaceDailyLeave } from './algorithm/leave';
 import type { Teacher, Lesson, Slot, Zone, Assignment, DayOfWeek} from './types';
 import { Calendar, ShieldAlert, Settings, BarChart3, ChevronLeft, ChevronRight, Printer, X, Plus } from 'lucide-react';
 interface Schedule {
@@ -13,7 +14,12 @@ interface Schedule {
 }
 
 
+type Absences = Record<number, string[]>;
+const presentLessons = (lessons: Lesson[], absences: Absences = {}) => lessons.filter(l => !absences[l.day]?.includes(l.teacherId));
+interface PublishedWeek { absences?: Absences; assignments: Assignment[]; teachers: Teacher[]; lessons: Lesson[]; slots?: Slot[]; zones?: Zone[]; }
+
 interface Snapshot {
+  absences: Absences;
   schedule: Schedule;
   teachers: Teacher[];
 }
@@ -55,35 +61,33 @@ const mockZones: Zone[] = [
 ];
 
 function App() {
-  const [currentView, setCurrentView] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
+  const [calendarNow] = useState(() => Date.now());
+  const [currentView, setCurrentViewInternal] = useState<'plan' | 'import' | 'teachers' | 'reports' | 'settings' | 'print' | 'print-teachers'>('plan');
   const [settingsTab, setSettingsTab] = useState<'config' | 'teachers' | 'import'>('import');
   const [printTab, setPrintTab] = useState<'master' | 'personal' | 'timetable'>('master');
   const [schedulesSearch, setSchedulesSearch] = useState('');
   const [timetablesSearch, setTimetablesSearch] = useState('');
 
-  // Clear search states when leaving the print menu
-  useEffect(() => {
-    if (currentView !== 'print') {
-      setSchedulesSearch('');
-      setTimetablesSearch('');
-    }
-  }, [currentView]);
+  const setCurrentView = (view: typeof currentView) => {
+    if (view !== 'print') { setSchedulesSearch(''); setTimetablesSearch(''); }
+    setCurrentViewInternal(view);
+  };
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
-  
+
     const generatePdfBlob = async (activeTeachers: Teacher[]) => {
       const pdf = new jsPDF('l', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      
+
       let addedPage = false;
       const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
       for (let i = 0; i < filteredTeachers.length; i++) {
          setPublishingProgress(`PDF Oluşturuluyor... (${i+1}/${filteredTeachers.length})`);
          await new Promise(r => setTimeout(r, 50)); // let UI update
          const teacher = filteredTeachers[i];
-         const el = document.getElementById(`teacher-print-${teacher.id}`);
-         
+         const el = hiddenPrintRef.current?.querySelector<HTMLElement>(`[id="teacher-print-${teacher.id}"]`);
+
          if (el) {
             const imgData = await toJpeg(el, {
                cacheBust: true,
@@ -92,26 +96,27 @@ function App() {
                backgroundColor: '#ffffff',
                skipFonts: true
             });
-            
+
             if (addedPage) pdf.addPage();
             addedPage = true;
-            
+
             const imgProps = pdf.getImageProperties(imgData);
             const padding = 10;
             const availableWidth = pdfWidth - (padding * 2);
             const availableHeight = pdfHeight - (padding * 2);
             const ratio = Math.min(availableWidth / imgProps.width, availableHeight / imgProps.height);
-            
+
             const finalW = imgProps.width * ratio;
             const finalH = imgProps.height * ratio;
-            
+
             const x = (pdfWidth - finalW) / 2;
             const y = (pdfHeight - finalH) / 2;
-            
+
             pdf.addImage(imgData, 'JPEG', x, y, finalW, finalH);
          }
       }
-      
+
+      if (!addedPage) throw new Error('PDF için öğretmen çizelgesi oluşturulamadı.');
       return pdf.output('blob');
    };
 
@@ -121,16 +126,17 @@ function App() {
        return false;
     }
     try {
+      setPdfContext({ week: weekStr, assignments: currentSchedule.assignments, slots: viewSlots, zones: viewZones });
       setPdfTeachers(activeTeachers);
       // Wait for React to render the hidden div and load fonts
       await new Promise(r => setTimeout(r, 1500));
-      
+
       if (!hiddenPrintRef.current) return false;
-      
+
       // Use html-to-image which natively supports CSS features like oklch via SVG foreignObject
-      
+
       const pdfBlob = await generatePdfBlob(activeTeachers);
-      
+
       const formData = new FormData();
       formData.append("chat_id", telegramChatId);
       formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
@@ -145,7 +151,7 @@ function App() {
          console.error('Telegram Error:', errText);
          alert('Telegram Hatası: ' + errText);
       }
-      
+
       setPdfTeachers([]); // Cleanup
       return res.ok;
     } catch(e) {
@@ -158,7 +164,7 @@ function App() {
 
   const [teachers, setTeachers] = useState<Teacher[]>(bilsaData.teachers as Teacher[]);
   const [lessons, setLessons] = useState<Lesson[]>(bilsaData.lessons as Lesson[]);
-  
+
   // App-level settings state
   const [appZones, setAppZones] = useState<Zone[]>(mockZones);
   const [appPeriods, setAppPeriods] = useState([
@@ -173,25 +179,33 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const getWeekString = (offset = 0) => {
-    const curr = new Date();
+    const curr = new Date(calendarNow);
     curr.setDate(curr.getDate() + (offset * 7));
     const day = curr.getDay();
     const diff = curr.getDate() - day + (day === 0 ? -6 : 1);
     const monday = new Date(curr.setDate(diff));
     const friday = new Date(monday);
     friday.setDate(monday.getDate() + 4);
-    
+
     const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-    
+
     if (monday.getMonth() === friday.getMonth()) {
       return `${monday.getDate()} - ${friday.getDate()} ${monthNames[monday.getMonth()]} Haftası`;
     }
     return `${monday.getDate()} ${monthNames[monday.getMonth()]} - ${friday.getDate()} ${monthNames[friday.getMonth()]} Haftası`;
   };
-  const [weekSchedules, setWeekSchedules] = useState<Record<number, typeof schedule>>({ 0: schedule });
+  const weekKey = (offset = 0) => {
+    const date = new Date(calendarNow);
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() - ((date.getDay() + 6) % 7) + offset * 7);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  };
+  const [baseWeekStart, setBaseWeekStart] = useState(() => weekKey());
+  const [draftWeeks, setDraftWeeks] = useState<Record<string, Schedule>>({});
+  const [weekAbsences, setWeekAbsences] = useState<Record<string, Absences>>({});
 
   const [history, setHistory] = useState<Record<number, Snapshot[]>>({});
-  const [publishedWeeks, setPublishedWeeks] = useState<Record<string, {assignments: Assignment[], teachers: Teacher[], lessons: Lesson[]}>>({});
+  const [publishedWeeks, setPublishedWeeks] = useState<Record<string, PublishedWeek>>({});
   const [publishModalOpen, setPublishModalOpen] = useState(false);
   const [isSendingTelegram, setIsSendingTelegram] = useState(false);
   const hiddenPrintRef = useRef<HTMLDivElement>(null);
@@ -202,53 +216,53 @@ function App() {
   const [publishingProgress, setPublishingProgress] = useState<string | null>(null);
 
   const saveHistory = () => {
-    const currentHistSched = weekSchedules[weekOffset] || schedule;
+    const currentHistSched = currentSchedule;
     setHistory(prev => {
       const weekHist = prev[weekOffset] || [];
       return {
         ...prev,
-        [weekOffset]: [...weekHist, { schedule: currentHistSched, teachers: JSON.parse(JSON.stringify(teachers)) }].slice(-20)
+        [weekOffset]: [...weekHist, { schedule: currentHistSched, teachers: JSON.parse(JSON.stringify(teachers)), absences: weekAbsences[weekKey(weekOffset)] || {} }].slice(-20)
       };
     });
   };
 
   const handleUndo = () => {
-    setHistory(prev => {
-      const weekHist = prev[weekOffset] || [];
-      if (weekHist.length === 0) return prev;
-      
+      if (isLocked) return;
+      const weekHist = history[weekOffset] || [];
+      if (weekHist.length === 0) return;
+
       const lastSnapshot = weekHist[weekHist.length - 1];
       const newHist = weekHist.slice(0, -1);
-      
+
       setTeachers(lastSnapshot.teachers);
-      setWeekSchedules(weeks => ({ ...weeks, [weekOffset]: lastSnapshot.schedule }));
-      setSchedule(lastSnapshot.schedule);
-      
-      return { ...prev, [weekOffset]: newHist };
-    });
+      setWeekAbsences(prev => ({ ...prev, [weekKey(weekOffset)]: lastSnapshot.absences }));
+      setDraftWeeks(weeks => ({ ...weeks, [weekKey(weekOffset)]: lastSnapshot.schedule }));
+      if (weekOffset === 0) setSchedule(lastSnapshot.schedule);
+
+      setHistory(prev => ({ ...prev, [weekOffset]: newHist }));
   };
 
   const [isInitializing, setIsInitializing] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [saveMessage, setSaveMessage] = useState('');
+  const loadedState = useRef('');
+  const [pdfContext, setPdfContext] = useState<{week: string; assignments: Assignment[]; slots: Slot[]; zones: Zone[]} | null>(null);
   const [telegramToken, setTelegramToken] = useState('');
   const [telegramChatId, setTelegramChatId] = useState('');
   const [adminPassword, setAdminPassword] = useState('1234');
 
   useEffect(() => {
     let isMounted = true;
-    
-    // Timeout to prevent hanging if Firebase is blocked or offline
-    const fallbackTimeout = setTimeout(() => {
-       if (isMounted) {
-          console.warn("Firebase timeout: Loading default settings.");
-          setIsInitializing(false);
-       }
-    }, 4000);
 
     FirebaseService.loadSettings().then(settings => {
       if (!isMounted) return;
-      clearTimeout(fallbackTimeout);
-      
+
       if (settings) {
+        if (settings.publishedWeeks) setPublishedWeeks(settings.publishedWeeks);
+        if (localStorage.getItem('nobet_settings_pending') === 'true') setSaveMessage('Bu cihazda sunucuya aktarılmamış değişiklikler var.');
+        if (settings.weekAbsences) setWeekAbsences(settings.weekAbsences);
+        if (settings.draftWeeks) setDraftWeeks(settings.draftWeeks);
+        if (settings.baseWeekStart) setBaseWeekStart(settings.baseWeekStart);
         if (settings.appZones) setAppZones(settings.appZones);
         if (settings.appPeriods) setAppPeriods(settings.appPeriods);
         if (settings.appTimetable) setAppTimetable(settings.appTimetable);
@@ -258,20 +272,19 @@ function App() {
         if (settings.telegramToken) setTelegramToken(settings.telegramToken);
         if (settings.telegramChatId) setTelegramChatId(settings.telegramChatId);
         if (settings.adminPassword) setAdminPassword(settings.adminPassword);
-        
+
         if (settings.lastScheduleAssignments) {
            setSchedule(prev => ({ ...prev, assignments: settings.lastScheduleAssignments }));
-           setWeekSchedules({ 0: { assignments: settings.lastScheduleAssignments, warnings: [] } });
         }
       }
       setIsInitializing(false);
     }).catch(err => {
       if (!isMounted) return;
-      clearTimeout(fallbackTimeout);
       console.error(err);
+      setLoadError("Kayıtlı veriler yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin. Verilerinizi korumak için otomatik kayıt durduruldu.");
       setIsInitializing(false);
     });
-    
+
     return () => { isMounted = false; };
   }, []);
 
@@ -280,7 +293,20 @@ function App() {
     const newSlots: Slot[] = [];
     const days = [1, 2, 3, 4, 5];
     const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
-    
+
+    if (!appPeriods.length || appZones.some(z => z.minStaff < 0 || z.idealStaff < z.minStaff || z.riskMultiplier <= 0)) {
+      alert('Ders sayısını ve bölge nöbetçi sayılarını kontrol edin. İdeal sayı asgari sayıdan az olamaz.'); return;
+    }
+    for (const day of dayNames) {
+      let previousEnd = '';
+      for (const period of appPeriods) {
+        const times = appTimetable[`${period.id}_${day}`];
+        if (!times?.start || !times?.end || times.start >= times.end || (previousEnd && times.start < previousEnd)) {
+          alert(`${day}, ${period.id}. ders: saatler eksik, ters veya çakışıyor.`); return;
+        }
+        previousEnd = times.end;
+      }
+    }
     // Validate minimum data
     if (!appTimetable['1_Pazartesi']?.start) {
        alert("Lütfen önce ders saatlerini doldurunuz!");
@@ -289,14 +315,14 @@ function App() {
 
     days.forEach((dayNum, idx) => {
        const dayName = dayNames[idx];
-       
+
        // 1. OPENING SLOT
        const firstStart = appTimetable[`1_${dayName}`]?.start;
        if (firstStart) {
           const [h,m] = firstStart.split(':').map(Number);
           let totalMins = h * 60 + m - 20; // 20 mins before
           const openStart = `${Math.floor(totalMins / 60).toString().padStart(2, '0')}:${(totalMins % 60).toString().padStart(2, '0')}`;
-          
+
           newSlots.push({
              id: `s_open_d${dayNum}`,
              day: dayNum as any,
@@ -312,7 +338,7 @@ function App() {
           const next = appPeriods[i+1];
           const currEnd = appTimetable[`${curr.id}_${dayName}`]?.end;
           const nextStart = appTimetable[`${next.id}_${dayName}`]?.start;
-          
+
           if (currEnd && nextStart && currEnd !== nextStart) {
              newSlots.push({
                id: `s_break_${curr.id}_d${dayNum}`,
@@ -332,7 +358,7 @@ function App() {
           const [h,m] = lastEnd.split(':').map(Number);
           let totalMins = h * 60 + m + 20; // 20 mins after
           const closeEnd = `${Math.floor(totalMins / 60).toString().padStart(2, '0')}:${(totalMins % 60).toString().padStart(2, '0')}`;
-          
+
           newSlots.push({
              id: `s_close_d${dayNum}`,
              day: dayNum as any,
@@ -345,13 +371,13 @@ function App() {
     });
 
     setAppSlots(newSlots);
-    
+
     // Regenerate schedule with new slots and zones
-    const newSchedule = generateSchedule(teachers, lessons, newSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+    const newSchedule = generateSchedule(teachers, effectiveLessons, newSlots, appZones, currentSchedule?.assignments || []);
     updateCurrentSchedule(newSchedule);
-    setSchedule(newSchedule);
-    
-    await FirebaseService.saveSettings({
+
+    try {
+    const saved = await FirebaseService.saveSettings({
       appZones,
       appPeriods,
       appTimetable,
@@ -360,51 +386,69 @@ function App() {
       lessons,
       telegramToken, telegramChatId, adminPassword
     });
-    
-    alert("Ayarlar başarıyla kaydedildi ve Nöbet Programı yeni saatlere göre yeniden oluşturuldu!");
+
+    alert(saved.synced ? "Ayarlar kaydedildi ve program güncellendi." : "Program güncellendi; ayarlar yalnızca bu cihazda kaydedildi. Sunucu bağlantısını kontrol edin.");
     setCurrentView('plan');
+    } catch (error) { alert(error instanceof Error ? error.message : String(error)); }
   };
 
-  
-  const baseSchedule = schedule;
-  const targetWeekStr = getWeekString(weekOffset);
+
+  const targetWeekKey = weekKey(weekOffset);
+  const publishedWeek = publishedWeeks[targetWeekKey] || publishedWeeks[getWeekString(weekOffset)];
+  const activeAbsences = weekAbsences[targetWeekKey] || publishedWeek?.absences || {};
+  const effectiveLessons = presentLessons(lessons, activeAbsences);
+  const rotationOffset = Math.round((Date.parse(targetWeekKey) - Date.parse(baseWeekStart)) / 604800000);
   const computedSchedule = {
-    ...baseSchedule,
-    assignments: publishedWeeks[targetWeekStr] 
-      ? publishedWeeks[targetWeekStr].assignments
-      : (weekOffset === 0 
-          ? baseSchedule.assignments 
-          : rotateSchedule(baseSchedule.assignments, weekOffset, appSlots, appZones))
+    assignments: publishedWeek?.assignments || rotateSchedule(schedule.assignments, rotationOffset, appSlots, appZones, teachers, effectiveLessons),
+    warnings: [] as string[],
   };
-
-      
-  const currentSchedule = weekSchedules[weekOffset] || computedSchedule;
+  const currentSchedule = draftWeeks[targetWeekKey] || computedSchedule;
+  const displayedPublished = draftWeeks[targetWeekKey] ? undefined : publishedWeek;
+  const viewTeachers = displayedPublished?.teachers || teachers;
+  const viewLessons = displayedPublished?.lessons || lessons;
+  const viewSlots = displayedPublished?.slots || appSlots;
+  const viewZones = displayedPublished?.zones || appZones;
+  const currentWarnings = validateSchedule(currentSchedule.assignments, viewTeachers, presentLessons(viewLessons, activeAbsences), viewSlots, viewZones);
   const updateCurrentSchedule = (newSched: typeof schedule | ((prev: typeof schedule) => typeof schedule)) => {
     const resolved = typeof newSched === 'function' ? newSched(currentSchedule) : newSched;
-    setWeekSchedules(prev => ({ ...prev, [weekOffset]: resolved }));
+    setDraftWeeks(prev => ({ ...prev, [targetWeekKey]: resolved }));
+    if (weekOffset === 0) { setSchedule(resolved); setBaseWeekStart(weekKey()); }
   };
 
-  const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [lockOverrides, setLockOverrides] = useState<Record<string, boolean>>({});
+  const isLocked = lockOverrides[targetWeekKey] ?? Boolean(publishedWeek);
+  const setIsLocked = (locked: boolean) => setLockOverrides(prev => ({ ...prev, [targetWeekKey]: locked }));
   const [addTeacherModal, setAddTeacherModal] = useState<{slotId: string, zoneId: string} | null>(null);
   const [leaveModal, setLeaveModal] = useState<{assignment: Assignment, teacher: Teacher} | null>(null);
   const [telegramSpecificModal, setTelegramSpecificModal] = useState<{title: string, message: string, affectedTeachers: Teacher[]} | null>(null);
   const [longLeaveDate, setLongLeaveDate] = useState<string>('');
 
-  // Otomatik yedekleme (Herhangi bir ayar, öğretmen veya liste değiştiğinde)
+  const settingsPayload = { appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
+    lastScheduleAssignments: schedule.assignments, publishedWeeks, draftWeeks, weekAbsences, baseWeekStart,
+    telegramToken, telegramChatId, adminPassword };
+  const settingsJSON = JSON.stringify(settingsPayload);
   useEffect(() => {
-    if (isInitializing) return;
+    if (isInitializing || loadError) return;
+    // Loading a page must never write defaults or an empty publication archive.
+    if (!loadedState.current) { loadedState.current = settingsJSON; return; }
+    if (loadedState.current === settingsJSON) return;
     const timeout = setTimeout(() => {
-      FirebaseService.saveSettings({
-        appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
-        lastScheduleAssignments: (weekSchedules[0] || schedule).assignments,
-        publishedWeeks,
-        telegramToken, telegramChatId, adminPassword
-      }).catch(console.error);
+      setSaveMessage('Kaydediliyor…');
+      FirebaseService.saveSettings(JSON.parse(settingsJSON)).then(result => {
+        loadedState.current = settingsJSON;
+        setSaveMessage(result.synced ? 'Değişiklikler kaydedildi.' : 'Yalnızca bu cihazda kaydedildi; sunucuya aktarılmadı.');
+      }).catch(error => setSaveMessage(String(error)));
     }, 1500);
     return () => clearTimeout(timeout);
-  }, [appZones, appPeriods, appTimetable, appSlots, teachers, lessons, (weekSchedules[0] || schedule).assignments, publishedWeeks, isInitializing, telegramToken, telegramChatId, adminPassword]);
+  }, [settingsJSON, isInitializing, loadError]);
 
-  
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {
+      if (loadedState.current && loadedState.current !== settingsJSON) { event.preventDefault(); event.returnValue = ''; }
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [settingsJSON]);
 
   const daysList = [
     { id: 1, name: 'Pazartesi' },
@@ -419,20 +463,14 @@ function App() {
     setLessons(importedLessons);
     const newSched = generateSchedule(importedTeachers, importedLessons, appSlots, appZones);
     updateCurrentSchedule(newSched);
-    setSchedule(newSched);
     setTimeout(() => setCurrentView('plan'), 1500); // Switch to plan view after showing success
   };
 
   const handleToggleExclude = (teacherId: string, isExcluded: boolean) => {
     saveHistory();
-    setTeachers(prev => {
-      const updated = prev.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
-      // Auto-regenerate schedule with updated teachers, keeping manual assignments
-      const newSched = generateSchedule(updated, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
-      updateCurrentSchedule(newSched);
-      setSchedule(newSched);
-      return updated;
-    });
+    const updated = teachers.map(t => t.id === teacherId ? { ...t, isExcluded } : t);
+    setTeachers(updated);
+    updateCurrentSchedule(generateSchedule(updated, effectiveLessons, appSlots, appZones, currentSchedule.assignments));
   };
 
   const handleTeacherClick = (assignment: Assignment) => {
@@ -440,77 +478,19 @@ function App() {
     if (!t) return;
     setLeaveModal({ assignment, teacher: t });
   };
-  
+
   const processOneDayLeave = (t: Teacher) => {
     saveHistory();
-    let affectedTeacherIds = new Set<string>();
-    affectedTeacherIds.add(t.id);
-    let finalLogs = "";
-    
-    updateCurrentSchedule(prev => {
-      let newAssignments = [...prev.assignments];
-      
-      const todayAssignments = newAssignments.filter(
-        a => a.teacherId === t.id && appSlots.find(s => s.id === a.slotId)?.day === selectedDay
-      );
-
-      const logs: string[] = [];
-
-      todayAssignments.forEach(absentAssignment => {
-        const slot = appSlots.find(s => s.id === absentAssignment.slotId);
-        if (!slot) return;
-
-        const availableTeachers = teachers.filter(cand => 
-          cand.id !== t.id && !cand.isExcluded &&
-          !newAssignments.some(a => a.teacherId === cand.id && a.slotId === slot.id) &&
-          !lessons.some(l => l.teacherId === cand.id && l.day === slot.day && appTimetable[l.period]?.start < slot.endTime && appTimetable[l.period]?.end > slot.startTime)
-        );
-
-        let bestReplacement = availableTeachers[0]?.id;
-        
-        if (bestReplacement) {
-          affectedTeacherIds.add(bestReplacement);
-          const replTeacher = teachers.find(x => x.id === bestReplacement);
-          
-          const oldIndex = newAssignments.findIndex(a => a.id === absentAssignment.id);
-          if (oldIndex !== -1) {
-             newAssignments[oldIndex] = { ...newAssignments[oldIndex], teacherId: bestReplacement, isManual: true };
-          }
-
-          const futureDutyIndex = newAssignments.findIndex(a => {
-             if (a.teacherId !== bestReplacement) return false;
-             const s = appSlots.find(slot => slot.id === a.slotId);
-             return s && s.day > selectedDay;
-          });
-
-          if (futureDutyIndex !== -1) {
-             const futureDutySlot = appSlots.find(s => s.id === newAssignments[futureDutyIndex].slotId);
-             newAssignments[futureDutyIndex] = { ...newAssignments[futureDutyIndex], teacherId: t.id, isManual: true };
-             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Karşılığında ${replTeacher?.name} hocanın ${["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"][futureDutySlot?.day || 0]} günkü nöbeti alındı)`);
-          } else {
-             logs.push(`• ${t.name} hocanın bugünkü (${slot.startTime}) nöbeti ${replTeacher?.name} hocaya verildi. (Devredilecek nöbet bulunamadı, sistem borçlandırdı)`);
-          }
-        } else {
-          logs.push(`• ${slot.startTime} saati için uygun yedek öğretmen bulunamadı!`);
-        }
-      });
-      
-      finalLogs = logs.join('\n');
-      return { ...prev, assignments: newAssignments };
+    setWeekAbsences(prev => ({ ...prev, [targetWeekKey]: { ...activeAbsences, [selectedDay]: [...new Set([...(activeAbsences[selectedDay] || []), t.id])] } }));
+    const result = replaceDailyLeave(t.id, selectedDay, currentSchedule.assignments, teachers, effectiveLessons, appSlots, appZones);
+    updateCurrentSchedule({ assignments: result.assignments, warnings: [] });
+    setTelegramSpecificModal({
+      title: 'Günlük Rapor Değişikliği',
+      message: `${t.name} için ${getWeekString(weekOffset)}, ${selectedDay}. gün nöbet değişiklikleri:\n\n${result.logs.join('\n')}`,
+      affectedTeachers: teachers.filter(x => result.affected.has(x.id)),
     });
-    
-    setTimeout(() => {
-       setTelegramSpecificModal({
-          title: "Günlük Rapor Değişikliği",
-          message: `🚨 Duyuru: ${t.name} hocamız bugün raporlu/izinli olduğu için nöbetlerde aşağıdaki zorunlu değişiklikler yapılmıştır:
-
-${finalLogs}
-
-Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
-          affectedTeachers: teachers.filter(x => affectedTeacherIds.has(x.id))
-       });
-    }, 200);
   };
+
 
   const processLongLeave = (t: Teacher, untilDate: string) => {
     if (!untilDate) {
@@ -520,16 +500,15 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
     saveHistory();
     const tempTeachers = teachers.map(x => x.id === t.id ? { ...x, isExcluded: true, excludedUntil: untilDate } : x);
     setTeachers(tempTeachers);
-    
-    const newSched = generateSchedule(tempTeachers, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+
+    const newSched = generateSchedule(tempTeachers, effectiveLessons, appSlots, appZones, currentSchedule?.assignments || []);
     updateCurrentSchedule(newSched);
-    setSchedule(newSched);
-    
+
     setTimeout(() => {
        setTelegramSpecificModal({
           title: "Uzun Süreli İzin / Görevlendirme",
           message: `🚨 Duyuru: ${t.name} hocamız ${new Date(untilDate).toLocaleDateString('tr-TR')} tarihine kadar görevli/izinli olduğu için şablon nöbet programı yeniden dengelenmiş ve güncellenmiştir.\n\nTüm öğretmenlerimizin güncel programı ektedir.`,
-          affectedTeachers: tempTeachers 
+          affectedTeachers: tempTeachers
        });
     }, 200);
   };
@@ -563,19 +542,13 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
     // Check if moving to the same place
     if (assignment.slotId === targetSlotId && assignment.zoneId === targetZoneId) return;
 
-    // Calculate if teacher is available in target slot
-    const availability = calculateAvailability(teachers, lessons, appSlots);
-    const isAvail = availability[assignment.teacherId]?.[targetSlotId];
-
-    if (!isAvail || !isAvail.canDuty) {
-       const confirmed = window.confirm(`DİKKAT: Bu öğretmenin bu saatte nöbet tutması uygun değil!\nSebep: ${isAvail?.reason || 'Bilinmiyor'}\n\nYine de zorla atamak istiyor musunuz?`);
-       if (!confirmed) return;
-    }
+    const problem = assignmentProblem({ ...assignment, slotId: targetSlotId, zoneId: targetZoneId }, currentSchedule.assignments, teachers, effectiveLessons, appSlots, appZones);
+    if (problem) { alert(problem); return; }
 
     // Update assignment
     updateCurrentSchedule(prev => {
-       const newAssignments = prev.assignments.map(a => 
-          a.id === assignmentId 
+       const newAssignments = prev.assignments.map(a =>
+          a.id === assignmentId
              ? { ...a, slotId: targetSlotId, zoneId: targetZoneId, isManual: true }
              : a
        );
@@ -583,9 +556,52 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
     });
   };
 
-  // Only show slots for the selected day in the table
-  const currentDaySlots = appSlots.filter(s => s.day === selectedDay);
+  const publishPlan = async (offset: number) => {
+    setIsPublishing(true);
+    try {
+      const key = weekKey(offset);
+      const week = getWeekString(offset);
+      const existing = publishedWeeks[key] || publishedWeeks[week];
+      const targetAssignments = offset === weekOffset ? currentSchedule.assignments
+        : draftWeeks[key]?.assignments || existing?.assignments || rotateSchedule(schedule.assignments,
+          Math.round((Date.parse(key) - Date.parse(baseWeekStart)) / 604800000), appSlots, appZones, teachers, presentLessons(lessons, weekAbsences[key]));
+      const snapshot: PublishedWeek = JSON.parse(JSON.stringify({ absences: weekAbsences[key] || existing?.absences || {}, assignments: targetAssignments,
+        teachers: draftWeeks[key] ? teachers : existing?.teachers || teachers, lessons: draftWeeks[key] ? lessons : existing?.lessons || lessons,
+        slots: draftWeeks[key] ? appSlots : existing?.slots || appSlots, zones: draftWeeks[key] ? appZones : existing?.zones || appZones }));
+      const problems = validateSchedule(snapshot.assignments, snapshot.teachers, presentLessons(snapshot.lessons, snapshot.absences), snapshot.slots!, snapshot.zones!);
+      if (problems.length) throw new Error('Yayınlamadan önce uyarıları giderin:\n' + problems.join('\n'));
+      if (sendTelegramPdf && (!telegramToken || !telegramChatId)) throw new Error('Telegram ayarları eksik. Gönderim seçeneğini kapatabilir veya ayarları tamamlayabilirsiniz.');
+      const nextPublished = { ...publishedWeeks, [key]: snapshot };
+      const saved = await FirebaseService.saveSettings({ ...settingsPayload, publishedWeeks: nextPublished });
+      if (!saved.synced) throw new Error('Plan bu cihazda saklandı ancak sunucuya aktarılamadı. Yayın tamamlanmadı; bağlantıyı kontrol edip tekrar deneyin.');
+      setPublishedWeeks(nextPublished);
+      setDraftWeeks(prev => { const next = { ...prev }; delete next[key]; return next; });
+      if (offset === weekOffset) setIsLocked(true);
+      if (sendTelegramPdf) {
+        setPdfContext({ week, assignments: snapshot.assignments, slots: snapshot.slots!, zones: snapshot.zones! });
+        setPdfTeachers(snapshot.teachers);
+        await new Promise(r => setTimeout(r, 100));
+        if (document.fonts) await document.fonts.ready;
+        const pdfBlob = await generatePdfBlob(snapshot.teachers);
+        setPublishingProgress("Telegram'a gönderiliyor…");
+        const form = new FormData();
+        form.append('chat_id', telegramChatId);
+        form.append('document', new File([pdfBlob], `${week.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
+        form.append('caption', telegramMessage);
+        const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: form });
+        const body = await response.json();
+        if (!response.ok || !body.ok) throw new Error('Plan yayınlandı, ancak Telegram gönderilemedi: ' + (body.description || response.status));
+      }
+      alert(`${week} yayınlandı.${sendTelegramPdf ? " Telegram PDF gönderildi." : ''}`);
+      setPublishModalOpen(false);
+    } catch (error) { alert(error instanceof Error ? error.message : String(error)); }
+    finally { setPdfTeachers([]); setPdfContext(null); setIsPublishing(false); setPublishingProgress(null); }
+  };
 
+  // Only show slots for the selected day in the table
+  const currentDaySlots = viewSlots.filter(s => s.day === selectedDay);
+
+  if (loadError) return <div className="p-8 text-red-700">{loadError}<button className="block mt-4 underline" onClick={() => window.location.reload()}>Yeniden dene</button></div>;
   if (isInitializing) { return <div className="flex h-screen items-center justify-center bg-gray-50"><div className="text-xl font-medium text-gray-500 animate-pulse">Sistem Yükleniyor...</div></div>; }
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -595,17 +611,17 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
           <h1 className="text-2xl font-bold text-indigo-600">NöbetAI</h1>
           <p className="text-sm text-gray-500 mt-1">Akıllı Çizelge Sistemi</p>
         </div>
-        
+
         <nav className="flex-1 px-4 space-y-2">
-          <button 
+          <button
             onClick={() => setCurrentView('plan')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'plan' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
             <Calendar size={20} />
             <span>Haftalık Plan</span>
           </button>
-          
-          <button 
+
+          <button
             onClick={() => { setCurrentView('settings'); setSettingsTab('config'); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'settings' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
@@ -613,7 +629,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             <span>Ayarlar</span>
           </button>
 
-          <button 
+          <button
             onClick={() => setCurrentView('reports')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'reports' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
@@ -621,7 +637,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             <span>Analiz & Raporlar</span>
           </button>
 
-          <button 
+          <button
             onClick={() => { setCurrentView('print'); setPrintTab('master'); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentView === 'print' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
           >
@@ -634,36 +650,40 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
       {/* Main Content */}
       <div className="flex-1 p-8 print:p-0">
         <div className="max-w-6xl mx-auto print:max-w-none print:m-0">
+          {saveMessage && <p role="status" className="text-sm text-indigo-700 mb-3 print:hidden">{saveMessage}<button className="ml-3 underline" onClick={async () => {
+            try { const result = await FirebaseService.saveSettings(settingsPayload); setSaveMessage(result.synced ? 'Değişiklikler sunucuya kaydedildi.' : 'Yalnızca bu cihazda kaydedildi.'); }
+            catch (error) { setSaveMessage(String(error)); }
+          }}>Kaydı yeniden dene</button></p>}
 
 
           {currentView === 'reports' && (
-            <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={appZones} slots={appSlots} />
+            <Analytics teachers={teachers} assignments={currentSchedule.assignments} zones={viewZones} slots={viewSlots} />
           )}
 
           {currentView === 'print' && (
             <div className="space-y-6">
               <div className="flex justify-between items-center border-b border-gray-200 pb-4 print:hidden">
                 <div className="flex gap-6">
-                  <button 
-                    onClick={() => setPrintTab('master')} 
+                  <button
+                    onClick={() => setPrintTab('master')}
                     className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'master' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                   >
                     Okul Panosu (Genel)
                   </button>
-                  <button 
-                    onClick={() => setPrintTab('personal')} 
+                  <button
+                    onClick={() => setPrintTab('personal')}
                     className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'personal' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                   >
                     Öğretmen El Programı
                   </button>
-                  <button 
-                    onClick={() => setPrintTab('timetable')} 
+                  <button
+                    onClick={() => setPrintTab('timetable')}
                     className={`pb-3 px-1 font-medium text-lg border-b-2 transition-colors ${printTab === 'timetable' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                   >
                     Ders Programları
                   </button>
                 </div>
-                
+
                 <div className={`flex items-center bg-indigo-50 rounded-full p-1 border border-indigo-100 shadow-sm mb-2 ${printTab === 'timetable' ? 'opacity-0 pointer-events-none' : ''}`}>
                   <button onClick={() => setWeekOffset(o => o - 1)} className="p-1 hover:bg-indigo-200 rounded-full text-indigo-600 transition-colors" title="Önceki Hafta"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-sm font-medium text-indigo-700 px-4 min-w-[140px] text-center">{getWeekString(weekOffset)}</span>
@@ -672,20 +692,20 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
               </div>
 
               {printTab === 'master' && (
-                <PrintableView 
-                  schedule={currentSchedule} 
-                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers} 
-                  zones={appZones} 
-                  slots={appSlots} 
-                  weekString={getWeekString(weekOffset)} 
+                <PrintableView
+                  schedule={currentSchedule}
+                  teachers={viewTeachers}
+                  zones={viewZones}
+                  slots={viewSlots}
+                  weekString={getWeekString(weekOffset)}
                 />
               )}
               {printTab === 'personal' && (
                 <TeacherSchedulesPrintView
-                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers}
+                  teachers={viewTeachers}
                   assignments={currentSchedule.assignments}
-                  slots={appSlots}
-                  zones={appZones}
+                  slots={viewSlots}
+                  zones={viewZones}
                   weekString={getWeekString(weekOffset)}
                   searchTerm={schedulesSearch}
                   setSearchTerm={setSchedulesSearch}
@@ -693,8 +713,8 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
               )}
               {printTab === 'timetable' && (
                 <TeacherTimetablesPrintView
-                  teachers={publishedWeeks[getWeekString(weekOffset)]?.teachers || teachers}
-                  lessons={publishedWeeks[getWeekString(weekOffset)]?.lessons || lessons}
+                  teachers={viewTeachers}
+                  lessons={viewLessons}
                   searchTerm={timetablesSearch}
                   setSearchTerm={setTimetablesSearch}
                 />
@@ -720,9 +740,9 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   <span className={`ml-3 font-medium text-lg ${settingsTab === 'config' ? 'text-indigo-600' : 'text-gray-500'}`}>Program & Bölge Ayarı</span>
                 </button>
               </div>
-              
+
               {settingsTab === 'config' && (
-                <SettingsView 
+                <SettingsView
                   appZones={appZones} setAppZones={setAppZones}
                   appPeriods={appPeriods} setAppPeriods={setAppPeriods}
                   appTimetable={appTimetable} setAppTimetable={setAppTimetable}
@@ -734,12 +754,12 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
               )}
 
               {settingsTab === 'teachers' && (
-                <TeacherList 
-                  teachers={teachers} 
-                  schedule={currentSchedule} 
-                  slots={appSlots} 
-                  zones={appZones} 
-                  onToggleExclude={handleToggleExclude} 
+                <TeacherList
+                  teachers={teachers}
+                  schedule={currentSchedule}
+                  slots={viewSlots}
+                  zones={viewZones}
+                  onToggleExclude={handleToggleExclude}
                 />
               )}
 
@@ -766,16 +786,16 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <button 
+                  <button
                     onClick={() => setPublishModalOpen(true)}
                     className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors shadow-sm"
                   >
                     Programı Yayınla (Kilitle)
                   </button>
-                  
-                  <button 
+
+                  <button
                     onClick={handleUndo}
-                    disabled={!(history[weekOffset] && history[weekOffset].length > 0)}
+                    disabled={isLocked || !(history[weekOffset] && history[weekOffset].length > 0)}
                     className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Geri Al (Ctrl+Z)"
                   >
@@ -783,27 +803,26 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                     Geri Al
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => setIsLocked(!isLocked)}
                     className={`px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2 ${
-                      isLocked 
-                        ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300' 
+                      isLocked
+                        ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300'
                         : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
                     }`}
                   >
                     {isLocked ? '🔒 Plan Kilitli (Korumada)' : '🔓 Planı Kilitle'}
                   </button>
 
-<button 
+<button
                     onClick={() => {
                        if (isLocked) {
                           alert('Bu plan kilitlenmiş! Yanlışlıkla bozulmaması için yeniden optimize etme işlemi engellendi. İşlem yapmak için kilidi açın.');
                           return;
                        }
                        saveHistory();
-                       const newSched = generateSchedule(teachers, lessons, appSlots, appZones, currentSchedule?.assignments.filter(a => !a.isManual) || []);
+                       const newSched = generateSchedule(teachers, effectiveLessons, appSlots, appZones, currentSchedule?.assignments || []);
                        updateCurrentSchedule(newSched);
-                       setSchedule(newSched);
                     }}
                     className={`text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm ${
                       isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
@@ -822,8 +841,8 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                        setSelectedDay(day.id);
                     }}
                     className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
-                      selectedDay === day.id 
-                        ? 'border-indigo-600 text-indigo-600' 
+                      selectedDay === day.id
+                        ? 'border-indigo-600 text-indigo-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >
@@ -832,14 +851,14 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 ))}
               </div>
 
-          {schedule.warnings.length > 0 && (
+          {currentWarnings.length > 0 && (
             <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <ShieldAlert className="text-amber-500 mt-0.5" size={20} />
                 <div>
                   <h3 className="text-sm font-bold text-amber-800 mb-1">Algoritma Uyarıları</h3>
                   <ul className="text-sm text-amber-700 space-y-1 list-disc list-inside">
-                    {schedule.warnings.map((w, i) => <li key={i}>{w}</li>)}
+                    {currentWarnings.map((w, i) => <li key={i}>{w}</li>)}
                   </ul>
                 </div>
               </div>
@@ -852,7 +871,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="py-4 px-6 font-semibold text-gray-700">Zaman Dilimi</th>
                   <th className="py-4 px-6 font-semibold text-gray-700">Türü</th>
-                  {appZones.map(z => (
+                  {viewZones.map(z => (
                     <th key={z.id} className="py-4 px-6 font-semibold text-gray-700">{z.name}</th>
                   ))}
                 </tr>
@@ -867,16 +886,16 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                         slot.type === 'CLOSING' ? 'bg-purple-100 text-purple-800' :
                         'bg-green-100 text-green-800'
                       }`}>
-                        {slot.type === 'OPENING' ? 'Açılış Nöbeti' : 
-                         slot.type === 'CLOSING' ? 'Kapanış Nöbeti' : 
+                        {slot.type === 'OPENING' ? 'Açılış Nöbeti' :
+                         slot.type === 'CLOSING' ? 'Kapanış Nöbeti' :
                          `${slot.afterLesson}. Ders Sonu`}
                       </span>
                     </td>
-                    {appZones.map(zone => {
+                    {viewZones.map(zone => {
                       const assigned = currentSchedule.assignments.filter(a => a.slotId === slot.id && a.zoneId === zone.id);
                       return (
-                        <td 
-                          key={zone.id} 
+                        <td
+                          key={zone.id}
                           className="py-4 px-6 border-l border-gray-100"
                           onDragOver={handleDragOver}
                           onDrop={(e) => {
@@ -893,10 +912,10 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                         >
                           <div className="flex flex-col gap-1.5 min-h-[40px] group/cell relative pb-5">
                             {assigned.length > 0 ? assigned.map(a => {
-                              const t = teachers.find(t => t.id === a.teacherId);
+                              const t = viewTeachers.find(t => t.id === a.teacherId);
                               return (
                                 <div key={a.id} className="relative group">
-                                <div 
+                                <div
                                   draggable
                                   onDragStart={(e) => { if (!isLocked) handleDragStart(e, a); }}
                                   onClick={() => {
@@ -907,8 +926,8 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                                         handleTeacherClick(a);
                                       }}
                                   className={`flex items-center justify-between px-3 py-2 rounded-md text-sm cursor-grab active:cursor-grabbing border transition-transform group-hover:scale-[1.02] ${
-                                    a.isManual 
-                                      ? 'bg-amber-50 border-amber-200 text-amber-800' 
+                                    a.isManual
+                                      ? 'bg-amber-50 border-amber-200 text-amber-800'
                                       : 'bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100'
                                   }`}
                                 >
@@ -967,7 +986,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[80vh] flex flex-col">
             <div className="p-4 border-b border-gray-200 flex items-center justify-between">
               <h3 className="font-bold text-gray-800">Öğretmen Ekle (Manuel)</h3>
-              <button 
+              <button
                 onClick={() => setAddTeacherModal(null)}
                 className="text-gray-400 hover:text-gray-600 bg-gray-100 p-1.5 rounded-full"
               >
@@ -976,7 +995,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             </div>
             <div className="p-4 overflow-y-auto flex-1">
               <div className="space-y-2">
-                {teachers.filter(t => !t.isExcluded).map(t => {
+                {teachers.filter(t => !assignmentProblem({ id: 'new-candidate', teacherId: t.id, slotId: addTeacherModal.slotId, zoneId: addTeacherModal.zoneId, isManual: true }, currentSchedule.assignments, teachers, effectiveLessons, appSlots, appZones)).map(t => {
                   return (
                     <button
                       key={t.id}
@@ -1010,7 +1029,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
       )}
 
 
-      
+
       {publishModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
@@ -1021,17 +1040,17 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
 
             <div className="mb-4">
               <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={sendTelegramPdf} 
+                <input
+                  type="checkbox"
+                  checked={sendTelegramPdf}
                   onChange={e => setSendTelegramPdf(e.target.checked)}
                   className="rounded text-indigo-600 focus:ring-indigo-500"
                 />
                 <span>Telegram Grubuna PDF ve Mesaj Gönder</span>
               </label>
-              
+
               {sendTelegramPdf && (
-                <textarea 
+                <textarea
                   value={telegramMessage}
                   onChange={e => setTelegramMessage(e.target.value)}
                   className="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50 h-28"
@@ -1039,42 +1058,11 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 />
               )}
             </div>
-            
+
             <div className="space-y-3 mt-4">
-              <button 
+              <button
                 disabled={isPublishing}
-                onClick={async () => {
-                  setIsPublishing(true);
-                  const weekStr = getWeekString(weekOffset);
-                  try {
-                    setPdfTeachers(teachers);
-                    await new Promise(r => setTimeout(r, 1500));
-                    const pdfBlob = await generatePdfBlob(teachers);
-                      
-                    if (sendTelegramPdf && telegramToken && telegramChatId) {
-                      setPublishingProgress("Telegram'a Gönderiliyor...");
-                      const formData = new FormData();
-                      formData.append("chat_id", telegramChatId);
-                      formData.append("document", new File([pdfBlob], `${weekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
-                      formData.append("caption", telegramMessage);
-                      await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: formData });
-                    }
-                    
-                    setPdfTeachers([]);
-                    
-                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons };
-                    await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [weekStr]: updatedData } });
-                    setPublishedWeeks(prev => ({ ...prev, [weekStr]: updatedData }));
-                    alert("Yayınlandı ve Telegram'a gönderildi!");
-                  } catch (e) {
-                    console.error(e);
-                    alert("Hata: " + e);
-                    setPdfTeachers([]);
-                  }
-                  setIsPublishing(false);
-                  setPublishingProgress(null);
-                  setPublishModalOpen(false);
-                }}
+                onClick={() => publishPlan(weekOffset)}
                 className="w-full text-left p-4 rounded-lg border-2 border-indigo-100 hover:border-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50"
               >
                 <div className="font-semibold text-indigo-900">Hemen Şimdi (Mevcut Haftayı Ez)</div>
@@ -1083,40 +1071,9 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 </div>
               </button>
 
-              <button 
+              <button
                 disabled={isPublishing}
-                onClick={async () => {
-                  setIsPublishing(true);
-                  const nextWeekStr = getWeekString(weekOffset + 1);
-                  try {
-                    setPdfTeachers(teachers);
-                    await new Promise(r => setTimeout(r, 1500));
-                    const pdfBlob = await generatePdfBlob(teachers);
-                    
-                    if (telegramToken && telegramChatId) {
-                      setPublishingProgress("Telegram'a Gönderiliyor...");
-                      const formData = new FormData();
-                      formData.append("chat_id", telegramChatId);
-                      formData.append("document", new File([pdfBlob], `${nextWeekStr.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
-                      formData.append("caption", telegramMessage);
-                      await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: formData });
-                    }
-                    
-                    setPdfTeachers([]);
-
-                    const updatedData = { assignments: currentSchedule.assignments, teachers, lessons };
-                    await FirebaseService.saveSettings({ publishedWeeks: { ...publishedWeeks, [nextWeekStr]: updatedData } });
-                    setPublishedWeeks(prev => ({ ...prev, [nextWeekStr]: updatedData }));
-                    alert(`${nextWeekStr} programı Telegram grubuna anında gönderildi ve kaydedildi!`);
-                  } catch (e) {
-                    console.error(e);
-                    alert("Hata: " + e);
-                    setPdfTeachers([]);
-                  }
-                  setIsPublishing(false);
-                  setPublishingProgress(null);
-                  setPublishModalOpen(false);
-                }}
+                onClick={() => publishPlan(weekOffset + 1)}
                 className="w-full text-left p-4 rounded-lg border-2 border-emerald-100 hover:border-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-50"
               >
                 <div className="font-semibold text-emerald-900">Gelecek Hafta Pazartesi</div>
@@ -1127,7 +1084,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             </div>
 
             <div className="mt-4 text-right">
-              <button 
+              <button
                 disabled={isPublishing}
                 onClick={() => setPublishModalOpen(false)}
                 className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
@@ -1140,7 +1097,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
       )}
 
 
-      
+
       {leaveModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
@@ -1148,9 +1105,9 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             <p className="text-gray-600 mb-6 font-medium text-indigo-700">
               Seçilen Öğretmen: {leaveModal.teacher.name}
             </p>
-            
+
             <div className="space-y-4">
-              <button 
+              <button
                 onClick={() => {
                   processOneDayLeave(leaveModal.teacher);
                   setLeaveModal(null);
@@ -1165,13 +1122,13 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
                 <div className="font-semibold text-red-900 mb-2">Uzun Süreli Rapor / Görevli İzinli</div>
                 <div className="text-sm text-red-700 mb-3">Öğretmen belirttiğiniz tarihe kadar sistemden muaf tutulur ve program kalan öğretmenlere yeniden dağıtılır. Tarih dolduğunda sistem yöneticiye hatırlatma mesajı atar.</div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Öğretmenin Dönüş Tarihi:</label>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   value={longLeaveDate}
                   onChange={e => setLongLeaveDate(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-3"
                 />
-                <button 
+                <button
                   onClick={() => {
                     processLongLeave(leaveModal.teacher, longLeaveDate);
                     setLeaveModal(null);
@@ -1185,7 +1142,7 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
             </div>
 
             <div className="mt-4 text-right">
-              <button 
+              <button
                 onClick={() => setLeaveModal(null)}
                 className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
               >
@@ -1206,20 +1163,20 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
               Bu değişikliği Telegram grubuna anında PDF (El Programı) ve açıklama ile göndermek ister misiniz?
             </p>
 
-            <textarea 
+            <textarea
               value={telegramSpecificModal.message}
               onChange={e => setTelegramSpecificModal(prev => prev ? {...prev, message: e.target.value} : null)}
               className="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50 h-36 mb-4"
             />
-            
+
             <div className="flex space-x-3">
-              <button 
+              <button
                 onClick={() => setTelegramSpecificModal(null)}
                 className="flex-1 py-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-medium"
               >
                 Gönderme (Kapat)
               </button>
-              <button 
+              <button
                 onClick={async () => {
                   try {
                     setIsSendingTelegram(true);
@@ -1247,18 +1204,18 @@ Değişiklikten etkilenen öğretmenlerimizin güncel programı ektedir.`,
 
 
 
-    
+
       <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '1000px', background: '#fff', zIndex: -100 }}>
         <div ref={hiddenPrintRef} className="p-8 bg-white text-black">
            {pdfTeachers.length > 0 && (
                <>
-                   <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">{getWeekString(weekOffset)} - Öğretmen El Programları</h2>
-                   <TeacherSchedulesPrintView 
+                   <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">{pdfContext?.week || getWeekString(weekOffset)} - Öğretmen El Programları</h2>
+                   <TeacherSchedulesPrintView
                        teachers={pdfTeachers}
-                       assignments={currentSchedule.assignments}
-                       slots={appSlots}
-                       zones={appZones}
-                       weekString={getWeekString(weekOffset)}
+                       assignments={pdfContext?.assignments || currentSchedule.assignments}
+                       slots={pdfContext?.slots || viewSlots}
+                       zones={pdfContext?.zones || viewZones}
+                       weekString={pdfContext?.week || getWeekString(weekOffset)}
                        searchTerm=""
                        setSearchTerm={() => {}}
                        hideControls={true}

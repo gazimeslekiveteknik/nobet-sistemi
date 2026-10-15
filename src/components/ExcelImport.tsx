@@ -17,6 +17,7 @@ export function ExcelImport({ onDataImported }: ExcelImportProps) {
   const [error, setError] = useState<string | null>(null);
 
   const handleFileUpload = async (uploadedFile: File) => {
+    if (isProcessing) return;
     setFile(uploadedFile);
     setIsProcessing(true);
     setError(null);
@@ -88,6 +89,7 @@ export function ExcelImport({ onDataImported }: ExcelImportProps) {
           <label className="mt-4 px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer transition-colors">
             Dosya Seç
             <input 
+              disabled={isProcessing}
               type="file" 
               className="hidden" 
               accept=".xlsx, .xls, .pdf" 

@@ -1,13 +1,14 @@
 {
   "name": "nobet-sistemi",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "lint": "oxlint src api lib tests",
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.cjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

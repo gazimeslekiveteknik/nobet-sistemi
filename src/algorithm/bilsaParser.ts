@@ -95,5 +95,6 @@ export function parseBilsaExcel(workbook: XLSX.WorkBook): { teachers: Teacher[],
     throw new Error('Dosya formatı tanınmadı. "Adı Soyadı:" etiketi bulunamadı. Bu bir Bilsa Excel çıktısı olmayabilir.');
   }
 
+  if (!lessons.length) throw new Error("Öğretmenler bulundu ancak dersler okunamadı. Dosyanın gün ve ders sütunlarını kontrol edin.");
   return { teachers, lessons };
 }

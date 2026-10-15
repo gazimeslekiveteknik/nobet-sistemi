@@ -1,4 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist';
+import { readPeriodColumns, lessonsInRow } from './pdfGrid';
 import type { Teacher, Lesson, DayOfWeek } from '../types';
 
 // In Vite, we can load the worker like this
@@ -106,24 +107,10 @@ export async function parseBilsaPDF(arrayBuffer: ArrayBuffer): Promise<{ teacher
             // We group items that have similar X coordinates
             cells.sort((a, b) => a.transform[4] - b.transform[4]);
             
-            // X coordinates usually jump by ~50-60 pixels per column in A4 PDF
-            // This is a naive grouping
-            let period = 1;
-            let lastX = -1;
-            
-            for (const cell of cells) {
-               if (lastX === -1 || cell.transform[4] - lastX > 30) {
-                  // New period
-                  lessons.push({
-                     id: `L_${teacherId}_${day}_${period}`,
-                     day: day as DayOfWeek,
-                     period: period,
-                     className: cell.str.trim(),
-                     teacherId: teacherId
-                  });
-                  period++;
-                  lastX = cell.transform[4];
-               }
+            const columns = readPeriodColumns(items);
+            for (const cell of lessonsInRow(cells, columns)) {
+              lessons.push({ id: `L_${teacherId}_${day}_${cell.period}`, day: day as DayOfWeek,
+                period: cell.period, className: cell.className, teacherId });
             }
          }
       }
@@ -131,12 +118,13 @@ export async function parseBilsaPDF(arrayBuffer: ArrayBuffer): Promise<{ teacher
 
   } catch (err) {
     console.error("PDF Parsing error:", err);
-    throw new Error("PDF dosyası okunamadı. Lütfen Bilsa çıktısı olduğundan emin olun.");
+    throw new Error(err instanceof Error ? err.message : "PDF dosyası okunamadı. Lütfen Bilsa çıktısı olduğundan emin olun.");
   }
 
   if (teachers.length === 0) {
      throw new Error("Bu PDF'te öğretmen programı bulunamadı.");
   }
 
+  if (!lessons.length) throw new Error("Öğretmenler bulundu ancak ders çizelgesi okunamadı. Mevcut veriler değiştirilmedi; Excel çıktısını deneyin.");
   return { teachers, lessons };
 }

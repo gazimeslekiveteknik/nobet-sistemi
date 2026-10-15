@@ -1,5 +1,6 @@
 import type { Teacher, Lesson, Slot, Zone, Assignment } from '../types';
 import { calculateAvailability } from './availability';
+import { assignmentProblem, overlaps } from './validation';
 
 export interface ScheduleResult {
   assignments: Assignment[];
@@ -16,8 +17,13 @@ export function generateSchedule(
   const availabilityMatrix = calculateAvailability(teachers, lessons, slots);
   
   // Keep assignments that are manually locked
-  const assignments: Assignment[] = existingAssignments.filter(a => a.isManual);
+  const assignments: Assignment[] = [];
   const warnings: string[] = [];
+  for (const assignment of existingAssignments.filter(a => a.isManual)) {
+    const problem = assignmentProblem(assignment, assignments, teachers, lessons, slots, zones);
+    if (problem) warnings.push(`Manuel atama kaldırıldı: ${problem}`);
+    else assignments.push(assignment);
+  }
   
   // Track current weekly load (start with history to balance globally)
   const teacherLoads: Record<string, number> = {};
@@ -101,7 +107,7 @@ export function generateSchedule(
          if (zone.activeSlotTypes && !zone.activeSlotTypes.includes('BREAK')) {
             targetStaff = zone.idealStaff;
          } else {
-            targetStaff = 1;
+            targetStaff = Math.max(1, zone.minStaff);
          }
       }
       while (assignedCount < targetStaff) {
@@ -114,7 +120,7 @@ export function generateSchedule(
           if (!avail || !avail.canDuty) continue;
 
           // Check if already assigned to another zone in this slot
-          const isAssigned = assignments.some(a => a.slotId === slot.id && a.teacherId === teacher.id);
+          const isAssigned = assignments.some(a => a.teacherId === teacher.id && slots.some(s => s.id === a.slotId && overlaps(s, slot)));
           if (isAssigned) continue;
 
           // Calculate score (lower is better)
@@ -134,7 +140,7 @@ export function generateSchedule(
           score += zoneHistory * 2;
           
           // Tie-breaker
-          score += Math.random();
+          score += teachers.indexOf(teacher) / Math.max(teachers.length, 1);
           
           if (score < bestScore) {
             bestScore = score;
@@ -171,69 +177,33 @@ export function generateSchedule(
 }
 
 
-export const rotateSchedule = (baseAssignments: Assignment[], weekOffset: number, appSlots: Slot[], appZones: Zone[]): Assignment[] => {
-    if (weekOffset === 0) return baseAssignments;
-    
-    const rotated: Assignment[] = [];
-    
-    // Group assignments by Day
-    const assignmentsByDay = new Map<number, Assignment[]>();
-    baseAssignments.forEach(a => {
-        const slot = appSlots.find(s => s.id === a.slotId);
-        if (!slot) return;
-        const day = slot.day;
-        if (!assignmentsByDay.has(day)) assignmentsByDay.set(day, []);
-        assignmentsByDay.get(day)!.push(a);
-    });
-    
-    assignmentsByDay.forEach((dayAssignments) => {
-        // Group by Teacher to form "Roles" for this day
-        const rolesByTeacher = new Map<string, Assignment[]>();
-        dayAssignments.forEach(a => {
-            if (!rolesByTeacher.has(a.teacherId)) rolesByTeacher.set(a.teacherId, []);
-            rolesByTeacher.get(a.teacherId)!.push(a);
-        });
-        
-        // Build roles and determine primary zone for sorting
-        const roles = Array.from(rolesByTeacher.values()).map(assignments => {
-            const zoneCounts: Record<string, number> = {};
-            assignments.forEach(a => zoneCounts[a.zoneId] = (zoneCounts[a.zoneId] || 0) + 1);
-            
-            const primaryZoneId = Object.keys(zoneCounts).sort((a,b) => zoneCounts[b] - zoneCounts[a])[0];
-            const zone = appZones.find(z => z.id === primaryZoneId);
-            const priority = zone ? zone.priority : 999;
-            // secondary sort by teacherId to be perfectly deterministic
-            return { teacherId: assignments[0].teacherId, assignments, priority, id: assignments[0].teacherId };
-        });
-        
-        // Sort roles by priority (Bahçe -> 1.Kat -> 2.Kat -> ...)
-        roles.sort((a, b) => {
-            if (a.priority !== b.priority) return a.priority - b.priority;
-            return a.id.localeCompare(b.id);
-        });
-        
-        const N = roles.length;
-        if (N === 0) return;
-        
-        let offset = weekOffset % N;
-        if (offset < 0) offset += N;
-        
-        for (let i = 0; i < N; i++) {
-            let sourceIndex = (i - offset) % N;
-            if (sourceIndex < 0) sourceIndex += N;
-            
-            const targetRole = roles[i];
-            const sourceTeacherId = roles[sourceIndex].teacherId;
-            
-            targetRole.assignments.forEach(a => {
-                rotated.push({
-                    ...a,
-                    id: a.id + '_w' + weekOffset,
-                    teacherId: sourceTeacherId
-                });
-            });
-        }
-    });
-    
-    return rotated;
+export const rotateSchedule = (baseAssignments: Assignment[], weekOffset: number, appSlots: Slot[], appZones: Zone[], teachers: Teacher[], lessons: Lesson[]): Assignment[] => {
+  if (weekOffset === 0) return baseAssignments.map(a => ({ ...a }));
+  const availability = calculateAvailability(teachers, lessons, appSlots);
+  const result: Assignment[] = [];
+  for (const day of [1, 2, 3, 4, 5]) {
+    const slots = appSlots.filter(s => s.day === day);
+    const daily = baseAssignments.filter(a => slots.some(s => s.id === a.slotId));
+    const roles = [...new Set(daily.map(a => a.teacherId))].map(id => ({
+      id, assignments: daily.filter(a => a.teacherId === id),
+      signature: slots.map(s => availability[id]?.[s.id]?.canDuty ? '1' : '0').join(''),
+    }));
+    const groups = new Map<string, typeof roles>();
+    for (const role of roles) {
+      // A manually fixed role stays with its teacher, including the other duties that day.
+      const key = role.assignments.some(a => a.isManual) ? `locked:${role.id}` : role.signature;
+      groups.set(key, [...(groups.get(key) || []), role]);
+    }
+    for (const group of groups.values()) {
+      group.sort((a, b) => {
+        const priority = (role: typeof a) => Math.min(...role.assignments.map(x => appZones.find(z => z.id === x.zoneId)?.priority ?? 999));
+        return priority(a) - priority(b) || a.id.localeCompare(b.id);
+      });
+      const offset = ((weekOffset % group.length) + group.length) % group.length;
+      group.forEach((role, index) => role.assignments.forEach(a => result.push({
+        ...a, id: `${a.id}_w${weekOffset}`, teacherId: group[(index - offset + group.length) % group.length].id,
+      })));
+    }
+  }
+  return result;
 };
