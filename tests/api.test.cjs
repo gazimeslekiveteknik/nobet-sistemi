@@ -53,3 +53,29 @@ test('Telegram rejection releases receipt for retry',async()=> {
  global.fetch=async(url,options)=>{if(options.method==='DELETE')released=true;return url.includes('api.telegram.org')?{ok:false,json:async()=>({ok:false})}:{ok:true,status:200}};
  try{await assert.rejects(sendOnce({settingsUrl:'https://example.test/documents/settings/global',token:'test',chatId:'test',dateKey:'x',text:'test'}));assert.equal(released,true)}finally{global.fetch=previous}
 });
+test('Cron sends reminders from saved template when no publication exists',async()=> {
+ const {default:handler}=await import('../api/cron.js');
+ const RealDate=global.Date, previousFetch=global.fetch, previousSecret=process.env.CRON_SECRET;
+ const sent=[];
+ global.Date=class extends RealDate {constructor(...args){super(...(args.length?args:['2026-10-12T06:55:00Z']))}static now(){return new RealDate('2026-10-12T06:55:00Z').getTime()}};
+ process.env.CRON_SECRET='test-only';
+ global.fetch=async(url,options)=>{
+  if(url.includes('api.telegram.org')){sent.push(JSON.parse(options.body));return {ok:true,json:async()=>({ok:true})}}
+  if(options?.method==='POST')return {ok:true,status:200};
+  return {ok:true,json:async()=>enc({...fixture,telegramToken:'test',telegramChatId:'test'}).mapValue};
+ };
+ try{const res=response();await handler({method:'GET',headers:{authorization:'Bearer test-only'}},res);
+ assert.equal(res.statusCode,200);assert.equal(sent.length,1);assert.match(sent[0].text,/10:00/);assert.match(sent[0].text,/A/);assert.match(sent[0].text,/B/);
+ }finally{global.Date=RealDate;global.fetch=previousFetch;if(previousSecret===undefined)delete process.env.CRON_SECRET;else process.env.CRON_SECRET=previousSecret}
+});
+test('Cron does not send between reminder times or on weekends',async()=> {
+ const {default:handler}=await import('../api/cron.js');
+ const RealDate=global.Date, previousFetch=global.fetch, previousSecret=process.env.CRON_SECRET;
+ let sent=0;process.env.CRON_SECRET='test-only';
+ global.fetch=async(url)=>{if(url.includes('api.telegram.org'))sent++;return {ok:true,json:async()=>enc({...fixture,telegramToken:'test',telegramChatId:'test'}).mapValue}};
+ try{for(const time of ['2026-10-12T07:00:00Z','2026-10-17T06:55:00Z']){
+ global.Date=class extends RealDate{constructor(...args){super(...(args.length?args:[time]))}};
+ const res=response();await handler({method:'GET',headers:{authorization:'Bearer test-only'}},res);assert.equal(res.statusCode,200);
+ }assert.equal(sent,0);
+ }finally{global.Date=RealDate;global.fetch=previousFetch;if(previousSecret===undefined)delete process.env.CRON_SECRET;else process.env.CRON_SECRET=previousSecret}
+});

@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
     // --- FEATURE 1: TOMORROW OPENING REMINDER AT 18:00 ---
     // Runs on Sunday(0), Mon(1), Tue(2), Wed(3), Thu(4)
-    if (pub && currentTime === '18:00' && currentDay >= 0 && currentDay <= 4) {
+    if (currentTime === '18:00' && currentDay >= 0 && currentDay <= 4) {
        const nextDay = currentDay === 0 ? 1 : currentDay + 1; // Sun->Mon, Mon->Tue...
        const openingSlots = slots.filter(s => s.day === nextDay && s.type === 'OPENING');
        
@@ -93,7 +93,7 @@ export default async function handler(req, res) {
 
     // --- FEATURE 2: 5-MIN EARLY NORMAL BREAK REMINDER ---
     // Only runs Mon-Fri
-    if (pub && currentDay >= 1 && currentDay <= 5) {
+    if (currentDay >= 1 && currentDay <= 5) {
         const targetDate = new Date(trtDate.getTime() + 5 * 60 * 1000);
         const targetTime = `${String(targetDate.getUTCHours()).padStart(2, '0')}:${String(targetDate.getUTCMinutes()).padStart(2, '0')}`;
         

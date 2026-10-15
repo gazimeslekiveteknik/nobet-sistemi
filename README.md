@@ -55,3 +55,5 @@ TV ekranı kaynakları bu deponun üstündeki `tv-kiosk` klasöründedir ve ayr�
 ## Tarayıcı senaryosu
 
 Yerel sunucu 127.0.0.1:5173 üzerinde çalışırken `node tests/ui-smoke.cjs` çalıştırılabilir. Playwright kurulu olmalıdır; farklı konum için `PLAYWRIGHT_MODULE`, mevcut Chrome çalıştırılabilir dosyası için `CHROME_EXECUTABLE` kullanılabilir. Test, Firebase servisini sahte verilerle değiştirir ve yerel sunucu dışındaki ağ isteklerini engeller. Açılışta yazma yapılmaması, yayın kilidi, manuel atama ve gelecek hafta yayını doğrulanır.
+
+Telegram hatırlatmaları, hedef haftanın yayını varsa o yayını; yoksa önceki sürümle uyumlu olarak kayıtlı şablon planını kullanır. Nöbet başlangıcından 5 dakika önce ve ertesi günün açılışı için 18:00’da çalışır. `/api/cron` zamanlayıcısı her dakika kimliği doğrulanmış çağrı yapmalıdır.
