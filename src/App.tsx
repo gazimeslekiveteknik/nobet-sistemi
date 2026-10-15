@@ -16,7 +16,7 @@ interface Schedule {
 
 type Absences = Record<number, string[]>;
 const presentLessons = (lessons: Lesson[], absences: Absences = {}) => lessons.filter(l => !absences[l.day]?.includes(l.teacherId));
-interface PublishedWeek { absences?: Absences; assignments: Assignment[]; teachers: Teacher[]; lessons: Lesson[]; slots?: Slot[]; zones?: Zone[]; }
+interface PublishedWeek { telegramPdf?: { fileId: string; botId: string; caption: string }; absences?: Absences; assignments: Assignment[]; teachers: Teacher[]; lessons: Lesson[]; slots?: Slot[]; zones?: Zone[]; }
 
 interface Snapshot {
   absences: Absences;
@@ -249,6 +249,8 @@ function App() {
   const [pdfContext, setPdfContext] = useState<{week: string; assignments: Assignment[]; slots: Slot[]; zones: Zone[]} | null>(null);
   const [telegramToken, setTelegramToken] = useState('');
   const [telegramChatId, setTelegramChatId] = useState('');
+  const [telegramArchiveChatId, setTelegramArchiveChatId] = useState('1392839951');
+  const [sendImmediately, setSendImmediately] = useState(false);
   const [adminPassword, setAdminPassword] = useState('1234');
 
   useEffect(() => {
@@ -271,6 +273,7 @@ function App() {
         if (settings.lessons) setLessons(settings.lessons);
         if (settings.telegramToken) setTelegramToken(settings.telegramToken);
         if (settings.telegramChatId) setTelegramChatId(settings.telegramChatId);
+        if (settings.telegramArchiveChatId) setTelegramArchiveChatId(settings.telegramArchiveChatId);
         if (settings.adminPassword) setAdminPassword(settings.adminPassword);
 
         if (settings.lastScheduleAssignments) {
@@ -384,7 +387,7 @@ function App() {
       appSlots: newSlots,
       teachers,
       lessons,
-      telegramToken, telegramChatId, adminPassword
+      telegramToken, telegramChatId, telegramArchiveChatId, adminPassword
     });
 
     alert(saved.synced ? "Ayarlar kaydedildi ve program güncellendi." : "Program güncellendi; ayarlar yalnızca bu cihazda kaydedildi. Sunucu bağlantısını kontrol edin.");
@@ -425,7 +428,7 @@ function App() {
 
   const settingsPayload = { appZones, appPeriods, appTimetable, appSlots, teachers, lessons,
     lastScheduleAssignments: schedule.assignments, publishedWeeks, draftWeeks, weekAbsences, baseWeekStart,
-    telegramToken, telegramChatId, adminPassword };
+    telegramToken, telegramChatId, telegramArchiveChatId, adminPassword };
   const settingsJSON = JSON.stringify(settingsPayload);
   useEffect(() => {
     if (isInitializing || loadError) return;
@@ -570,29 +573,38 @@ function App() {
         slots: draftWeeks[key] ? appSlots : existing?.slots || appSlots, zones: draftWeeks[key] ? appZones : existing?.zones || appZones }));
       const problems = validateSchedule(snapshot.assignments, snapshot.teachers, presentLessons(snapshot.lessons, snapshot.absences), snapshot.slots!, snapshot.zones!);
       if (problems.length) throw new Error('Yayınlamadan önce uyarıları giderin:\n' + problems.join('\n'));
-      if (sendTelegramPdf && (!telegramToken || !telegramChatId)) throw new Error('Telegram ayarları eksik. Gönderim seçeneğini kapatabilir veya ayarları tamamlayabilirsiniz.');
-      const nextPublished = { ...publishedWeeks, [key]: snapshot };
-      const saved = await FirebaseService.saveSettings({ ...settingsPayload, publishedWeeks: nextPublished });
-      if (!saved.synced) throw new Error('Plan bu cihazda saklandı ancak sunucuya aktarılamadı. Yayın tamamlanmadı; bağlantıyı kontrol edip tekrar deneyin.');
-      setPublishedWeeks(nextPublished);
-      setDraftWeeks(prev => { const next = { ...prev }; delete next[key]; return next; });
-      if (offset === weekOffset) setIsLocked(true);
+      if (sendTelegramPdf && (!telegramToken || !telegramChatId || !telegramArchiveChatId || telegramArchiveChatId.trim() === telegramChatId.trim())) throw new Error('Bot, hedef grup ve hedeften farklı özel arşiv sohbeti ayarlarını tamamlayın.');
       if (sendTelegramPdf) {
         setPdfContext({ week, assignments: snapshot.assignments, slots: snapshot.slots!, zones: snapshot.zones! });
         setPdfTeachers(snapshot.teachers);
         await new Promise(r => setTimeout(r, 100));
         if (document.fonts) await document.fonts.ready;
         const pdfBlob = await generatePdfBlob(snapshot.teachers);
-        setPublishingProgress("Telegram'a gönderiliyor…");
+        setPublishingProgress("PDF özel arşive yükleniyor…");
         const form = new FormData();
-        form.append('chat_id', telegramChatId);
+        form.append('chat_id', telegramArchiveChatId);
         form.append('document', new File([pdfBlob], `${week.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
         form.append('caption', telegramMessage);
         const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: form });
         const body = await response.json();
-        if (!response.ok || !body.ok) throw new Error('Plan yayınlandı, ancak Telegram gönderilemedi: ' + (body.description || response.status));
+        if (!response.ok || !body.ok || !body.result?.document?.file_id) throw new Error('PDF arşivlenemedi; yayın tamamlanmadı. ' + (body.description || response.status));
+        snapshot.telegramPdf = { fileId: body.result.document.file_id, botId: telegramToken.split(':')[0], caption: telegramMessage };
       }
-      alert(`${week} yayınlandı.${sendTelegramPdf ? " Telegram PDF gönderildi." : ''}`);
+      const nextPublished = { ...publishedWeeks, [key]: snapshot };
+      const saved = await FirebaseService.saveSettings({ ...settingsPayload, publishedWeeks: nextPublished });
+      if (!saved.synced) throw new Error('PDF hazırlandı ancak sunucu kaydı tamamlanamadı. Tekrar yayınlayın.');
+      setPublishedWeeks(nextPublished);
+      setDraftWeeks(prev => { const next = { ...prev }; delete next[key]; return next; });
+      if (offset === weekOffset) setIsLocked(true);
+      if (sendImmediately && snapshot.telegramPdf) {
+        const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: telegramChatId, document: snapshot.telegramPdf.fileId, caption: telegramMessage }),
+        });
+        const body = await response.json();
+        if (!response.ok || !body.ok) throw new Error('Plan yayınlandı ve PDF saklandı; anlık grup gönderimi başarısız.');
+      }
+      alert(`${week} yayınlandı.${sendTelegramPdf ? ' PDF saklandı; ilgili haftadan önceki pazar 18.00 gönderimi hazır.' : ''}`);
       setPublishModalOpen(false);
     } catch (error) { alert(error instanceof Error ? error.message : String(error)); }
     finally { setPdfTeachers([]); setPdfContext(null); setIsPublishing(false); setPublishingProgress(null); }
@@ -748,6 +760,7 @@ function App() {
                   appTimetable={appTimetable} setAppTimetable={setAppTimetable}
                   telegramToken={telegramToken} setTelegramToken={setTelegramToken}
                   telegramChatId={telegramChatId} setTelegramChatId={setTelegramChatId}
+                  telegramArchiveChatId={telegramArchiveChatId} setTelegramArchiveChatId={setTelegramArchiveChatId}
                   adminPassword={adminPassword} setAdminPassword={setAdminPassword}
                   onSave={handleSaveSettings}
                 />
@@ -1035,7 +1048,7 @@ function App() {
           <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold text-gray-900 mb-2">Yeni Programı Yayınla</h3>
             <p className="text-gray-600 mb-4 text-sm">
-              Hazırladığınız program TV Kiosk ve Telegram'da yayınlanacaktır.
+              Program kaydedilir. PDF özel arşivde hazırlanır ve ilgili haftadan önceki pazar Türkiye saatiyle 18.00’de gruba gönderilir. Geçmiş veya başlamış haftalar için anlık gönderimi seçin.
             </p>
 
             <div className="mb-4">
@@ -1046,9 +1059,10 @@ function App() {
                   onChange={e => setSendTelegramPdf(e.target.checked)}
                   className="rounded text-indigo-600 focus:ring-indigo-500"
                 />
-                <span>Telegram Grubuna PDF ve Mesaj Gönder</span>
+                <span>PDF’i sakla ve pazar 18.00 gönderimini hazırla</span>
               </label>
 
+              {sendTelegramPdf && <label className="block text-sm mb-3"><input type="checkbox" checked={sendImmediately} onChange={e => setSendImmediately(e.target.checked)} /> Yayınlarken de gruba gönder (B seçeneği)</label>}
               {sendTelegramPdf && (
                 <textarea
                   value={telegramMessage}

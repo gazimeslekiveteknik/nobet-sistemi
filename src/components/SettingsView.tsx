@@ -11,6 +11,8 @@ interface SettingsProps {
   setAppTimetable: (t: any) => void;
   telegramToken: string;
   setTelegramToken: (s: string) => void;
+  telegramArchiveChatId: string;
+  setTelegramArchiveChatId: (value: string) => void;
   telegramChatId: string;
   setTelegramChatId: (s: string) => void;
   adminPassword?: string;
@@ -18,7 +20,7 @@ interface SettingsProps {
   onSave: () => void;
 }
 
-export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods, appTimetable, setAppTimetable, telegramToken, setTelegramToken, telegramChatId, setTelegramChatId, adminPassword = '1234', setAdminPassword, onSave }: SettingsProps) {
+export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods, appTimetable, setAppTimetable, telegramToken, setTelegramToken, telegramChatId, setTelegramChatId, telegramArchiveChatId, setTelegramArchiveChatId, adminPassword = '1234', setAdminPassword, onSave }: SettingsProps) {
   const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
   const [lessonDuration, setLessonDuration] = useState(40);
   const [breakDuration, setBreakDuration] = useState(15);
@@ -52,15 +54,48 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
       const res = await fetch(`https://api.telegram.org/bot${telegramToken}/getUpdates`);
       const data = await res.json();
       if (data.ok && data.result.length > 0) {
-        const chat = data.result[data.result.length - 1].message?.chat;
-        if (chat) {
+        const groupMsg = [...data.result].reverse().find((u: any) => 
+          u.message?.chat?.type === 'group' || 
+          u.message?.chat?.type === 'supergroup' || 
+          (u.message?.chat?.id && Number(u.message.chat.id) < 0)
+        );
+        if (groupMsg?.message?.chat) {
+          const chat = groupMsg.message.chat;
           setTelegramChatId(chat.id.toString());
-          alert(`Grup bulundu: ${chat.title || chat.first_name || 'Bilinmiyor'}. Chat ID: ${chat.id}`);
-        } else {
-          alert("Gruptan son mesaj alınamadı. Lütfen gruba bir mesaj yazıp tekrar deneyin.");
+          alert(`Öğretmenler Grubu bulundu: ${chat.title || 'Grup'}\nChat ID: ${chat.id}`);
+          return;
         }
+        alert("Gelen mesajlar arasında öğretmenler grubu bulunamadı. Lütfen öğretmenler grubuna botu eklediğinizden ve grupta yeni bir mesaj yazdığınızdan emin olun.");
       } else {
         alert("Henüz bota bir mesaj gelmemiş. Lütfen Telegram grubunuza 'deneme' yazıp tekrar tıklayın.");
+      }
+    } catch {
+      alert("Bağlantı hatası: Telegram API'sine ulaşılamadı.");
+    }
+  };
+
+  const findArchiveChat = async () => {
+    if (!telegramToken) {
+      alert("Lütfen önce Bot Token'ı girin.");
+      return;
+    }
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${telegramToken}/getUpdates`);
+      const data = await res.json();
+      if (data.ok && data.result.length > 0) {
+        const privateMsg = [...data.result].reverse().find((u: any) => 
+          u.message?.chat?.type === 'private' || 
+          (u.message?.chat?.id && Number(u.message.chat.id) > 0)
+        );
+        if (privateMsg?.message?.chat) {
+          const chat = privateMsg.message.chat;
+          setTelegramArchiveChatId(chat.id.toString());
+          alert(`Özel Arşiv Sohbeti bulundu: ${chat.first_name || ''} ${chat.last_name || ''} (${chat.username ? '@' + chat.username : 'Özel Sohbet'})\nChat ID: ${chat.id}`);
+          return;
+        }
+        alert("Bot ile yaptığınız özel sohbette mesaj bulunamadı. Lütfen Telegram'da bota özelden 'arşiv deneme' yazıp tekrar deneyin.");
+      } else {
+        alert("Henüz bota bir mesaj gelmemiş. Lütfen Telegram'da bota özelden 'arşiv deneme' yazıp tekrar tıklayın.");
       }
     } catch {
       alert("Bağlantı hatası: Telegram API'sine ulaşılamadı.");
@@ -448,16 +483,17 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
                     placeholder="Örn: 8079043852:AAFjL3..." 
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                   />
+                  <p className="text-xs text-gray-500 mt-1">BotFather'dan aldığınız API anahtarı.</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Grup Chat ID (Otomatik Bulunur)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Grup Chat ID (Öğretmenler Grubu)</label>
                   <div className="flex gap-2">
                     <input 
                       type="text" 
                       value={telegramChatId}
                       onChange={(e) => setTelegramChatId(e.target.value)}
-                      placeholder="Test butonuna basınca dolar..." 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Örn: -1003679318534" 
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
                     />
                     <button 
                       onClick={testTelegram}
@@ -466,7 +502,30 @@ export function SettingsView({ appZones, setAppZones, appPeriods, setAppPeriods,
                       Grubu Bul
                     </button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">Nöbet bildirimlerinin ve haftalık programın gideceği öğretmenler grubu.</p>
                 </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-lg border border-blue-200">
+                <label className="block text-sm font-bold text-gray-800 mb-1">Telegram Arşiv Chat ID (Bota Özel Sohbet / Dosya Deposu)</label>
+                <div className="flex gap-2 mt-2">
+                  <input 
+                    type="text"
+                    value={telegramArchiveChatId} 
+                    onChange={e => setTelegramArchiveChatId(e.target.value)} 
+                    placeholder="Örn: 1392839951"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono text-sm" 
+                  />
+                  <button 
+                    onClick={findArchiveChat}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-medium whitespace-nowrap transition-colors"
+                  >
+                    Arşivi Bul
+                  </button>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  Bot ile sizin aranızdaki özel sohbet (Örn: <strong>1392839951</strong>). Yeni bir program yayınlandığında PDF sessizce buraya arşivlenir. Pazar akşamları saat 18:00'de sistem uyanır ve bu PDF'i otomatik olarak yukarıdaki Öğretmenler Grubuna gönderir.
+                </p>
               </div>
               <div className="pt-4 border-t border-blue-200">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Yeni Yönetici Şifresi Belirle</label>
