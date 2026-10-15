@@ -75,7 +75,7 @@ function App() {
 
   // Load the 35 teachers and 934 lessons parsed from the PDF
 
-    const generatePdfBlob = async (activeTeachers: Teacher[]) => {
+    const generatePdfBlob = async (activeTeachers: Teacher[], progressLabel?: string) => {
       const pdf = new jsPDF('l', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -83,14 +83,15 @@ function App() {
       let addedPage = false;
       const filteredTeachers = activeTeachers.filter(t => !t.isExcluded);
       for (let i = 0; i < filteredTeachers.length; i++) {
-         setPublishingProgress(`PDF Oluşturuluyor... (${i+1}/${filteredTeachers.length})`);
-         await new Promise(r => setTimeout(r, 50)); // let UI update
          const teacher = filteredTeachers[i];
+         const prefix = progressLabel ? `${progressLabel}: ` : '';
+         setPublishingProgress(`${prefix}PDF oluşturuluyor... (${i+1}/${filteredTeachers.length} - ${teacher.name})`);
+         await new Promise(r => setTimeout(r, 15)); // let UI update
          const el = hiddenPrintRef.current?.querySelector<HTMLElement>(`[id="teacher-print-${teacher.id}"]`);
 
          if (el) {
             const imgData = await toJpeg(el, {
-               cacheBust: true,
+               cacheBust: false,
                pixelRatio: 1,
                quality: 0.85,
                backgroundColor: '#ffffff',
@@ -559,55 +560,150 @@ function App() {
     });
   };
 
-  const publishPlan = async (offset: number) => {
+  const publishPlan = async (startOffset: number) => {
     setIsPublishing(true);
     try {
-      const key = weekKey(offset);
-      const week = getWeekString(offset);
-      const existing = publishedWeeks[key] || publishedWeeks[week];
-      const targetAssignments = offset === weekOffset ? currentSchedule.assignments
-        : draftWeeks[key]?.assignments || existing?.assignments || rotateSchedule(schedule.assignments,
-          Math.round((Date.parse(key) - Date.parse(baseWeekStart)) / 604800000), appSlots, appZones, teachers, presentLessons(lessons, weekAbsences[key]));
-      const snapshot: PublishedWeek = JSON.parse(JSON.stringify({ absences: weekAbsences[key] || existing?.absences || {}, assignments: targetAssignments,
-        teachers: draftWeeks[key] ? teachers : existing?.teachers || teachers, lessons: draftWeeks[key] ? lessons : existing?.lessons || lessons,
-        slots: draftWeeks[key] ? appSlots : existing?.slots || appSlots, zones: draftWeeks[key] ? appZones : existing?.zones || appZones }));
-      const problems = validateSchedule(snapshot.assignments, snapshot.teachers, presentLessons(snapshot.lessons, snapshot.absences), snapshot.slots!, snapshot.zones!);
-      if (problems.length) throw new Error('Yayınlamadan önce uyarıları giderin:\n' + problems.join('\n'));
-      if (sendTelegramPdf && (!telegramToken || !telegramChatId || !telegramArchiveChatId || telegramArchiveChatId.trim() === telegramChatId.trim())) throw new Error('Bot, hedef grup ve hedeften farklı özel arşiv sohbeti ayarlarını tamamlayın.');
-      if (sendTelegramPdf) {
-        setPdfContext({ week, assignments: snapshot.assignments, slots: snapshot.slots!, zones: snapshot.zones! });
-        setPdfTeachers(snapshot.teachers);
-        await new Promise(r => setTimeout(r, 100));
-        if (document.fonts) await document.fonts.ready;
-        const pdfBlob = await generatePdfBlob(snapshot.teachers);
-        setPublishingProgress("PDF özel arşive yükleniyor…");
-        const form = new FormData();
-        form.append('chat_id', telegramArchiveChatId);
-        form.append('document', new File([pdfBlob], `${week.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
-        form.append('caption', telegramMessage);
-        const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: form });
-        const body = await response.json();
-        if (!response.ok || !body.ok || !body.result?.document?.file_id) throw new Error('PDF arşivlenemedi; yayın tamamlanmadı. ' + (body.description || response.status));
-        snapshot.telegramPdf = { fileId: body.result.document.file_id, botId: telegramToken.split(':')[0], caption: telegramMessage };
+      if (sendTelegramPdf && (!telegramToken || !telegramChatId || !telegramArchiveChatId || telegramArchiveChatId.trim() === telegramChatId.trim())) {
+        throw new Error('Bot Token, Öğretmenler Grubu ve bunlardan farklı Özel Arşiv Sohbeti ayarlarını tamamlayın.');
       }
-      const nextPublished = { ...publishedWeeks, [key]: snapshot };
+
+      const getWeekDate = (off: number) => {
+        const d = new Date(calendarNow);
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + off * 7);
+        return d;
+      };
+
+      const startWeekDate = getWeekDate(startOffset);
+      const targetYear = startWeekDate.getMonth() <= 5 ? startWeekDate.getFullYear() : startWeekDate.getFullYear() + 1;
+      const juneEnd = new Date(targetYear, 5, 27, 23, 59, 59);
+
+      const targetOffsets: number[] = [];
+      let curOff = startOffset;
+      while (getWeekDate(curOff) <= juneEnd) {
+        targetOffsets.push(curOff);
+        curOff++;
+        if (targetOffsets.length >= 45) break;
+      }
+      if (targetOffsets.length === 0) targetOffsets.push(startOffset);
+
+      const totalWeeks = targetOffsets.length;
+      let nextPublished = { ...publishedWeeks };
+
+      for (let idx = 0; idx < totalWeeks; idx++) {
+        const off = targetOffsets[idx];
+        const key = weekKey(off);
+        const week = getWeekString(off);
+        const progressHeader = `Hafta ${idx + 1}/${totalWeeks} (${week})`;
+        setPublishingProgress(`${progressHeader}: Plan hesaplanıyor…`);
+
+        const existing = publishedWeeks[key] || publishedWeeks[week];
+        const targetAssignments = off === weekOffset
+          ? currentSchedule.assignments
+          : draftWeeks[key]?.assignments || existing?.assignments || rotateSchedule(
+              schedule.assignments,
+              Math.round((Date.parse(key) - Date.parse(baseWeekStart)) / 604800000),
+              appSlots,
+              appZones,
+              teachers,
+              presentLessons(lessons, weekAbsences[key])
+            );
+
+        const snapshot: PublishedWeek = JSON.parse(JSON.stringify({
+          absences: weekAbsences[key] || existing?.absences || {},
+          assignments: targetAssignments,
+          teachers: draftWeeks[key] ? teachers : existing?.teachers || teachers,
+          lessons: draftWeeks[key] ? lessons : existing?.lessons || lessons,
+          slots: draftWeeks[key] ? appSlots : existing?.slots || appSlots,
+          zones: draftWeeks[key] ? appZones : existing?.zones || appZones
+        }));
+
+        const problems = validateSchedule(snapshot.assignments, snapshot.teachers, presentLessons(snapshot.lessons, snapshot.absences), snapshot.slots!, snapshot.zones!);
+        if (problems.length && off === startOffset) {
+          throw new Error(`${week} için uyarıları giderin:\n` + problems.join('\n'));
+        }
+
+        if (sendTelegramPdf) {
+          setPdfContext({ week, assignments: snapshot.assignments, slots: snapshot.slots!, zones: snapshot.zones! });
+          setPdfTeachers(snapshot.teachers);
+          await new Promise(r => setTimeout(r, 60));
+          if (document.fonts) await document.fonts.ready;
+
+          const pdfBlob = await generatePdfBlob(snapshot.teachers, progressHeader);
+          setPublishingProgress(`${progressHeader}: Arşive yükleniyor…`);
+
+          let uploadedFileId: string | null = null;
+          for (let attempt = 0; attempt < 3; attempt++) {
+            const form = new FormData();
+            form.append('chat_id', telegramArchiveChatId);
+            form.append('document', new File([pdfBlob], `${week.replace(/ /g, '_')}_El_Programi.pdf`, { type: 'application/pdf' }));
+            form.append('caption', `📦 [Arşiv] ${week} Öğretmen El Programı`);
+
+            const res = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, { method: 'POST', body: form });
+            const body = await res.json();
+
+            if (res.ok && body.ok && body.result?.document?.file_id) {
+              uploadedFileId = body.result.document.file_id;
+              break;
+            }
+
+            if (res.status === 429 || body?.parameters?.retry_after) {
+              const waitSec = (body?.parameters?.retry_after || 3) + 1;
+              setPublishingProgress(`Telegram hız sınırı, ${waitSec} sn bekleniyor…`);
+              await new Promise(r => setTimeout(r, waitSec * 1000));
+              continue;
+            }
+
+            throw new Error(`${week} arşive yüklenemedi: ` + (body.description || res.status));
+          }
+
+          if (!uploadedFileId) throw new Error(`${week} için Telegram dosya kimliği alınamadı.`);
+
+          snapshot.telegramPdf = {
+            fileId: uploadedFileId,
+            botId: telegramToken.split(':')[0],
+            caption: telegramMessage
+          };
+
+          if (idx === 0 && sendImmediately) {
+            setPublishingProgress(`${week}: Gruba gönderiliyor…`);
+            await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: telegramChatId, document: uploadedFileId, caption: telegramMessage }),
+            });
+          }
+
+          // Throttle to respect Telegram rates
+          await new Promise(r => setTimeout(r, 1000));
+        }
+
+        nextPublished[key] = snapshot;
+      }
+
+      setPublishingProgress('Veritabanına kaydediliyor…');
       const saved = await FirebaseService.saveSettings({ ...settingsPayload, publishedWeeks: nextPublished });
-      if (!saved.synced) throw new Error('PDF hazırlandı ancak sunucu kaydı tamamlanamadı. Tekrar yayınlayın.');
+      if (!saved.synced) throw new Error('Haftalar oluşturuldu ancak sunucu kaydı tamamlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.');
+
       setPublishedWeeks(nextPublished);
-      setDraftWeeks(prev => { const next = { ...prev }; delete next[key]; return next; });
-      if (offset === weekOffset) setIsLocked(true);
-      if (sendImmediately && snapshot.telegramPdf) {
-        const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendDocument`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: telegramChatId, document: snapshot.telegramPdf.fileId, caption: telegramMessage }),
-        });
-        const body = await response.json();
-        if (!response.ok || !body.ok) throw new Error('Plan yayınlandı ve PDF saklandı; anlık grup gönderimi başarısız.');
-      }
-      alert(`${week} yayınlandı.${sendTelegramPdf ? ' PDF saklandı; ilgili haftadan önceki pazar 18.00 gönderimi hazır.' : ''}`);
+      setDraftWeeks(prev => {
+        const next = { ...prev };
+        targetOffsets.forEach(off => delete next[weekKey(off)]);
+        return next;
+      });
+
+      if (startOffset === weekOffset) setIsLocked(true);
+
+      alert(`Tüm sezon başarıyla yayınlandı! Toplam ${totalWeeks} haftalık program (Haziran sonuna kadar) rotasyonlu olarak hazırlandı ve arşive kaydedildi.\n\nHer Pazar akşamı saat 18:00'de ilgili haftanın güncel PDF'i otomatik olarak gruba gönderilecektir.`);
       setPublishModalOpen(false);
-    } catch (error) { alert(error instanceof Error ? error.message : String(error)); }
-    finally { setPdfTeachers([]); setPdfContext(null); setIsPublishing(false); setPublishingProgress(null); }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : String(error));
+    } finally {
+      setPdfTeachers([]);
+      setPdfContext(null);
+      setIsPublishing(false);
+      setPublishingProgress(null);
+    }
   };
 
   // Only show slots for the selected day in the table
